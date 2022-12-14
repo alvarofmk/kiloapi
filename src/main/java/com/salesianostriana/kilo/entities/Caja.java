@@ -5,7 +5,10 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -23,6 +26,10 @@ public class Caja {
     private int numCaja;
 
     private double kilosTotales;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "caja")
+    private Set<Tiene> alimentos = new HashSet<Tiene>();
 
     @Override
     public boolean equals(Object o) {
