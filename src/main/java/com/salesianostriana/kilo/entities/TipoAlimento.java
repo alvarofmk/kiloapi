@@ -5,6 +5,9 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -20,6 +23,11 @@ public class TipoAlimento {
     private Long id;
 
     private String nombre;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "tipoAlimento")
+    private List<KilosDiponibles> kilosDiponibles = new ArrayList<>();
 
     @Override
     public boolean equals(Object obj) {
