@@ -5,6 +5,8 @@ import com.salesianostriana.kilo.entities.keys.DetalleAportacionPK;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -24,6 +26,12 @@ public class DetalleAportacion {
 
 
     private double cantidadKg;
+
+
+    @ManyToOne
+    @JoinColumn(name = "tipo_alimento", foreignKey = @ForeignKey(name = "FK_DETALLEAPORTACION_TIPOALIMENTO"))
+    private TipoAlimento tipoAlimento;
+
 
     @Override
     public boolean equals(Object o) {
@@ -45,4 +53,7 @@ public class DetalleAportacion {
                 ", cantidadKg=" + cantidadKg +
                 '}';
     }
+
+
+
 }

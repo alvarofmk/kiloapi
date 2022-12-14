@@ -2,10 +2,7 @@ package com.salesianostriana.kilo.entities;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -23,6 +20,13 @@ public class TipoAlimento {
     private Long id;
 
     private String nombre;
+
+    @OneToMany(mappedBy = "tipoAlimento",
+            cascade = CascadeType.ALL,
+            orphanRemoval = false,
+            fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<DetalleAportacion> detalleAportaciones = new ArrayList<>();
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

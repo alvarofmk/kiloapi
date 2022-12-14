@@ -1,12 +1,15 @@
 package com.salesianostriana.kilo;
 
+import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.entities.Caja;
+import com.salesianostriana.kilo.entities.DetalleAportacion;
 import com.salesianostriana.kilo.repositories.CajaRepository;
 import com.salesianostriana.kilo.services.CajaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
 
 @Component
 public class TestData {
@@ -22,6 +25,9 @@ public class TestData {
                 .build();
 
         repository.save(c1);
+
+
+
 
     }
 }
