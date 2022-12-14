@@ -28,7 +28,7 @@ public class Caja {
     private double kilosTotales;
 
     @Builder.Default
-    @OneToMany(mappedBy = "caja")
+    @OneToMany(mappedBy = "alimentos")
     private Set<Tiene> alimentos = new HashSet<Tiene>();
 
     @Override
