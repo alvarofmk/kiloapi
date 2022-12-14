@@ -8,4 +8,9 @@ public class View {
 
     }
 
+    public static interface AportacionView{
+
+        public static interface DetallesAportacionView{}
+    }
+
 }
