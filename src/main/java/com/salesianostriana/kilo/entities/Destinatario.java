@@ -29,7 +29,7 @@ public class Destinatario {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(mappedBy = "caja")
+    @OneToMany(mappedBy = "destinatario")
     private List<Caja> cajas = new ArrayList<>();
 
 
