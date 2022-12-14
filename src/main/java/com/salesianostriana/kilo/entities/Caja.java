@@ -2,9 +2,7 @@ package com.salesianostriana.kilo.entities;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -23,6 +21,25 @@ public class Caja {
     private int numCaja;
 
     private double kilosTotales;
+
+    @ManyToOne
+    @JoinColumn(name = "destinatario", foreignKey = @ForeignKey(name = "FK_CAJA_DESTINATARIO"))
+    private Destinatario destinatario;
+
+
+    public void addDestinatario(Destinatario d) {
+        this.destinatario = d;
+        d.getCajas().add(this);
+    }
+
+    public void removeDestinatario(Destinatario d) {
+        d.getCajas().remove(this);
+        this.destinatario= null;
+    }
+
+
+
+
 
     @Override
     public boolean equals(Object o) {
