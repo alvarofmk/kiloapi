@@ -1,4 +1,5 @@
 package com.salesianostriana.kilo.entities;
+
 import lombok.*;
 
 import javax.persistence.*;
@@ -7,11 +8,12 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@NoArgsConstructor
 @Setter
+@Getter
 @ToString
+@Builder
 public class Clase {
 
     @Id @GeneratedValue
@@ -19,8 +21,8 @@ public class Clase {
 
     private String nombre, tutor;
 
-    @ToString.Exclude
     @Builder.Default
+    @ToString.Exclude
     @OneToMany(mappedBy = "clase", fetch = FetchType.EAGER)
     private Set<Aportacion> aportaciones = new HashSet<>();
 
