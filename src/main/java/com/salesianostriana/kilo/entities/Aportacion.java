@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -26,6 +28,12 @@ public class Aportacion {
     ))
     private Clase clase;
 
+    @OneToMany(mappedBy = "aportacion",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @Builder.Default
+    private List<DetalleAportacion> detalleAportaciones = new ArrayList<>();
+
     public void addToClase(Clase c){
         this.clase = c;
         c.getAportaciones().add(this);
@@ -34,6 +42,11 @@ public class Aportacion {
     public void removeFromClase(Clase c){
         this.clase = null;
         c.getAportaciones().remove(this);
+    }
+
+    @PreRemove
+    public void setNullAportacion() {
+        this.detalleAportaciones.forEach(d -> d.setAportacion(null));
     }
 
     @Override
