@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.salesianostriana.kilo.dtos.CajaResponseDTO;
 import com.salesianostriana.kilo.dtos.requests.CreateCajaDTO;
 import com.salesianostriana.kilo.entities.Caja;
+import com.salesianostriana.kilo.entities.TipoAlimento;
 import com.salesianostriana.kilo.services.CajaService;
+import com.salesianostriana.kilo.services.TipoAlimentoService;
 import com.salesianostriana.kilo.views.View;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -19,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/caja")
@@ -26,6 +29,8 @@ import java.util.List;
 public class CajaController {
 
     private final CajaService cajaService;
+
+    private final TipoAlimentoService tipoAlimentoService;
 
     @Operation(summary = "Obtiene todas las cajas")
     @ApiResponses(value = {
@@ -86,6 +91,16 @@ public class CajaController {
             return ResponseEntity.badRequest().build();
         else
             return ResponseEntity.status(HttpStatus.CREATED).body(cajaService.createCaja(createCajaDTO));
+    }
+
+    @PostMapping("/{id}/tipo/{idAlimento}/kg/{cantidad}")
+    public ResponseEntity<Caja> addAlimento(@PathVariable Long id, @PathVariable Long idAlimento, @PathVariable Double cantidad){
+        Optional<Caja> caja = cajaService.findById(id);
+        Optional<TipoAlimento> alimento = tipoAlimentoService.findById(idAlimento);
+        if (caja.isPresent() && alimento.isPresent())
+            return ResponseEntity.status(HttpStatus.CREATED).body(cajaService.addAlimento(caja.get(), alimento.get(), cantidad));
+        else
+            return ResponseEntity.badRequest().build();
     }
 
 }
