@@ -2,8 +2,15 @@ package com.salesianostriana.kilo.entities;
 
 import lombok.*;
 
+
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -21,25 +28,14 @@ public class Caja {
     private int numCaja;
 
     private double kilosTotales;
+  
+    @Builder.Default
+    @OneToMany(mappedBy = "caja")
+    private Set<Tiene> alimentos = new HashSet<Tiene>();
 
     @ManyToOne
     @JoinColumn(name = "destinatario", foreignKey = @ForeignKey(name = "FK_CAJA_DESTINATARIO"))
     private Destinatario destinatario;
-
-
-    public void addDestinatario(Destinatario d) {
-        this.destinatario = d;
-        d.getCajas().add(this);
-    }
-
-    public void removeDestinatario(Destinatario d) {
-        d.getCajas().remove(this);
-        this.destinatario= null;
-    }
-
-
-
-
 
     @Override
     public boolean equals(Object o) {
@@ -63,4 +59,15 @@ public class Caja {
                 ", kilosTotales=" + kilosTotales +
                 '}';
     }
+  
+    public void addDestinatario(Destinatario d) {
+        this.destinatario = d;
+        d.getCajas().add(this);
+    }
+
+    public void removeDestinatario(Destinatario d) {
+        d.getCajas().remove(this);
+        this.destinatario= null;
+    }
+  
 }
