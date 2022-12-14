@@ -44,6 +44,16 @@ public class Aportacion {
         c.getAportaciones().remove(this);
     }
 
+    public void addDetalleAportacion(DetalleAportacion d) {
+        d.setAportacion(this);
+        this.detalleAportaciones.add(d);
+    }
+
+    public void removeDetalleAportacion(DetalleAportacion d) {
+        d.setAportacion(null);
+        this.detalleAportaciones.remove(d);
+    }
+
     @PreRemove
     public void setNullAportacion() {
         this.detalleAportaciones.forEach(d -> d.setAportacion(null));
