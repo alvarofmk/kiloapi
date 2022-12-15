@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,4 +18,10 @@ public class TipoAlimentoService {
     public List<TipoAlimento> findAll() {
         return tipoAlimentoRepository.findAll();
     }
+
+    public Optional<TipoAlimento> findById(Long id){
+        return tipoAlimentoRepository.findById(id);
+    }
+
+
 }
