@@ -5,6 +5,7 @@ public class View {
     public static interface CajaView{
 
         public static interface GenericResponseView{}
+        public static interface DetailResponseView extends GenericResponseView{}
 
     }
 
@@ -16,7 +17,10 @@ public class View {
     public static interface DetalleAportacionView{
 
         public static interface NombreAlimentoView{}
+    }
+    public static interface TipoAlimentoView {
 
+        public static interface AllTipoAlimentoView{}
     }
 
 }

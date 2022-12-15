@@ -14,8 +14,19 @@ import java.util.Objects;
 @Builder
 public class Tiene {
 
+    public Tiene(Caja caja, TipoAlimento tipoAlimento, double cantidadKgs) {
+        this.caja = caja;
+        this.tipoAlimento = tipoAlimento;
+        this.cantidadKgs = cantidadKgs;
+
+        //asignar ids
+        tienePK.setCajaId(this.caja.getId());
+        tienePK.setTipoAlimentoId(this.tipoAlimento.getId());
+
+    }
+
     @EmbeddedId
-    private TienePK tienePK;
+    private TienePK tienePK = new TienePK();
 
     @ManyToOne
     @MapsId("cajaId")

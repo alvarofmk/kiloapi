@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,10 +29,14 @@ public class TipoAlimento {
     @Builder.Default
     private List<DetalleAportacion> detalleAportaciones = new ArrayList<>();
 
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     @OneToMany(mappedBy = "tipoAlimento")
-    private List<KilosDiponibles> kilosDiponibles = new ArrayList<>();
+    @Builder.Default
+    private List<KilosDisponibles> kilosDisponibles = new ArrayList<>();
+
+    @PreRemove
+    public void setTipoAlimentoNull() {
+        this.detalleAportaciones.forEach(d -> d.setTipoAlimento(null));
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -57,4 +62,5 @@ public class TipoAlimento {
                 ", nombre='" + nombre + '\'' +
                 '}';
     }
+
 }

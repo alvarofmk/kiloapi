@@ -4,9 +4,13 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.salesianostriana.kilo.dtos.CajaResponseDTO;
 import com.salesianostriana.kilo.dtos.requests.CreateCajaDTO;
 import com.salesianostriana.kilo.entities.Caja;
+import com.salesianostriana.kilo.entities.TipoAlimento;
 import com.salesianostriana.kilo.services.CajaService;
+import com.salesianostriana.kilo.services.TipoAlimentoService;
 import com.salesianostriana.kilo.views.View;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -19,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/caja")
@@ -26,6 +31,8 @@ import java.util.List;
 public class CajaController {
 
     private final CajaService cajaService;
+
+    private final TipoAlimentoService tipoAlimentoService;
 
     @Operation(summary = "Obtiene todas las cajas")
     @ApiResponses(value = {
@@ -80,12 +87,56 @@ public class CajaController {
                                     """)) }),
             @ApiResponse(responseCode = "400", description = "Hay algún error en los datos",
                     content = @Content) })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "Los datos para crear la caja")
     @PostMapping("/")
     public ResponseEntity<Caja> createCaja(@RequestBody CreateCajaDTO createCajaDTO){
         if (createCajaDTO.getNumCaja() <= 0)
             return ResponseEntity.badRequest().build();
         else
             return ResponseEntity.status(HttpStatus.CREATED).body(cajaService.createCaja(createCajaDTO));
+    }
+
+    @Operation(summary = "Añade kilos de un tipo de alimento a una caja")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Kilos añadidos con éxito",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CajaResponseDTO.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "id": 1,
+                                        "qr": "http://localhost:8080/caja/1",
+                                        "numCaja": 7,
+                                        "kilosTotales": 4.0,
+                                        "contenido": [
+                                            {
+                                                "id": 2,
+                                                "nombre": "Pasta",
+                                                "kg": 3.0
+                                            },
+                                            {
+                                                "id": 3,
+                                                "nombre": "Chocolate",
+                                                "kg": 1.0
+                                            }
+                                        ]
+                                    }
+                                    """))}),
+            @ApiResponse(responseCode = "400", description = "Alguno de los datos está incorrecto",
+                    content = @Content)
+    })
+    @Parameters(value = {
+            @Parameter(description = "El id de la caja", name = "id", required = true),
+            @Parameter(description = "El id del alimento a añadir", name = "idAlimento", required = true),
+            @Parameter(description = "La cantidad de alimento a añadir", name = "cantidad", required = true)
+    })
+    @JsonView(View.CajaView.DetailResponseView.class)
+    @PostMapping("/{id}/tipo/{idAlimento}/kg/{cantidad}")
+    public ResponseEntity<CajaResponseDTO> addAlimento(@PathVariable Long id, @PathVariable Long idAlimento, @PathVariable Double cantidad){
+        Optional<Caja> result = cajaService.addAlimento(id, idAlimento, cantidad);
+        if (result.isPresent())
+            return ResponseEntity.status(HttpStatus.CREATED).body(CajaResponseDTO.of(result.get()));
+        else
+            return ResponseEntity.badRequest().build();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.salesianostriana.kilo.entities;
 
+import com.salesianostriana.kilo.entities.keys.TienePK;
 import lombok.*;
 
 
@@ -8,9 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @AllArgsConstructor
@@ -68,6 +67,18 @@ public class Caja {
     public void removeDestinatario(Destinatario d) {
         d.getCajas().remove(this);
         this.destinatario= null;
+    }
+
+    public void addTiene(Tiene tiene){
+        tiene.setCaja(this);
+        this.kilosTotales += tiene.getCantidadKgs();
+        this.alimentos.add(tiene);
+    }
+
+    public void removeTiene(Tiene tiene){
+        this.alimentos.remove(tiene);
+        this.kilosTotales -= tiene.getCantidadKgs();
+        tiene.setCaja(null);
     }
   
 }
