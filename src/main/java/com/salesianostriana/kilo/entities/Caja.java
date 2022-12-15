@@ -72,9 +72,11 @@ public class Caja {
     public void addTiene(Tiene tiene){
         tiene.setCaja(this);
         this.kilosTotales += tiene.getCantidadKgs();
+        this.alimentos.add(tiene);
     }
 
     public void removeTiene(Tiene tiene){
+        this.alimentos.remove(tiene);
         this.kilosTotales -= tiene.getCantidadKgs();
         tiene.setCaja(null);
     }

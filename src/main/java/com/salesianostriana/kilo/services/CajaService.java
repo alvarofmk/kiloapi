@@ -50,6 +50,6 @@ public class CajaService {
             caja.removeTiene(tiene.get());
         }
         caja.addTiene(new Tiene(caja, tipoAlimento, cantidad));
-        return caja;
+        return repository.save(caja);
     }
 }
