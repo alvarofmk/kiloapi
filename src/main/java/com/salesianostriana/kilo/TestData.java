@@ -1,10 +1,7 @@
 package com.salesianostriana.kilo;
 
 import com.salesianostriana.kilo.entities.*;
-import com.salesianostriana.kilo.repositories.CajaRepository;
-import com.salesianostriana.kilo.repositories.KilosDisponiblesRepository;
-import com.salesianostriana.kilo.repositories.TipoAlimentoRepository;
-import com.salesianostriana.kilo.repositories.ClaseRepository;
+import com.salesianostriana.kilo.repositories.*;
 import com.salesianostriana.kilo.services.CajaService;
 import com.salesianostriana.kilo.services.ClaseService;
 import com.salesianostriana.kilo.services.KilosDisponiblesService;
@@ -26,13 +23,33 @@ public class TestData {
     private final ClaseService claseService;
     private final KilosDisponiblesRepository kilosDisponiblesRepository;
 
+    private final DestinatarioRepository destinatarioRepository;
+
     @PostConstruct
     public void initData(){
+
+        Destinatario d1 = Destinatario.builder()
+                .nombre("Mi abuela")
+                .telefono("686 567 397")
+                .direccion("La giralda basicamente")
+                .personaContacto("Pues mi abuela")
+                .build();
+
+        Destinatario d2 = Destinatario.builder()
+                .nombre("Blizzard")
+                .telefono("666 666 666")
+                .direccion("Algún sitio de china")
+                .personaContacto("Jeff Kaplan")
+                .build();
+
         Caja c1 = Caja.builder()
-                .qr("sdfsdfsdf")
+                .qr("http://localhots:8080/caja/3")
                 .numCaja(7)
                 .build();
 
+        c1.addDestinatario(d2);
+
+        destinatarioRepository.saveAll(List.of(d1, d2));
         cajaRepository.save(c1);
 
         TipoAlimento t1 = TipoAlimento.builder()
@@ -71,7 +88,6 @@ public class TestData {
         k2.addTipoAlimento(t2);
 
         kilosDisponiblesRepository.saveAll(List.of(k1, k2));
-
 
 
     }

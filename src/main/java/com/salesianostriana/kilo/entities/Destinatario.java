@@ -25,11 +25,10 @@ public class Destinatario {
 
     private String personaContacto;
 
-    private Integer telefono;
+    private String telefono;
 
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     @OneToMany(mappedBy = "destinatario")
+    @Builder.Default
     private List<Caja> cajas = new ArrayList<>();
 
 
@@ -38,7 +37,7 @@ public class Destinatario {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Destinatario that = (Destinatario) o;
-        return Objects.equals(id, that.id) && Objects.equals(nombre, that.nombre) && Objects.equals(direccion, that.direccion) && Objects.equals(personaContacto, that.personaContacto) && Objects.equals(telefono, that.telefono);
+        return Objects.equals(id, that.id);
     }
 
     @Override
