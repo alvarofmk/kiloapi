@@ -63,7 +63,12 @@ public class TestData {
                 .nombre("Chocolate")
                 .build();
 
-        tipoAlimentoRepository.saveAll(List.of(t1, t2));
+        t1 = tipoAlimentoRepository.save(t1);
+        t2 = tipoAlimentoRepository.save(t2);
+        //tipoAlimentoRepository.saveAll(List.of(t1, t2));
+
+        //t1 = tipoAlimentoRepository.findById(4L).get();
+        //t2 = tipoAlimentoRepository.findById(5L).get();
 
         Clase cl1 = Clase.builder()
                 .nombre("2DAM")
@@ -90,7 +95,8 @@ public class TestData {
 
         k2.addTipoAlimento(t2);
 
-        //kilosDisponiblesRepository.saveAll(List.of(k1, k2));
+
+        tipoAlimentoRepository.saveAll(List.of(t1, t2));
 
         Aportacion a1 = Aportacion.builder()
                 .fecha(LocalDate.of(2018, 1, 1))
@@ -107,6 +113,7 @@ public class TestData {
         de1.addToTipoAlimento(t1);
 
         detalleAportacionRepository.save(de1);
+
         
     }
 }

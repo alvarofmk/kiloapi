@@ -61,8 +61,8 @@ public class TipoAlimentoController {
             description = "No se han encontrado tipos de alimentos",
             content = @Content)
     })
-    @GetMapping("/")
     @JsonView(View.TipoAlimentoView.AllTipoAlimentoView.class)
+    @GetMapping("/")
     public ResponseEntity<List<TipoAlimentoDTO>> getAllTipoAlimento() {
         List<TipoAlimento> lista = tipoAlimentoService.findAll();
 
@@ -77,11 +77,35 @@ public class TipoAlimentoController {
         }
     }
 
+    @Operation(summary = "Obtiene un tipo de alimento en base a su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+            description = "Se ha encontrado el tipo de alimento",
+            content = {
+                    @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = TipoAlimentoDTO.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "id": 4,
+                                                "nombre": "Pasta",
+                                                "kilosDisponibles": 10.0
+                                            }
+                                            """
+                            )
+                    })
+            }),
+            @ApiResponse(responseCode = "404",
+            description = "No se ha encontrado el tipo de alimento por el ID",
+            content = @Content)
+    })
+    @JsonView(View.TipoAlimentoView.TipoAlimentoByIdView.class)
     @GetMapping("/{id}")
-    public ResponseEntity<TipoAlimento> getTipoAlimentoById(@PathVariable Long id) {
+    public ResponseEntity<TipoAlimentoDTO> getTipoAlimentoById(@PathVariable Long id) {
         Optional<TipoAlimento> resultado = tipoAlimentoService.findById(id);
         if(resultado.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(resultado.get());
+            return ResponseEntity.of(resultado.map(TipoAlimentoDTO::of));
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

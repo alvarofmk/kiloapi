@@ -23,7 +23,6 @@ public class TipoAlimento {
     private String nombre;
 
     @OneToMany(mappedBy = "tipoAlimento",
-            cascade = CascadeType.ALL,
             orphanRemoval = false,
             fetch = FetchType.EAGER)
     @Builder.Default
