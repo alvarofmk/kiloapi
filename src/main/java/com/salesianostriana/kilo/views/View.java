@@ -9,4 +9,9 @@ public class View {
 
     }
 
+    public static interface TipoAlimentoView {
+
+        public static interface AllTipoAlimentoView{}
+    }
+
 }

@@ -12,7 +12,7 @@ import java.util.Objects;
 public class KilosDisponibles {
 
     @ManyToOne
-    @JoinColumn(name = "tipoAlimento", foreignKey = @ForeignKey(name = "FK_KILOSDISPONIBLES_TIPOALIMENTO"))
+    @JoinColumn(name = "tipo_alimento", foreignKey = @ForeignKey(name = "FK_KILOSDISPONIBLES_TIPOALIMENTO"))
     @MapsId
     private TipoAlimento tipoAlimento;
 

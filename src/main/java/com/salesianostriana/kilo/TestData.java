@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -67,11 +68,14 @@ public class TestData {
                 .cantidadDisponible(2.0)
                 .build();
 
+<<<<<<< HEAD
         k2.addTipoAlimento(t2);
 
         kilosDisponiblesRepository.saveAll(List.of(k1, k2));
 
 
 
+=======
+>>>>>>> master
     }
 }

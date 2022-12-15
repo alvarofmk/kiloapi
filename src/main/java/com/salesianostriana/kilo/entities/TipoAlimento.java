@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,6 +33,11 @@ public class TipoAlimento {
     @Builder.Default
     private List<KilosDisponibles> kilosDisponibles = new ArrayList<>();
 
+    @PreRemove
+    public void setTipoAlimentoNull() {
+        this.detalleAportaciones.forEach(d -> d.setTipoAlimento(null));
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(obj.getClass() == this.getClass() && obj != null){
@@ -56,4 +62,5 @@ public class TipoAlimento {
                 ", nombre='" + nombre + '\'' +
                 '}';
     }
+
 }
