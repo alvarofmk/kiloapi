@@ -20,30 +20,30 @@ public class KilosDisponibles {
     private Long id;
     private Double cantidadDisponible;
 
+    public KilosDisponibles(Long id, double cantidad) {
+        this.id = id;
+        this.cantidadDisponible = cantidad;
+    }
+
 
     public void addTipoAlimento (TipoAlimento t) {
+        this.id = t.getId();
         this.tipoAlimento = t;
-        t.getKilosDiponibles().add(this);
+        t.getKilosDisponibles().add(this);
     }
 
     public void removeTipoAlimento(TipoAlimento t){
-        t.getKilosDiponibles().remove(this);
+        t.getKilosDisponibles().remove(this);
         this.tipoAlimento = null;
+        this.id = null;
     }
-
-
-
-
-
-
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         KilosDisponibles that = (KilosDisponibles) o;
-        return Objects.equals(tipoAlimento, that.tipoAlimento) && Objects.equals(cantidadDisponible, that.cantidadDisponible);
+        return Objects.equals(tipoAlimento, that.tipoAlimento);
     }
 
     @Override

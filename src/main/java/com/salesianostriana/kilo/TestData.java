@@ -1,15 +1,14 @@
 package com.salesianostriana.kilo;
 
-import com.salesianostriana.kilo.entities.Aportacion;
-import com.salesianostriana.kilo.entities.Caja;
-import com.salesianostriana.kilo.entities.Clase;
-import com.salesianostriana.kilo.entities.DetalleAportacion;
-import com.salesianostriana.kilo.entities.TipoAlimento;
+import com.salesianostriana.kilo.entities.*;
 import com.salesianostriana.kilo.repositories.CajaRepository;
+import com.salesianostriana.kilo.repositories.KilosDisponiblesRepository;
 import com.salesianostriana.kilo.repositories.TipoAlimentoRepository;
 import com.salesianostriana.kilo.repositories.ClaseRepository;
 import com.salesianostriana.kilo.services.CajaService;
 import com.salesianostriana.kilo.services.ClaseService;
+import com.salesianostriana.kilo.services.KilosDisponiblesService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,16 +17,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class TestData {
 
-    @Autowired
-    private CajaRepository cajaRepository;
-
-    @Autowired
-    private TipoAlimentoRepository tipoAlimentoRepository;
-
-    @Autowired
-    ClaseService claseService;
+    private final CajaRepository cajaRepository;
+    private final TipoAlimentoRepository tipoAlimentoRepository;
+    private final ClaseService claseService;
+    private final KilosDisponiblesRepository kilosDisponiblesRepository;
 
     @PostConstruct
     public void initData(){
@@ -61,8 +57,19 @@ public class TestData {
         clases.forEach(claseService::add);
         clases.forEach(System.out::println);
 
+        KilosDisponibles k1 = KilosDisponibles.builder()
+                .cantidadDisponible(10.0)
+                .build();
 
+        k1.addTipoAlimento(t1);
 
+        KilosDisponibles k2 = KilosDisponibles.builder()
+                .cantidadDisponible(2.0)
+                .build();
+
+        k2.addTipoAlimento(t2);
+
+        kilosDisponiblesRepository.saveAll(List.of(k1, k2));
 
 
 
