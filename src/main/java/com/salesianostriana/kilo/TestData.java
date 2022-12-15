@@ -1,10 +1,8 @@
 package com.salesianostriana.kilo;
 
 import com.salesianostriana.kilo.entities.*;
-import com.salesianostriana.kilo.repositories.CajaRepository;
-import com.salesianostriana.kilo.repositories.KilosDisponiblesRepository;
-import com.salesianostriana.kilo.repositories.TipoAlimentoRepository;
-import com.salesianostriana.kilo.repositories.ClaseRepository;
+import com.salesianostriana.kilo.entities.keys.DetalleAportacionPK;
+import com.salesianostriana.kilo.repositories.*;
 import com.salesianostriana.kilo.services.CajaService;
 import com.salesianostriana.kilo.services.ClaseService;
 import com.salesianostriana.kilo.services.KilosDisponiblesService;
@@ -25,6 +23,10 @@ public class TestData {
     private final TipoAlimentoRepository tipoAlimentoRepository;
     private final ClaseService claseService;
     private final KilosDisponiblesRepository kilosDisponiblesRepository;
+
+    private final AportacionRepository aportacionRepository;
+
+    private final DetalleAportacionRepository detalleAportacionRepository;
 
     @PostConstruct
     public void initData(){
@@ -71,6 +73,24 @@ public class TestData {
         k2.addTipoAlimento(t2);
 
         kilosDisponiblesRepository.saveAll(List.of(k1, k2));
+
+        Aportacion a1 = Aportacion.builder()
+                .fecha(LocalDate.of(2018, 1, 1))
+                .build();
+
+        aportacionRepository.save(a1);
+
+        DetalleAportacion d1 = DetalleAportacion.builder()
+                .detalleAportacionPK(new DetalleAportacionPK(1L, a1.getId()))
+                .cantidadKg(45.8)
+                .build();
+
+        a1.addDetalleAportacion(d1);
+        d1.addToTipoAlimento(t1);
+
+        detalleAportacionRepository.save(d1);
+
+
 
 
 

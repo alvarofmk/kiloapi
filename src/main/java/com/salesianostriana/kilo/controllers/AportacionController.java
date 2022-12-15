@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/aportacion")
 @RequiredArgsConstructor
+@Tag(name = "Aportacion", description = "Controlador de la entidad aportaciones")
 public class AportacionController {
 
     private final AportacionService aportacionService;

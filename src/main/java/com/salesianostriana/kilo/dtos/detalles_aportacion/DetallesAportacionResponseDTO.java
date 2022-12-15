@@ -14,13 +14,13 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DetallesAportacionResponseDTO {
 
-    @JsonView(View.DetalleAportacionView.class)
+    @JsonView({View.AportacionView.AportacionDetallesView.class})
     private Long numLinea;
 
-    @JsonView(View.DetalleAportacionView.class)
+    @JsonView(View.AportacionView.AportacionDetallesView.class)
     private double cantidadKg;
 
-    @JsonView(View.DetalleAportacionView.NombreAlimentoView.class)
+    @JsonView(View.AportacionView.AportacionDetallesView.class)
     private String nombre;
 
 
