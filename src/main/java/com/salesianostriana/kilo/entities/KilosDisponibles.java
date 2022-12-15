@@ -9,7 +9,7 @@ import java.util.Objects;
 @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter
 @Builder
-public class KilosDiponibles {
+public class KilosDisponibles {
 
     @ManyToOne
     @JoinColumn(name = "tipoAlimento", foreignKey = @ForeignKey(name = "FK_KILOSDISPONIBLES_TIPOALIMENTO"))
@@ -42,7 +42,7 @@ public class KilosDiponibles {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        KilosDiponibles that = (KilosDiponibles) o;
+        KilosDisponibles that = (KilosDisponibles) o;
         return Objects.equals(tipoAlimento, that.tipoAlimento) && Objects.equals(cantidadDisponible, that.cantidadDisponible);
     }
 
