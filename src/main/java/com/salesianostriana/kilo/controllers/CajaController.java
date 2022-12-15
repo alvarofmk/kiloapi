@@ -2,9 +2,9 @@ package com.salesianostriana.kilo.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.salesianostriana.kilo.dtos.CajaResponseDTO;
-import com.salesianostriana.kilo.dtos.requests.CreateCajaDTO;
+import com.salesianostriana.kilo.dtos.cajas.CreateCajaDTO;
+import com.salesianostriana.kilo.dtos.cajas.EditCajaDTO;
 import com.salesianostriana.kilo.entities.Caja;
-import com.salesianostriana.kilo.entities.TipoAlimento;
 import com.salesianostriana.kilo.services.CajaService;
 import com.salesianostriana.kilo.services.TipoAlimentoService;
 import com.salesianostriana.kilo.views.View;
@@ -137,6 +137,38 @@ public class CajaController {
             return ResponseEntity.status(HttpStatus.CREATED).body(CajaResponseDTO.of(result.get()));
         else
             return ResponseEntity.badRequest().build();
+    }
+
+    @Operation(summary = "Edita una caja por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Caja editada con éxito",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CajaResponseDTO.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "id": 3,
+                                        "qr": "No me lo se",
+                                        "numCaja": 10,
+                                        "kilosTotales": 1.0,
+                                        "contenido": [
+                                            {
+                                                "id": 5,
+                                                "nombre": "Chocolate",
+                                                "kg": 1.0
+                                            }
+                                        ]
+                                    }
+                                    """))}),
+            @ApiResponse(responseCode = "400", description = "Los datos son incorrectos",
+                    content = @Content)
+    })
+    @Parameter(description = "El id de la caja a modificar", name = "id", required = true)
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "Los datos actualizados de la caja")
+    @JsonView(View.CajaView.DetailResponseView.class)
+    @PutMapping("/{id}")
+    public ResponseEntity<CajaResponseDTO> editCaja(@PathVariable Long id, @RequestBody EditCajaDTO editCajaDTO){
+        Optional<Caja> result = cajaService.editCaja(editCajaDTO, id);
+        return result.isPresent() ? ResponseEntity.ok(result.map(CajaResponseDTO::of).get()) : ResponseEntity.badRequest().build();
     }
 
 }
