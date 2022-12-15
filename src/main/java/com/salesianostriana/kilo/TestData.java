@@ -90,7 +90,7 @@ public class TestData {
 
         k2.addTipoAlimento(t2);
 
-        kilosDisponiblesRepository.saveAll(List.of(k1, k2));
+        //kilosDisponiblesRepository.saveAll(List.of(k1, k2));
 
         Aportacion a1 = Aportacion.builder()
                 .fecha(LocalDate.of(2018, 1, 1))
@@ -107,7 +107,6 @@ public class TestData {
         de1.addToTipoAlimento(t1);
 
         detalleAportacionRepository.save(de1);
-
-
+        
     }
 }
