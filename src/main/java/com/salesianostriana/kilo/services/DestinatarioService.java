@@ -1,5 +1,6 @@
 package com.salesianostriana.kilo.services;
 
+import com.salesianostriana.kilo.dtos.DestinatarioResponseDTO;
 import com.salesianostriana.kilo.entities.Destinatario;
 import com.salesianostriana.kilo.repositories.DestinatarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +21,9 @@ public class DestinatarioService {
             toDelete = opt.get();
             toDelete.getCajas().forEach(caja -> caja.setDestinatario(null));
             destinatarioRepository.delete(toDelete);
+    }
+
+    public Optional<DestinatarioResponseDTO> getSummary(Long id) {
+        return destinatarioRepository.findSummary(id);
     }
 }
