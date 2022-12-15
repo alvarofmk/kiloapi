@@ -51,7 +51,7 @@ public class ClaseController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<ClaseResponseDTO> findById (
-            @Parameter(description = "ID de la aportación buscada", required = true)
+            @Parameter(description = "ID de la clase buscada", required = true)
             @PathVariable Long id
     ) {
         Optional<Clase> c = service.findById(id);
