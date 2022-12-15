@@ -132,10 +132,9 @@ public class CajaController {
     @JsonView(View.CajaView.DetailResponseView.class)
     @PostMapping("/{id}/tipo/{idAlimento}/kg/{cantidad}")
     public ResponseEntity<CajaResponseDTO> addAlimento(@PathVariable Long id, @PathVariable Long idAlimento, @PathVariable Double cantidad){
-        Optional<Caja> caja = cajaService.findById(id);
-        Optional<TipoAlimento> alimento = tipoAlimentoService.findById(idAlimento);
-        if (caja.isPresent() && alimento.isPresent())
-            return ResponseEntity.status(HttpStatus.CREATED).body(CajaResponseDTO.of(cajaService.addAlimento(caja.get(), alimento.get(), cantidad)));
+        Optional<Caja> result = cajaService.addAlimento(id, idAlimento, cantidad);
+        if (result.isPresent())
+            return ResponseEntity.status(HttpStatus.CREATED).body(CajaResponseDTO.of(result.get()));
         else
             return ResponseEntity.badRequest().build();
     }

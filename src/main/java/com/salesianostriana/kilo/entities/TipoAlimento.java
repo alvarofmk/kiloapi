@@ -29,9 +29,8 @@ public class TipoAlimento {
     @Builder.Default
     private List<DetalleAportacion> detalleAportaciones = new ArrayList<>();
 
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     @OneToMany(mappedBy = "tipoAlimento")
+    @Builder.Default
     private List<KilosDisponibles> kilosDisponibles = new ArrayList<>();
 
     @PreRemove
