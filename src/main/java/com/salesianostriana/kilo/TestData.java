@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -46,10 +47,6 @@ public class TestData {
         List<Clase> clases = List.of(cl1, cl2);
         clases.forEach(claseService::add);
         clases.forEach(System.out::println);
-
-
-
-
 
 
     }

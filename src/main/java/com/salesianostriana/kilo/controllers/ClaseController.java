@@ -1,5 +1,6 @@
 package com.salesianostriana.kilo.controllers;
 
+import com.salesianostriana.kilo.dtos.ClaseResponseDTO;
 import com.salesianostriana.kilo.entities.Clase;
 import com.salesianostriana.kilo.services.ClaseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,8 +50,8 @@ public class ClaseController {
             )
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Clase> findById (
-            @Parameter(description = "ID de la aportación buscada", required = true)
+    public ResponseEntity<ClaseResponseDTO> findById (
+            @Parameter(description = "ID de la clase buscada", required = true)
             @PathVariable Long id
     ) {
         Optional<Clase> c = service.findById(id);
@@ -60,7 +61,7 @@ public class ClaseController {
                     .status(HttpStatus.NOT_FOUND)
                     .build();
         } else {
-            return ResponseEntity.of(c);
+            return ResponseEntity.of(c.map(ClaseResponseDTO::of));
         }
     }
 }

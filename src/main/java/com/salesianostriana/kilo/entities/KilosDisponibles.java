@@ -23,11 +23,11 @@ public class KilosDisponibles {
 
     public void addTipoAlimento (TipoAlimento t) {
         this.tipoAlimento = t;
-        t.getKilosDiponibles().add(this);
+        t.getKilosDisponibles().add(this);
     }
 
     public void removeTipoAlimento(TipoAlimento t){
-        t.getKilosDiponibles().remove(this);
+        t.getKilosDisponibles().remove(this);
         this.tipoAlimento = null;
     }
 
