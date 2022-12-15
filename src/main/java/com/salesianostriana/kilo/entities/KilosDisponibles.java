@@ -11,7 +11,7 @@ import java.util.Objects;
 @Builder
 public class KilosDisponibles {
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "tipo_alimento", foreignKey = @ForeignKey(name = "FK_KILOSDISPONIBLES_TIPOALIMENTO"))
     @MapsId
     private TipoAlimento tipoAlimento;
@@ -29,11 +29,11 @@ public class KilosDisponibles {
     public void addTipoAlimento (TipoAlimento t) {
         this.id = t.getId();
         this.tipoAlimento = t;
-        t.getKilosDisponibles().add(this);
+        t.setKilosDisponibles(this);
     }
 
     public void removeTipoAlimento(TipoAlimento t){
-        t.getKilosDisponibles().remove(this);
+        t.setKilosDisponibles(null);
         this.tipoAlimento = null;
         this.id = null;
     }
