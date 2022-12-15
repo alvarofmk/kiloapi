@@ -65,9 +65,7 @@ public class AportacionController {
     )
     {
         Optional<Aportacion> aportacion = aportacionService.findById(id);
-        if(aportacion.isPresent())
-            return ResponseEntity.of(Optional.of(AportacionesReponseDTO.of(aportacion.get())));
+        return ResponseEntity.of(Optional.of(AportacionesReponseDTO.of(aportacion.get())));
 
-        return ResponseEntity.notFound().build();
     }
 }

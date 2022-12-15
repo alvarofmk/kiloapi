@@ -98,17 +98,15 @@ public class TestData {
 
         aportacionRepository.save(a1);
 
-        DetalleAportacion d1 = DetalleAportacion.builder()
+        DetalleAportacion de1 = DetalleAportacion.builder()
                 .detalleAportacionPK(new DetalleAportacionPK(1L, a1.getId()))
                 .cantidadKg(45.8)
                 .build();
 
-        a1.addDetalleAportacion(d1);
-        d1.addToTipoAlimento(t1);
+        a1.addDetalleAportacion(de1);
+        de1.addToTipoAlimento(t1);
 
-        detalleAportacionRepository.save(d1);
-
-
+        detalleAportacionRepository.save(de1);
 
 
     }
