@@ -68,14 +68,11 @@ public class TestData {
                 .cantidadDisponible(2.0)
                 .build();
 
-<<<<<<< HEAD
         k2.addTipoAlimento(t2);
 
         kilosDisponiblesRepository.saveAll(List.of(k1, k2));
 
 
 
-=======
->>>>>>> master
     }
 }
