@@ -33,6 +33,11 @@ public class TipoAlimento {
     @OneToMany(mappedBy = "tipoAlimento")
     private List<KilosDisponibles> kilosDisponibles = new ArrayList<>();
 
+    @PreRemove
+    public void setTipoAlimentoNull() {
+        this.detalleAportaciones.forEach(d -> d.setTipoAlimento(null));
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(obj.getClass() == this.getClass() && obj != null){
