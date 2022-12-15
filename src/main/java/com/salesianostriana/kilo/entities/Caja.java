@@ -30,7 +30,7 @@ public class Caja {
     private double kilosTotales;
   
     @Builder.Default
-    @OneToMany(mappedBy = "caja")
+    @OneToMany(mappedBy = "caja", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Tiene> alimentos = new HashSet<Tiene>();
 
     @ManyToOne

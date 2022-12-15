@@ -13,9 +13,11 @@ public class KilosDiponibles {
 
     @ManyToOne
     @JoinColumn(name = "tipoAlimento", foreignKey = @ForeignKey(name = "FK_KILOSDISPONIBLES_TIPOALIMENTO"))
-    @Id
+    @MapsId
     private TipoAlimento tipoAlimento;
 
+    @Id
+    private Long id;
     private Double cantidadDisponible;
 
 
