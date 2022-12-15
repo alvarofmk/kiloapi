@@ -15,7 +15,10 @@ public class DestinatarioService {
 
     public void deleteById(Long id) {
         Optional<Destinatario> opt = destinatarioRepository.findById(id);
+        Destinatario toDelete = null;
         if (opt.isPresent())
-            destinatarioRepository.delete(opt.get());
+            toDelete = opt.get();
+            toDelete.getCajas().forEach(caja -> caja.setDestinatario(null));
+            destinatarioRepository.delete(toDelete);
     }
 }
