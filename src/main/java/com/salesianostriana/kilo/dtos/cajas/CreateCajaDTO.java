@@ -1,4 +1,4 @@
-package com.salesianostriana.kilo.dtos.requests;
+package com.salesianostriana.kilo.dtos.cajas;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
