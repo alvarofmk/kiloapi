@@ -31,7 +31,7 @@ public class TipoAlimento {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToMany(mappedBy = "tipoAlimento")
-    private List<KilosDiponibles> kilosDiponibles = new ArrayList<>();
+    private List<KilosDisponibles> kilosDisponibles = new ArrayList<>();
 
     @Override
     public boolean equals(Object obj) {
