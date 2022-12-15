@@ -9,6 +9,15 @@ public class View {
 
     }
 
+    public static interface AportacionView{
+
+        public static interface AportacionDetallesView{}
+    }
+
+    public static interface DetalleAportacionView{
+
+        public static interface NombreAlimentoView{}
+    }
     public static interface TipoAlimentoView {
 
         public static interface AllTipoAlimentoView{}
