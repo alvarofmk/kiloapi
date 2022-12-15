@@ -64,8 +64,9 @@ public class CajaService {
                     cajaToAdd.removeTiene(tiene.get());
                 }
                 cajaToAdd.addTiene(new Tiene(cajaToAdd, tipoAlimento, cantidad));
-                kilosDisponiblesService.add(new KilosDisponibles(tipoAlimento.getId(), remaining));
-                return Optional.of(repository.save(cajaToAdd));
+                repository.save(cajaToAdd);
+                kilosDisponiblesService.add(new KilosDisponibles(tipoAlimentoId, remaining));
+                return Optional.of(cajaToAdd);
             }
         }
         return Optional.empty();
