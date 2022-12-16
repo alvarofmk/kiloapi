@@ -18,10 +18,10 @@ public class TieneResponseDTO {
     @JsonView({View.CajaView.DetailResponseView.class})
     private Long id;
 
-    @JsonView({View.CajaView.DetailResponseView.class})
+    @JsonView({View.CajaView.DetailResponseView.class, View.DestinatarioView.DetailedDestinatarioView.class})
     private String nombre;
 
-    @JsonView({View.CajaView.DetailResponseView.class})
+    @JsonView({View.CajaView.DetailResponseView.class, View.DestinatarioView.DetailedDestinatarioView.class})
     private double kg;
 
     public static TieneResponseDTO of(Tiene tiene){
