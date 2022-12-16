@@ -23,15 +23,13 @@ public class TipoAlimento {
     private String nombre;
 
     @OneToMany(mappedBy = "tipoAlimento",
-            cascade = CascadeType.ALL,
             orphanRemoval = false,
             fetch = FetchType.EAGER)
     @Builder.Default
     private List<DetalleAportacion> detalleAportaciones = new ArrayList<>();
 
-    @OneToMany(mappedBy = "tipoAlimento")
-    @Builder.Default
-    private List<KilosDisponibles> kilosDisponibles = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "tipoAlimento")
+    private KilosDisponibles kilosDisponibles;
 
     @PreRemove
     public void setTipoAlimentoNull() {

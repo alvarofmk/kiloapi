@@ -21,6 +21,10 @@ public class View {
     public static interface TipoAlimentoView {
 
         public static interface AllTipoAlimentoView{}
+
+        public static interface TipoAlimentoByIdView{
+
+        }
     }
 
 }

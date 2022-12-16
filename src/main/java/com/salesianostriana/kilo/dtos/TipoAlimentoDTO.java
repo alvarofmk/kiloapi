@@ -11,17 +11,23 @@ import lombok.*;
 @Builder
 public class TipoAlimentoDTO {
 
-    @JsonView(View.TipoAlimentoView.AllTipoAlimentoView.class)
+    @JsonView({View.TipoAlimentoView.AllTipoAlimentoView.class,
+    View.TipoAlimentoView.TipoAlimentoByIdView.class})
     private Long id;
 
-    @JsonView(View.TipoAlimentoView.AllTipoAlimentoView.class)
+    @JsonView({View.TipoAlimentoView.AllTipoAlimentoView.class,
+    View.TipoAlimentoView.TipoAlimentoByIdView.class})
     private String nombre;
+
+    @JsonView({View.TipoAlimentoView.TipoAlimentoByIdView.class})
+    private double kilosDisponibles;
 
     public static TipoAlimentoDTO of(TipoAlimento t) {
         return TipoAlimentoDTO
                 .builder()
                 .id(t.getId())
                 .nombre(t.getNombre())
+                .kilosDisponibles(t.getKilosDisponibles().getCantidadDisponible())
                 .build();
     }
 }

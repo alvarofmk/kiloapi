@@ -23,5 +23,9 @@ public class TipoAlimentoService {
         return tipoAlimentoRepository.findById(id);
     }
 
+    public boolean existsById(Long id) {
+        return tipoAlimentoRepository.existsById(id);
+    }
+
 
 }
