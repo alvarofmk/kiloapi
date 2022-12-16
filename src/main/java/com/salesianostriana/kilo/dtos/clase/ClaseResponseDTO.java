@@ -1,4 +1,4 @@
-package com.salesianostriana.kilo.dtos;
+package com.salesianostriana.kilo.dtos.clase;
 
 import com.salesianostriana.kilo.entities.Clase;
 import lombok.*;

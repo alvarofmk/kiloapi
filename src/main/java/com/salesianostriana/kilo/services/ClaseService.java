@@ -1,6 +1,6 @@
 package com.salesianostriana.kilo.services;
 
-import com.salesianostriana.kilo.dtos.cajas.CreateClassDTO;
+import com.salesianostriana.kilo.dtos.clase.CreateClaseDTO;
 import com.salesianostriana.kilo.entities.Clase;
 import com.salesianostriana.kilo.repositories.ClaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +28,11 @@ public class ClaseService {
     }
 
 
-    public Clase createClase(CreateClassDTO createClassDTO) {
+    public Clase createClase(CreateClaseDTO createClaseDTO) {
         Clase clase = repository.save(
                 Clase.builder()
-                        .tutor(createClassDTO.getTutor())
-                        .nombre(createClassDTO.getNombre())
-                        .aportaciones(null)
+                        .tutor(createClaseDTO.getTutor())
+                        .nombre(createClaseDTO.getNombre())
                         .build()
         );
 

@@ -1,7 +1,7 @@
 package com.salesianostriana.kilo.controllers;
 
-import com.salesianostriana.kilo.dtos.ClaseResponseDTO;
-import com.salesianostriana.kilo.dtos.cajas.CreateClassDTO;
+import com.salesianostriana.kilo.dtos.clase.ClaseResponseDTO;
+import com.salesianostriana.kilo.dtos.clase.CreateClaseDTO;
 import com.salesianostriana.kilo.entities.Clase;
 import com.salesianostriana.kilo.services.ClaseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -139,13 +138,13 @@ public class ClaseController {
             )
     })
     @PostMapping("/")
-    public ResponseEntity<Clase> createClass(@RequestBody CreateClassDTO createClassDTO) {
-        if (createClassDTO.getNombre() == null || createClassDTO.getTutor() == null) {
+    public ResponseEntity<Clase> createClass(@RequestBody CreateClaseDTO createClaseDTO) {
+        if (createClaseDTO.getNombre() == null || createClaseDTO.getTutor() == null) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .build();
         } else {
-            return ResponseEntity.status(HttpStatus.CREATED).body(service.createClase(createClassDTO));
+            return ResponseEntity.status(HttpStatus.CREATED).body(service.createClase(createClaseDTO));
         }
 
     }
