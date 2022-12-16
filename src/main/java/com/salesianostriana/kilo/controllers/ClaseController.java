@@ -185,14 +185,7 @@ public class ClaseController {
                     .build();
         }
 
-        Clase claseData = oldClase.get();
-
-        oldClase.map(c -> {
-            c.setNombre(claseEdit.getNombre());
-            c.setTutor(claseEdit.getNombre());
-
-            return c;
-        });
+        service.editClase(id, claseEdit);
 
 
         return ResponseEntity

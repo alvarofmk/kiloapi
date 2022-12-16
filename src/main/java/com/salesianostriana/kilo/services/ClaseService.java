@@ -38,4 +38,13 @@ public class ClaseService {
 
         return repository.save(clase);
     }
+
+    public Optional<Clase> editClase(Long id, CreateClaseDTO createClaseDTO) {
+        return repository.findById(id).map(c -> {
+            c.setNombre(createClaseDTO.getNombre());
+            c.setTutor(createClaseDTO.getNombre());
+
+            return repository.save(c);
+        });
+    }
 }
