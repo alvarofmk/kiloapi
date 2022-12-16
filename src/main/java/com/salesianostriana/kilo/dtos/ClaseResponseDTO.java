@@ -17,18 +17,6 @@ public class ClaseResponseDTO {
     private Double totalKilos;
 
 
-    public Double calcularKgTotales(Clase c){
-        final Double[] kg = {0.0};
-        c.getAportaciones().stream()
-                .forEach(a -> {
-                    a.getDetalleAportaciones().stream()
-                            .forEach(d -> kg[0] += d.getCantidadKg());
-                });
-
-        return kg[0];
-
-    }
-
     public static ClaseResponseDTO of(Clase c) {
         Double[] kg = {0.0};
         c.getAportaciones().stream()

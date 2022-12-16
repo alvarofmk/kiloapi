@@ -1,6 +1,7 @@
 package com.salesianostriana.kilo.controllers;
 
 import com.salesianostriana.kilo.dtos.ClaseResponseDTO;
+import com.salesianostriana.kilo.dtos.cajas.CreateClassDTO;
 import com.salesianostriana.kilo.entities.Clase;
 import com.salesianostriana.kilo.services.ClaseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,10 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -116,7 +114,39 @@ public class ClaseController {
                     clases.stream()
                             .map(ClaseResponseDTO::of)
                             .toList()
-            );
+        );}
+    }
+
+    @Operation(summary = "Crea una nueva clase")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "La clase ha sido creada",
+                    content = {@Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = """
+                                        {
+                                            "id" = 123,
+                                            "nombre" = "2DAM",
+                                            "tutor" = "Luis Miguel Lopez",
+                                            "aportaciones" = null
+                                        }
+                                    """))
+                    }),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "No se ha podido crear la clase",
+                    content = @Content
+            )
+    })
+    @PostMapping("/")
+    public ResponseEntity<Clase> createClass(@RequestBody CreateClassDTO createClassDTO) {
+        if (createClassDTO.getNombre() == null || createClassDTO.getTutor() == null) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(service.createClase(createClassDTO));
         }
+
     }
 }
