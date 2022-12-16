@@ -17,10 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -108,6 +105,55 @@ public class TipoAlimentoController {
             return ResponseEntity.of(resultado.map(TipoAlimentoDTO::of));
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+    @Operation(summary = "Crea un tipo de alimento")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+    description = "Cuerpo de la petición",
+    content = {
+            @Content(mediaType = "application/json",
+            schema = @Schema(implementation = TipoAlimentoDTO.class),
+            examples = {
+                    @ExampleObject(
+                            value = """
+                                    {
+                                        "nombre": "Atún en aceite de oliva"
+                                    }
+                                    """
+                    )
+            })
+    })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+            description = "Se ha creado el tipo de alimento",
+            content = {
+                    @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = TipoAlimentoDTO.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "id": 9,
+                                                "nombre": "Atún en aceite de oliva",
+                                                "kilosDisponibles": 0.0
+                                            }
+                                            """
+                            )
+                    })
+            }),
+            @ApiResponse(responseCode = "400",
+            description = "Los datos del tipo de alimento son incorrectos",
+            content = @Content)
+    })
+    @JsonView(View.TipoAlimentoView.TipoAlimentoByIdView.class)
+    @PostMapping("/")
+    public ResponseEntity<TipoAlimentoDTO> createTipoAlimento(@RequestBody TipoAlimentoDTO dto) {
+        TipoAlimento creado = tipoAlimentoService.createTipoAlimento(dto);
+        if(creado.getNombre() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }else {
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(TipoAlimentoDTO.of(creado));
         }
     }
 
