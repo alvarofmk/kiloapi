@@ -1,4 +1,4 @@
-package com.salesianostriana.kilo.dtos.cajas;
+package com.salesianostriana.kilo.dtos.clase;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateClassDTO {
+public class CreateClaseDTO {
 
     private String nombre, tutor;
 }
