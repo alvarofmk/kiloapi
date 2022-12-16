@@ -54,6 +54,16 @@ public class DetalleAportacion {
                 '}';
     }
 
+    public void addToTipoAlimento(TipoAlimento tipoAlimento){
+        this.tipoAlimento = tipoAlimento;
+        tipoAlimento.getDetalleAportaciones().add(this);
+    }
+
+    public void removeFromTipoAlimento(TipoAlimento tipoAlimento){
+        tipoAlimento.getDetalleAportaciones().remove(this);
+        this.tipoAlimento = null;
+    }
+
 
 
 }

@@ -11,8 +11,8 @@ import java.util.Objects;
 @Builder
 public class KilosDisponibles {
 
-    @ManyToOne
-    @JoinColumn(name = "tipoAlimento", foreignKey = @ForeignKey(name = "FK_KILOSDISPONIBLES_TIPOALIMENTO"))
+    @OneToOne
+    @JoinColumn(name = "tipo_alimento", foreignKey = @ForeignKey(name = "FK_KILOSDISPONIBLES_TIPOALIMENTO"))
     @MapsId
     private TipoAlimento tipoAlimento;
 
@@ -20,30 +20,30 @@ public class KilosDisponibles {
     private Long id;
     private Double cantidadDisponible;
 
+    public KilosDisponibles(Long id, double cantidad) {
+        this.id = id;
+        this.cantidadDisponible = cantidad;
+    }
+
 
     public void addTipoAlimento (TipoAlimento t) {
+        this.id = t.getId();
         this.tipoAlimento = t;
-        t.getKilosDisponibles().add(this);
+        t.setKilosDisponibles(this);
     }
 
     public void removeTipoAlimento(TipoAlimento t){
-        t.getKilosDisponibles().remove(this);
+        t.setKilosDisponibles(null);
         this.tipoAlimento = null;
+        this.id = null;
     }
-
-
-
-
-
-
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         KilosDisponibles that = (KilosDisponibles) o;
-        return Objects.equals(tipoAlimento, that.tipoAlimento) && Objects.equals(cantidadDisponible, that.cantidadDisponible);
+        return Objects.equals(tipoAlimento, that.tipoAlimento);
     }
 
     @Override
