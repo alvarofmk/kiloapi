@@ -1,7 +1,7 @@
 package com.salesianostriana.kilo.controllers;
 
 import com.salesianostriana.kilo.dtos.ClaseResponseDTO;
-import com.salesianostriana.kilo.dtos.requests.CreateClassDTO;
+import com.salesianostriana.kilo.dtos.cajas.CreateClassDTO;
 import com.salesianostriana.kilo.entities.Clase;
 import com.salesianostriana.kilo.services.ClaseService;
 import io.swagger.v3.oas.annotations.Operation;

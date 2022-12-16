@@ -1,6 +1,6 @@
 package com.salesianostriana.kilo.services;
 
-import com.salesianostriana.kilo.dtos.requests.CreateClassDTO;
+import com.salesianostriana.kilo.dtos.cajas.CreateClassDTO;
 import com.salesianostriana.kilo.entities.Clase;
 import com.salesianostriana.kilo.repositories.ClaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
