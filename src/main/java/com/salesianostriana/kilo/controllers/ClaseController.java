@@ -1,6 +1,7 @@
 package com.salesianostriana.kilo.controllers;
 
-import com.salesianostriana.kilo.dtos.ClaseResponseDTO;
+import com.salesianostriana.kilo.dtos.clase.ClaseResponseDTO;
+import com.salesianostriana.kilo.dtos.clase.CreateClaseDTO;
 import com.salesianostriana.kilo.entities.Clase;
 import com.salesianostriana.kilo.services.ClaseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,14 +12,11 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +24,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
+@Tag(name = "Clase", description = "Controlador de la entidad clase")
 @RequestMapping("/clase")
 public class ClaseController {
 
@@ -116,7 +115,87 @@ public class ClaseController {
                     clases.stream()
                             .map(ClaseResponseDTO::of)
                             .toList()
-            );
+        );}
+    }
+
+    @Operation(summary = "Crea una nueva clase")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "La clase ha sido creada",
+                    content = {@Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = """
+                                        {
+                                            "id" = 123,
+                                            "nombre" = "2DAM",
+                                            "tutor" = "Luis Miguel Lopez",
+                                            "aportaciones" = []
+                                        }
+                                    """))
+                    }),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "No se ha podido crear la clase",
+                    content = @Content
+            )
+    })
+    @PostMapping("/")
+    public ResponseEntity<Clase> createClass(@RequestBody CreateClaseDTO createClaseDTO) {
+        if (createClaseDTO.getNombre() == null || createClaseDTO.getTutor() == null) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(service.createClase(createClaseDTO));
         }
+
+    }
+
+    @Operation(summary = "Edita clase")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "La clase ha sido ceditada correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = """
+                                        {
+                                            "id" = 123,
+                                            "nombre" = "Clase editada",
+                                            "tutor" = "Tutor editado",
+                                            "aportaciones" = []
+                                        }
+                                    """))
+                    }),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "No se ha podido editar la clase",
+                    content = @Content
+            )
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<ClaseResponseDTO> editClase(
+            @Parameter(description = "ID de la clase a editar", required = true)
+            @PathVariable Long id,
+            @RequestBody CreateClaseDTO claseEdit ) {
+        Optional<Clase> oldClase = service.findById(id);
+
+        if (oldClase.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
+        Clase claseData = oldClase.get();
+
+        oldClase.map(c -> {
+            c.setNombre(claseEdit.getNombre());
+            c.setTutor(claseEdit.getNombre());
+
+            return c;
+        });
+
+
+        return ResponseEntity
+                .of(oldClase.map(ClaseResponseDTO::of));
     }
 }

@@ -22,15 +22,15 @@ public class CajaResponseDTO {
     @JsonView({View.CajaView.GenericResponseView.class})
     private String qr;
 
-    @JsonView({View.CajaView.GenericResponseView.class})
+    @JsonView({View.CajaView.GenericResponseView.class, View.DestinatarioView.DetailedDestinatarioView.class})
     private int numCaja;
 
-    @JsonView({View.CajaView.GenericResponseView.class})
+    @JsonView({View.CajaView.GenericResponseView.class, View.DestinatarioView.DetailedDestinatarioView.class})
     private double kilosTotales;
 
     private String nombreDestinatario;
 
-    @JsonView({View.CajaView.DetailResponseView.class})
+    @JsonView({View.CajaView.DetailResponseView.class, View.DestinatarioView.DetailedDestinatarioView.class})
     private List<TieneResponseDTO> contenido;
 
     public static CajaResponseDTO of(Caja caja){

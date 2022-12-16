@@ -26,4 +26,6 @@ public class DestinatarioService {
     public Optional<DestinatarioResponseDTO> getSummary(Long id) {
         return destinatarioRepository.findSummary(id);
     }
+
+    public Optional<Destinatario> findById(Long id){ return destinatarioRepository.findById(id); }
 }
