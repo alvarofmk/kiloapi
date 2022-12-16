@@ -24,7 +24,6 @@ public class TestData {
     private final ClaseService claseService;
     private final KilosDisponiblesRepository kilosDisponiblesRepository;
     private final AportacionRepository aportacionRepository;
-    private final DetalleAportacionRepository detalleAportacionRepository;
     private final DestinatarioRepository destinatarioRepository;
 
 
@@ -112,7 +111,7 @@ public class TestData {
         a1.addDetalleAportacion(de1);
         de1.addToTipoAlimento(t1);
 
-        detalleAportacionRepository.save(de1);
+        aportacionRepository.save(a1);
 
         
     }
