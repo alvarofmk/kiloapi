@@ -1,8 +1,10 @@
 package com.salesianostriana.kilo.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.salesianostriana.kilo.dtos.CajaResponseDTO;
 import com.salesianostriana.kilo.dtos.DestinatarioResponseDTO;
 import com.salesianostriana.kilo.services.DestinatarioService;
+import com.salesianostriana.kilo.views.View;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -56,6 +58,41 @@ public class DestinatarioController {
     @GetMapping("/{id}")
     public ResponseEntity<DestinatarioResponseDTO> getDestinatarioSummary(@PathVariable Long id) {
         return ResponseEntity.of(destinatarioService.getSummary(id));
+    }
+
+    @Operation(summary = "Muestra un destinatario y el detalle de las cajas asignadas a él")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Se ha encontrado al destinatario",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = DestinatarioResponseDTO.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "nombre": "Blizzard",
+                                        "direccion": "Algún sitio de china",
+                                        "personaContacto": "Jeff Kaplan",
+                                        "telefono": "666 666 666",
+                                        "cajas": [
+                                            {
+                                                "numCaja": 7,
+                                                "kilosTotales": 1.0,
+                                                "contenido": [
+                                                    {
+                                                        "nombre": "Chocolate",
+                                                        "kg": 1.0
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                    """))}),
+            @ApiResponse(responseCode = "404", description = "No se encuentra al destinatario",
+                    content = @Content)
+    })
+    @Parameter(description = "El id del destinatario a buscar", name = "id", required = true)
+    @JsonView(View.DestinatarioView.DetailedDestinatarioView.class)
+    @GetMapping("/{id}/detalle")
+    public ResponseEntity<DestinatarioResponseDTO> getDestinatarioDetail(@PathVariable Long id){
+        return ResponseEntity.of(destinatarioService.findById(id).map(DestinatarioResponseDTO::of));
     }
 
 }
