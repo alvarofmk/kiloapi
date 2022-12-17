@@ -108,7 +108,9 @@ public class TestData {
                 .cantidadKg(45.8)
                 .build();
 
+
         a1.addDetalleAportacion(de1);
+
         de1.addToTipoAlimento(t1);
 
         aportacionRepository.save(a1);
