@@ -46,8 +46,19 @@ public class TipoAlimentoService {
                                             .build());
 
         return tipoAlimentoRepository.save(creado);
+    }
 
-
+    public Optional<TipoAlimento> editTipoAlimento(Long id, TipoAlimentoDTO dto) {
+        Optional<TipoAlimento> toEdit = tipoAlimentoRepository.findById(id);
+        double cantidadTotalKg = tipoAlimentoRepository.getCantidadTotalKg(id);
+        if(dto.getKilosDisponibles() < cantidadTotalKg || dto.getNombre() == null) {
+            return Optional.empty();
+        }
+        return toEdit.map(editado -> {
+            editado.getKilosDisponibles().setCantidadDisponible(dto.getKilosDisponibles());
+            editado.setNombre(dto.getNombre());
+            return tipoAlimentoRepository.save(editado);
+        });
     }
 
 

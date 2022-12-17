@@ -7,6 +7,7 @@ import com.salesianostriana.kilo.entities.TipoAlimento;
 import com.salesianostriana.kilo.services.TipoAlimentoService;
 import com.salesianostriana.kilo.views.View;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -99,7 +100,14 @@ public class TipoAlimentoController {
     })
     @JsonView(View.TipoAlimentoView.TipoAlimentoByIdView.class)
     @GetMapping("/{id}")
-    public ResponseEntity<TipoAlimentoDTO> getTipoAlimentoById(@PathVariable Long id) {
+    public ResponseEntity<TipoAlimentoDTO> getTipoAlimentoById(
+            @Parameter(
+                    description = "ID del tipo de alimento a buscar",
+                    schema = @Schema(implementation = Long.class),
+                    name = "id",
+                    required = true
+            )
+            @PathVariable Long id) {
         Optional<TipoAlimento> resultado = tipoAlimentoService.findById(id);
         if(resultado.isPresent()) {
             return ResponseEntity.of(resultado.map(TipoAlimentoDTO::of));
@@ -155,6 +163,59 @@ public class TipoAlimentoController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(TipoAlimentoDTO.of(creado));
         }
+    }
+    @Operation(summary = "Edita un tipo de alimento en base a su ID")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+    description = "Cuerpo de la petición",
+    content = {
+            @Content(mediaType = "application/json",
+            schema = @Schema(implementation = TipoAlimentoDTO.class),
+            examples = {
+                    @ExampleObject(
+                            value = """
+                                    {
+                                        "nombre": "Arroz",
+                                        "kilosDisponibles": 60
+                                    }
+                                    """
+                    )
+            })
+    })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+            description = "Se ha editado el tipo de alimento",
+            content = {
+                    @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = TipoAlimentoDTO.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "id": 4,
+                                                "nombre": "Arroz",
+                                                "kilosDisponibles": 60.0
+                                            }
+                                            """
+                            )
+                    })
+            }),
+            @ApiResponse(responseCode = "400",
+            description = "Los datos del tipo de alimento no son correctos o no encuentra el tipo de alimento",
+            content = @Content)
+    })
+    @JsonView(View.TipoAlimentoView.TipoAlimentoByIdView.class)
+    @PutMapping("/{id}")
+    public ResponseEntity<TipoAlimentoDTO> editTipoAlimento(
+            @Parameter(
+                    description = "ID del tipo de alimento a editar",
+                    schema = @Schema(implementation = Long.class),
+                    name = "id",
+                    required = true
+            )
+            @PathVariable Long id, @RequestBody TipoAlimentoDTO dto) {
+        Optional<TipoAlimento> editado = tipoAlimentoService.editTipoAlimento(id, dto);
+        return editado.isPresent() ? ResponseEntity.status(HttpStatus.OK).body(TipoAlimentoDTO.of(editado.get())) :
+                                        ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
 }

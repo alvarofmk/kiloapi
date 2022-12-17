@@ -189,7 +189,7 @@ public class ClaseController {
 
         oldClase.map(c -> {
             c.setNombre(claseEdit.getNombre());
-            c.setTutor(claseEdit.getNombre());
+            c.setTutor(claseEdit.getTutor());
 
             return c;
         });
