@@ -1,14 +1,10 @@
-package com.salesianostriana.kilo.dtos;
+package com.salesianostriana.kilo.dtos.tipo_alimento;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.salesianostriana.kilo.entities.DetalleAportacion;
 import com.salesianostriana.kilo.entities.TipoAlimento;
 import com.salesianostriana.kilo.views.View;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @AllArgsConstructor @NoArgsConstructor
