@@ -1,15 +1,13 @@
 package com.salesianostriana.kilo.services;
 
 
-import com.salesianostriana.kilo.dtos.TipoAlimentoDTO;
-import com.salesianostriana.kilo.entities.DetalleAportacion;
+import com.salesianostriana.kilo.dtos.tipo_alimento.TipoAlimentoDTO;
 import com.salesianostriana.kilo.entities.KilosDisponibles;
 import com.salesianostriana.kilo.entities.TipoAlimento;
 import com.salesianostriana.kilo.repositories.TipoAlimentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

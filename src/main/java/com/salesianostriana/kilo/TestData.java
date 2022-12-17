@@ -115,6 +115,13 @@ public class TestData {
 
         aportacionRepository.save(a1);
 
+        k1.addTipoAlimento(t1);
+
+
+
+
+        tipoAlimentoRepository.save(t1);
+
         
     }
 }

@@ -2,7 +2,7 @@ package com.salesianostriana.kilo.controllers;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.salesianostriana.kilo.dtos.TipoAlimentoDTO;
+import com.salesianostriana.kilo.dtos.tipo_alimento.TipoAlimentoDTO;
 import com.salesianostriana.kilo.entities.TipoAlimento;
 import com.salesianostriana.kilo.services.TipoAlimentoService;
 import com.salesianostriana.kilo.views.View;
