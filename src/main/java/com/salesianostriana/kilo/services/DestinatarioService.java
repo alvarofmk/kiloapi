@@ -1,6 +1,7 @@
 package com.salesianostriana.kilo.services;
 
 import com.salesianostriana.kilo.dtos.DestinatarioResponseDTO;
+import com.salesianostriana.kilo.dtos.destinatarios.CreateDestinatarioDTO;
 import com.salesianostriana.kilo.entities.Destinatario;
 import com.salesianostriana.kilo.repositories.DestinatarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,4 +29,15 @@ public class DestinatarioService {
     }
 
     public Optional<Destinatario> findById(Long id){ return destinatarioRepository.findById(id); }
+
+    public Destinatario createDestinatario(CreateDestinatarioDTO createDestinatarioDTO){
+        return destinatarioRepository.save(Destinatario.builder()
+                .nombre(createDestinatarioDTO.getNombre())
+                .direccion(createDestinatarioDTO.getDireccion())
+                .personaContacto(createDestinatarioDTO.getPersonaContacto())
+                .telefono(createDestinatarioDTO.getTelefono())
+                .build()
+        );
+    }
+
 }
