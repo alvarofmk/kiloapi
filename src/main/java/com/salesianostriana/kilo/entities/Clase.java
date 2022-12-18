@@ -15,6 +15,7 @@ import java.util.Set;
 @Getter
 @ToString
 @Builder
+
 @NamedNativeQuery(
         name = "findFull",
         query = "SELECT new com.salesianostriana.kilo.dtos.clase.ClaseResponseDT0",
