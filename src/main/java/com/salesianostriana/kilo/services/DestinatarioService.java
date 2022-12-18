@@ -40,4 +40,23 @@ public class DestinatarioService {
         );
     }
 
+    public Optional<Destinatario> editDestinatario(Long id, CreateDestinatarioDTO editDest){
+        Optional<Destinatario> destinatario = destinatarioRepository.findById(id);
+
+        if(destinatario.isPresent()){
+            if(editDest.getNombre()== null || editDest.getDireccion()==null)
+                return Optional.empty();
+            else
+                return destinatario.map(d -> {
+                    d.setNombre(editDest.getNombre());
+                    d.setDireccion(editDest.getDireccion());
+                    d.setPersonaContacto(editDest.getPersonaContacto()==null ? d.getPersonaContacto() : editDest.getPersonaContacto());
+                    d.setTelefono(editDest.getTelefono()==null ? d.getTelefono() : editDest.getTelefono());
+                    return destinatarioRepository.save(d);
+                });
+        }
+        else
+            return Optional.empty();
+    }
+
 }
