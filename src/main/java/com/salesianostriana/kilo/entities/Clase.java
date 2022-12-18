@@ -1,5 +1,6 @@
 package com.salesianostriana.kilo.entities;
 
+import com.salesianostriana.kilo.dtos.clase.ClaseResponseDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,6 +15,21 @@ import java.util.Set;
 @Getter
 @ToString
 @Builder
+@NamedNativeQuery(
+        name = "findFull",
+        query = "SELECT new com.salesianostriana.kilo.dtos.clase.ClaseResponseDT0",
+        resultSetMapping = "Mapping.ClaseResponseDTO")
+@SqlResultSetMapping(
+        name = "Mapping.ClaseResponseDTO",
+        classes = @ConstructorResult(targetClass = ClaseResponseDTO.class,
+                columns = {
+                    @ColumnResult(name = "nombre"),
+                        @ColumnResult(name = "tutor"),
+                        @ColumnResult(name = "numAportaciones"),
+                        @ColumnResult(name = "totalKilos"),
+                }
+        )
+)
 public class Clase {
 
     @Id @GeneratedValue

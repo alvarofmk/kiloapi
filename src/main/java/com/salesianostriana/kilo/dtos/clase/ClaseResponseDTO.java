@@ -16,6 +16,16 @@ public class ClaseResponseDTO {
 
     private Double totalKilos;
 
+    /*
+    public ClaseResponseDTO(Long id, String nombre, String tutor, Integer numAportaciones, Double totalKilos) {
+        this.id = id;
+        this.nombre = nombre;
+        this.tutor = tutor;
+        this.numAportaciones = numAportaciones;
+        this.totalKilos = totalKilos;
+    }
+
+     */
 
     public static ClaseResponseDTO of(Clase c) {
         Double[] kg = {0.0};
