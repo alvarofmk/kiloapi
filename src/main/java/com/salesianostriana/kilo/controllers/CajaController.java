@@ -171,4 +171,20 @@ public class CajaController {
         return result.isPresent() ? ResponseEntity.ok(result.map(CajaResponseDTO::of).get()) : ResponseEntity.badRequest().build();
     }
 
+
+    @Operation(summary = "Borra una caja por su id",
+            description = "Si la caja a borrar ya tiene destinatario asociado, " +
+                    "el método elimina la caja del listado de cajas de su destinatario.")
+    @ApiResponse(responseCode = "204", description = "Caja borrada con éxito",
+            content = @Content)
+    @Parameter(description = "El id de la caja a borrar", name = "id", required = true)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCaja(@PathVariable Long id) {
+        cajaService.deleteById(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+
 }

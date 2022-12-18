@@ -2,13 +2,12 @@ package com.salesianostriana.kilo.services;
 
 import com.salesianostriana.kilo.dtos.cajas.CreateCajaDTO;
 import com.salesianostriana.kilo.dtos.cajas.EditCajaDTO;
-import com.salesianostriana.kilo.entities.Caja;
-import com.salesianostriana.kilo.entities.KilosDisponibles;
-import com.salesianostriana.kilo.entities.Tiene;
-import com.salesianostriana.kilo.entities.TipoAlimento;
+import com.salesianostriana.kilo.entities.*;
 import com.salesianostriana.kilo.entities.keys.TienePK;
 import com.salesianostriana.kilo.repositories.CajaRepository;
+import com.salesianostriana.kilo.repositories.DestinatarioRepository;
 import com.salesianostriana.kilo.repositories.TieneRepository;
+import com.salesianostriana.kilo.repositories.TipoAlimentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +25,8 @@ public class CajaService {
     private final KilosDisponiblesService kilosDisponiblesService;
 
     private final TipoAlimentoService tipoAlimentoService;
+    private final TipoAlimentoRepository tipoAlimentoRepository;
+    private final DestinatarioRepository destinatarioRepository;
 
     public List<Caja> findAll(){
         return repository.findAll();
@@ -79,5 +80,29 @@ public class CajaService {
             }
         }
         return Optional.empty();
+    }
+
+    public void deleteById(Long id) {
+        Optional<Caja> c = repository.findById(id);
+
+        if (c.isPresent()) {
+            Caja toDelete = c.get();
+            toDelete.getAlimentos().forEach(alim -> {
+                toDelete.setKilosTotales(toDelete.getKilosTotales() - alim.getCantidadKgs());
+
+                Double kilosDispo = alim.getTipoAlimento().getKilosDisponibles().getCantidadDisponible();
+
+                kilosDispo += alim.getCantidadKgs();
+
+                alim.setCantidadKgs(kilosDispo);
+            });
+
+            Destinatario dest = destinatarioRepository.findById(toDelete.getDestinatario().getId()).get();
+
+            dest.getCajas().remove(toDelete);
+
+            repository.delete(toDelete);
+
+        }
     }
 }
