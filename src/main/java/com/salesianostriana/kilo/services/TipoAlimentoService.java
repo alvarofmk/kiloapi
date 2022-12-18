@@ -2,6 +2,7 @@ package com.salesianostriana.kilo.services;
 
 
 import com.salesianostriana.kilo.dtos.tipo_alimento.TipoAlimentoDTO;
+import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.entities.KilosDisponibles;
 import com.salesianostriana.kilo.entities.TipoAlimento;
 import com.salesianostriana.kilo.repositories.TipoAlimentoRepository;
@@ -16,6 +17,10 @@ import java.util.Optional;
 public class TipoAlimentoService {
 
     private final TipoAlimentoRepository tipoAlimentoRepository;
+
+    private final AportacionService aportacionService;
+
+    private final CajaService cajaService;
 
     public List<TipoAlimento> findAll() {
         return tipoAlimentoRepository.findAll();
@@ -58,6 +63,15 @@ public class TipoAlimentoService {
             return tipoAlimentoRepository.save(editado);
         });
     }
+
+    public void deleteTipoAlimento(Long id) {
+        Optional<TipoAlimento> borrado = tipoAlimentoRepository.findById(id);
+        if((!cajaService.tipoAlimentoInTiene(id) && !aportacionService.tipoAlimentoInAportacion(id)) && borrado.isPresent())
+            tipoAlimentoRepository.delete(borrado.get());
+
+    }
+
+
 
 
 

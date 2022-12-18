@@ -218,4 +218,10 @@ public class TipoAlimentoController {
                                         ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTipoAlimento(@PathVariable Long id) {
+        tipoAlimentoService.deleteTipoAlimento(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }

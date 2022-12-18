@@ -80,4 +80,8 @@ public class CajaService {
         }
         return Optional.empty();
     }
+
+    public boolean tipoAlimentoInTiene(Long id) {
+        return repository.tipoAlimentoInTiene(id);
+    }
 }

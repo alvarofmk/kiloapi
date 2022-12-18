@@ -45,7 +45,7 @@ public class TestData {
                 .build();
 
         Caja c1 = Caja.builder()
-                .qr("http://localhots:8080/caja/3")
+                .qr("http://localhost:8080/caja/3")
                 .numCaja(7)
                 .build();
 
