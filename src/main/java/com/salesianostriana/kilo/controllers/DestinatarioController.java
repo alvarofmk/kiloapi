@@ -1,8 +1,9 @@
 package com.salesianostriana.kilo.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.salesianostriana.kilo.dtos.CajaResponseDTO;
 import com.salesianostriana.kilo.dtos.DestinatarioResponseDTO;
+import com.salesianostriana.kilo.dtos.destinatarios.CreateDestinatarioDTO;
+import com.salesianostriana.kilo.entities.Destinatario;
 import com.salesianostriana.kilo.services.DestinatarioService;
 import com.salesianostriana.kilo.views.View;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -94,5 +96,44 @@ public class DestinatarioController {
     public ResponseEntity<DestinatarioResponseDTO> getDestinatarioDetail(@PathVariable Long id){
         return ResponseEntity.of(destinatarioService.findById(id).map(DestinatarioResponseDTO::of));
     }
+
+    @Operation(summary = "Crea un nuevo destinatario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Destinatario creado con éxito",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Destinatario.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "id": 10,
+                                        "nombre": "Hijas de la caridad",
+                                        "direccion": "Calle Sin nombre Nº7",
+                                        "personaContacto": "Sor María",
+                                        "telefono": "689624528",
+                                        "cajas": [],                                  
+                                    }
+                                    """)) }),
+            @ApiResponse(responseCode = "400", description = "Los datos proporcionados no son correctos",
+                    content = @Content) })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "Datos del nuevo destinatario",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = CreateDestinatarioDTO.class),
+                    examples = @ExampleObject(value = """
+                            {
+                                "nombre": "Hijas de la caridad",
+                                "direccion": "Calle Sin nombre Nº7",
+                                "personaContacto": "Sor María",
+                                "telefono": "689624528",                          
+                            }
+                            """)
+            )}
+    )
+    @PostMapping("/")
+    public ResponseEntity<Destinatario> createDestinatario(@RequestBody CreateDestinatarioDTO newDest){
+        if(newDest.getNombre()!= null && newDest.getDireccion()!= null)
+            return ResponseEntity.status(HttpStatus.CREATED).body(destinatarioService.createDestinatario(newDest));
+        else
+            return ResponseEntity.badRequest().build();
+    }
+
 
 }
