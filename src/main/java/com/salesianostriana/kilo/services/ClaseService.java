@@ -39,6 +39,19 @@ public class ClaseService {
         return repository.save(clase);
     }
 
+
+    /*
+    public void deleteClase(Long id) {
+
+        if (repository.findById(id).isPresent()) repository.deleteById(id);
+
+    }
+    
+     */
+
+
+
+
     public void deleteClase(Long id) {
         Optional<Clase> c = repository.findById(id);
 
@@ -51,7 +64,6 @@ public class ClaseService {
 
             repository.delete(cl);
         }
-
-
     }
+
 }
