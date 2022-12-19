@@ -1,6 +1,5 @@
 package com.salesianostriana.kilo.controllers;
 
-import com.salesianostriana.kilo.dtos.CajaResponseDTO;
 import com.salesianostriana.kilo.dtos.RankingResponseDTO;
 import com.salesianostriana.kilo.services.ClaseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
