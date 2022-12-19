@@ -13,5 +13,6 @@ public class EditCajaDTO {
 
     private int numero;
     private String qr;
+    private Long destinatarioId;
 
 }
