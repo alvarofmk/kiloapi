@@ -17,11 +17,12 @@ public class KilosDisponiblesDTO {
 
     private String nombre;
 
-    private double cantidadKg;
-
     private Long idAportacion;
 
     private Long numLinea;
+
+    private double cantidadKg;
+
 
     public KilosDisponiblesDTO(Long id, String nombre, double cantidadKg){
         this.id = id;

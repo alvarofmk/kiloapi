@@ -4,6 +4,7 @@ package com.salesianostriana.kilo.controllers;
 import com.salesianostriana.kilo.dtos.kilos_disponibles.KilosDisponiblesDTO;
 import com.salesianostriana.kilo.services.KilosDisponiblesService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -66,6 +67,28 @@ public class KilosDisponiblesController {
                 ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @Operation(summary = "Obtiene los detalles de una aportación que contienen el alimento en concreto")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista con los detalles de aportación que contienen dicho alimento",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = KilosDisponiblesDTO.class),
+                            examples = @ExampleObject(value = """
+                                    [
+                                        {
+                                            "idAportacion": 8,
+                                            "numLinea": 1,
+                                            "cantidadKg": 7.5
+                                        },
+                                        {
+                                            "idAportacion": 9,
+                                            "numLinea": 3,
+                                            "cantidadKg": 4.5
+                                        }
+                                    ]
+                                    """)) }),
+            @ApiResponse(responseCode = "404", description = "No se encuentra el alimento en ninguna aportación",
+                    content = @Content) })
+    @Parameter(description = "El id del tipo de alimento que queremos buscar", name = "id", required = true)
     @GetMapping("/{id}")
     public ResponseEntity<List<KilosDisponiblesDTO>> getKgDispobilesAlimento(@PathVariable Long id){
 
