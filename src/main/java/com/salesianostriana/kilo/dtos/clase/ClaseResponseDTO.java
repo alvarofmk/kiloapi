@@ -17,6 +17,8 @@ public class ClaseResponseDTO {
     private Double totalKilos;
 
 
+
+    /*
     public static ClaseResponseDTO of(Clase c) {
         Double[] kg = {0.0};
         c.getAportaciones().stream()
@@ -34,4 +36,6 @@ public class ClaseResponseDTO {
                 .build();
 
     }
+
+     */
 }

@@ -64,9 +64,8 @@ public class ClaseController {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .build();
-        } else {
-            return ResponseEntity.of(c.map(ClaseResponseDTO::of));
         }
+        return ResponseEntity.of(service.findFull(id));
     }
 
     @Operation(summary = "Lista todas las clases")
@@ -193,10 +192,7 @@ public class ClaseController {
 
             return c;
         });
-
-
-        return ResponseEntity
-                .of(oldClase.map(ClaseResponseDTO::of));
+        return ResponseEntity.of(service.findFull(id));
     }
 
     @Operation(summary = "Borra una clase por su id",

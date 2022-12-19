@@ -1,5 +1,6 @@
 package com.salesianostriana.kilo.services;
 
+import com.salesianostriana.kilo.dtos.clase.ClaseResponseDTO;
 import com.salesianostriana.kilo.dtos.clase.CreateClaseDTO;
 import com.salesianostriana.kilo.entities.Clase;
 import com.salesianostriana.kilo.repositories.ClaseRepository;
@@ -22,6 +23,8 @@ public class ClaseService {
     public Optional<Clase> findById(Long id) {
         return repository.findById(id);
     }
+
+    public Optional<ClaseResponseDTO> findFull (Long id) { return repository.findFull(id) ; }
 
     public List<Clase> findAll(){
         return repository.findAll();
