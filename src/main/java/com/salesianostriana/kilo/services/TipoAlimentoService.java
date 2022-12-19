@@ -60,7 +60,7 @@ public class TipoAlimentoService {
     public Optional<TipoAlimento> editTipoAlimento(Long id, TipoAlimentoDTO dto) {
         Optional<TipoAlimento> toEdit = tipoAlimentoRepository.findById(id);
         if(dto.getNombre() == null
-                || (!tipoAlimentoInTiene(id)) && aportacionService.tipoAlimentoInAportacion(id)) {
+                || (!tipoAlimentoInTiene(id)) && !aportacionService.tipoAlimentoInAportacion(id)) {
             return Optional.empty();
         }
         return toEdit.map(editado -> {
