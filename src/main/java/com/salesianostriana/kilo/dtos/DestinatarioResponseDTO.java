@@ -2,6 +2,7 @@ package com.salesianostriana.kilo.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.salesianostriana.kilo.dtos.cajas.CajaResponseDTO;
 import com.salesianostriana.kilo.entities.Destinatario;
 import com.salesianostriana.kilo.views.View;
 import lombok.*;
