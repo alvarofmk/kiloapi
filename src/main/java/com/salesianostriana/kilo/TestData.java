@@ -3,16 +3,12 @@ package com.salesianostriana.kilo;
 import com.salesianostriana.kilo.entities.*;
 import com.salesianostriana.kilo.entities.keys.DetalleAportacionPK;
 import com.salesianostriana.kilo.repositories.*;
-import com.salesianostriana.kilo.services.CajaService;
 import com.salesianostriana.kilo.services.ClaseService;
-import com.salesianostriana.kilo.services.KilosDisponiblesService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -25,6 +21,8 @@ public class TestData {
     private final KilosDisponiblesRepository kilosDisponiblesRepository;
     private final AportacionRepository aportacionRepository;
     private final DestinatarioRepository destinatarioRepository;
+
+    private final TieneRepository tieneRepository;
 
 
     @PostConstruct
@@ -62,8 +60,13 @@ public class TestData {
                 .nombre("Chocolate")
                 .build();
 
+        TipoAlimento t3 = TipoAlimento.builder()
+                .nombre("Polvorones")
+                .build();
+
         t1 = tipoAlimentoRepository.save(t1);
         t2 = tipoAlimentoRepository.save(t2);
+        t3 = tipoAlimentoRepository.save(t3);
         //tipoAlimentoRepository.saveAll(List.of(t1, t2));
 
         //t1 = tipoAlimentoRepository.findById(4L).get();
@@ -83,17 +86,22 @@ public class TestData {
         clases.forEach(System.out::println);
 
         KilosDisponibles k1 = KilosDisponibles.builder()
-                .cantidadDisponible(10.0)
+                .cantidadDisponible(61.5)
                 .build();
 
         k1.addTipoAlimento(t1);
 
         KilosDisponibles k2 = KilosDisponibles.builder()
-                .cantidadDisponible(2.0)
+                .cantidadDisponible(22.5)
                 .build();
 
         k2.addTipoAlimento(t2);
 
+        KilosDisponibles k3 = KilosDisponibles.builder()
+                .cantidadDisponible(0.0)
+                .build();
+
+        k3.addTipoAlimento(t3);
 
         tipoAlimentoRepository.saveAll(List.of(t1, t2));
 
@@ -135,14 +143,21 @@ public class TestData {
                 .cantidadKg(15.7)
                 .build();
 
+        DetalleAportacion de5 = DetalleAportacion.builder()
+                .detalleAportacionPK(new DetalleAportacionPK(2L, a3.getId()))
+                .cantidadKg(10)
+                .build();
+
         a1.addDetalleAportacion(de1);
         a2.addDetalleAportacion(de2);
         a2.addDetalleAportacion(de3);
         a3.addDetalleAportacion(de4);
+        a3.addDetalleAportacion(de5);
         de1.addToTipoAlimento(t1);
         de2.addToTipoAlimento(t2);
         de3.addToTipoAlimento(t2);
         de4.addToTipoAlimento(t1);
+        de5.addToTipoAlimento(t3);
 
         aportacionRepository.save(a1);
         aportacionRepository.save(a2);
@@ -156,6 +171,16 @@ public class TestData {
 
         tipoAlimentoRepository.save(t2);
 
+        tipoAlimentoRepository.save(t3);
+
+        Tiene ti = new Tiene(c1, t3, 10);
+
+        c1.addTiene(ti);
+
+        cajaRepository.save(c1);
+        tieneRepository.save(ti);
+
+        System.out.println(tipoAlimentoRepository.findAlimentosEmpaquetados());
         
     }
 }
