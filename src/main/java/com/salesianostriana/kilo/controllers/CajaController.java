@@ -1,7 +1,7 @@
 package com.salesianostriana.kilo.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.salesianostriana.kilo.dtos.CajaResponseDTO;
+import com.salesianostriana.kilo.dtos.cajas.CajaResponseDTO;
 import com.salesianostriana.kilo.dtos.cajas.CreateCajaDTO;
 import com.salesianostriana.kilo.dtos.cajas.EditCajaDTO;
 import com.salesianostriana.kilo.entities.Caja;
@@ -184,6 +184,36 @@ public class CajaController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
+    }
+
+    @Operation(summary = "Lista una caja segun su Id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Caja por Id encontrada",
+                    content = { @Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = """
+                                                    {
+                                                        "id": 3,
+                                                        "qr": "http://localhots:8080/caja/3",
+                                                        "numCaja": 7,
+                                                        "kilosTotales": 0.0,
+                                                        "nombreDestinatario": "Blizzard",
+                                                        "contenido": []
+                                                    }
+                                    """))
+                    }),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "No se encontró ninguna caja con el id Id indicado",
+                    content = @Content
+            )
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<CajaResponseDTO> getById(
+            @Parameter(description = "ID de la caja buscada", required = true)
+            @PathVariable Long id) {
+        return ResponseEntity.of(cajaService.findById(id).map(CajaResponseDTO::of));
     }
 
 
