@@ -14,7 +14,7 @@ public interface KilosDisponiblesRepository extends JpaRepository<KilosDisponibl
             SELECT new com.salesianostriana.kilo.dtos.kilos_disponibles.KilosDisponiblesDTO(ta.id, ta.nombre, kd.cantidadDisponible)
             FROM KilosDisponibles kd JOIN TipoAlimento ta ON ta.id = kd.tipoAlimento
             """)
-    public List<KilosDisponiblesDTO> getAllKgDisponibles();
+    List<KilosDisponiblesDTO> getAllKgDisponibles();
 
     @Query("""
             SELECT new com.salesianostriana.kilo.dtos.kilos_disponibles.KilosDisponiblesDTO(d.detalleAportacionPK.aportacionId, d.detalleAportacionPK.lineaId, d.cantidadKg)

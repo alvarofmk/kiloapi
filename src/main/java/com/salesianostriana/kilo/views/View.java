@@ -12,6 +12,10 @@ public class View {
     public static interface AportacionView{
 
         public static interface AportacionDetallesView{}
+
+        public static interface AllAportacionView{}
+
+
     }
 
     public static interface DetalleAportacionView{
@@ -21,9 +25,9 @@ public class View {
     public static interface TipoAlimentoView {
 
         public static interface AllTipoAlimentoView{}
-        public static interface TipoAlimentoByIdView{
+        public static interface TipoAlimentoByIdView{}
 
-        }
+        public static interface TipoAlimentoRequest{}
     }
 
     public static interface DestinatarioView {
