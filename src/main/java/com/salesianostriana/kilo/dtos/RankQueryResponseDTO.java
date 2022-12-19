@@ -2,10 +2,7 @@ package com.salesianostriana.kilo.dtos;
 
 import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.entities.Clase;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor
@@ -14,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class RankQueryResponseDTO {
 
     private Long claseId;
+    private String nombre;
     private double sumaKilos;
 
 }

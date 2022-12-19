@@ -2,17 +2,16 @@ package com.salesianostriana.kilo.services;
 
 import com.salesianostriana.kilo.dtos.RankQueryResponseDTO;
 import com.salesianostriana.kilo.dtos.RankingResponseDTO;
-import com.salesianostriana.kilo.dtos.clase.ClaseQueryResponseDTO;
 import com.salesianostriana.kilo.dtos.clase.CreateClaseDTO;
 import com.salesianostriana.kilo.entities.Clase;
 import com.salesianostriana.kilo.repositories.ClaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.util.stream.Collectors.*;
 
 @Service
 public class ClaseService {
@@ -45,17 +44,16 @@ public class ClaseService {
     }
 
     public List<RankingResponseDTO> getRanking(){
-        List<RankingResponseDTO> result = new ArrayList<RankingResponseDTO>();
+        AtomicInteger position = new AtomicInteger(1);
         List<RankQueryResponseDTO> resumenAportaciones = repository.findClasesOrderedByRank();
-        List<ClaseQueryResponseDTO> clases = repository.findClassReferences();
-        clases.stream().forEach(c -> {
-            List<RankQueryResponseDTO> aportacionesDeClase = resumenAportaciones.stream().filter(a -> a.getClaseId() == c.getId()).toList();
-            long cantidadAportaciones = aportacionesDeClase.size();
-            double mediaKilos = aportacionesDeClase.stream().mapToDouble(a -> a.getSumaKilos()).average().getAsDouble();
-            double sumaKilos = aportacionesDeClase.stream().mapToDouble(a -> a.getSumaKilos()).sum();
-            result.add(new RankingResponseDTO(c.getNombre(), cantidadAportaciones, mediaKilos, sumaKilos));
-        });
+        List<RankingResponseDTO> result = new ArrayList<>(resumenAportaciones.stream().collect(groupingBy(RankQueryResponseDTO::getClaseId)).values().stream().map(v -> {
+            return new RankingResponseDTO(v.get(0).getNombre(), v.size(), v.stream().mapToDouble(RankQueryResponseDTO::getSumaKilos).average().getAsDouble(), v.stream().mapToDouble(RankQueryResponseDTO::getSumaKilos).sum());
+        }).toList());
         Collections.sort(result);
+        result.stream().forEachOrdered(r -> {
+            r.setPosicion(position.get());
+            position.getAndIncrement();
+        });
         return result;
     }
 }
