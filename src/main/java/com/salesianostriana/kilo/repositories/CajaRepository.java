@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface CajaRepository extends JpaRepository<Caja, Long> {
 
+
+
 }

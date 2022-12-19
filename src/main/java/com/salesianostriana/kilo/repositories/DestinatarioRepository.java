@@ -17,9 +17,18 @@ public interface DestinatarioRepository extends JpaRepository<Destinatario, Long
     public Optional<DestinatarioResponseDTO> findSummary(@Param("id") Long id);
 
     @Query("""
-            SELECT new com.salesianostriana.kilo.dtos.DestinatarioResponseDTO(d.nombre, d.direccion, d.personaContacto, d.telefono, SUM(c.kilosTotales))
+            SELECT new com.salesianostriana.kilo.dtos.DestinatarioResponseDTO(d.id ,d.nombre, d.direccion, d.personaContacto, d.telefono, COALESCE(SUM(c.kilosTotales), 0.0))
             FROM Destinatario d LEFT JOIN Caja c ON d.id = c.destinatario 
             GROUP BY d.id
             """)
-    List<DestinatarioResponseDTO> getDestinatariosConCajas();
+    List<DestinatarioResponseDTO> getDestinatariosConKilos();
+
+    @Query("""
+            SELECT c.numCaja
+            FROM Destinatario d JOIN Caja c ON d.id = c.destinatario
+            WHERE d.id = :id
+            """)
+    List<Integer> numerosdeCaja(@Param("id") Long id);
+
+
 }

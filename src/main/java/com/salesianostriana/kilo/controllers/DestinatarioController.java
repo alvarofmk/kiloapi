@@ -28,6 +28,7 @@ public class DestinatarioController {
 
     private final DestinatarioService destinatarioService;
 
+    @JsonView(View.DestinatarioView.AllDestinatarioView.class)
     @GetMapping("/")
     public ResponseEntity<List<DestinatarioResponseDTO>> getAllDestinatarios(){
 

@@ -16,7 +16,14 @@ public class DestinatarioService {
 
     private final DestinatarioRepository destinatarioRepository;
 
-    public List<DestinatarioResponseDTO> getAllDestinatarios(){return destinatarioRepository.getDestinatariosConCajas();}
+    public List<DestinatarioResponseDTO> getAllDestinatarios(){
+
+        List<DestinatarioResponseDTO> destinatarios = destinatarioRepository.getDestinatariosConKilos();
+        destinatarios.forEach(d ->
+                d.setNumerosDeCajas(destinatarioRepository.numerosdeCaja(d.getId()))
+            );
+        return destinatarios;
+    }
 
     public void deleteById(Long id) {
         Optional<Destinatario> opt = destinatarioRepository.findById(id);
