@@ -101,36 +101,56 @@ public class TestData {
                 .fecha(LocalDate.of(2018, 1, 1))
                 .build();
 
-        aportacionRepository.save(a1);
+        Aportacion a2 = Aportacion.builder()
+                .fecha(LocalDate.of(2019, 1, 1))
+                .build();
+
+        Aportacion a3 = Aportacion.builder()
+                .fecha(LocalDate.of(2020, 1, 1))
+                .build();
+
+        a1.addToClase(cl1);
+        a2.addToClase(cl2);
+        a3.addToClase(cl2);
+
+        aportacionRepository.saveAll(List.of(a1, a2, a3));
 
         DetalleAportacion de1 = DetalleAportacion.builder()
                 .detalleAportacionPK(new DetalleAportacionPK(1L, a1.getId()))
                 .cantidadKg(45.8)
                 .build();
 
-        DetalleAportacion de2 = DetalleAportacion.builder()
-                .detalleAportacionPK(new DetalleAportacionPK(2L, a1.getId()))
-                .cantidadKg(1)
+        DetalleAportacion de3 = DetalleAportacion.builder()
+                .detalleAportacionPK(new DetalleAportacionPK(1L, a2.getId()))
+                .cantidadKg(20.2)
                 .build();
 
+        DetalleAportacion de2 = DetalleAportacion.builder()
+                .detalleAportacionPK(new DetalleAportacionPK(2L, a2.getId()))
+                .cantidadKg(2.3)
+                .build();
 
+        DetalleAportacion de4 = DetalleAportacion.builder()
+                .detalleAportacionPK(new DetalleAportacionPK(1L, a3.getId()))
+                .cantidadKg(15.7)
+                .build();
 
         a1.addDetalleAportacion(de1);
-
-        a1.addDetalleAportacion(de2);
-
+        a2.addDetalleAportacion(de2);
+        a2.addDetalleAportacion(de3);
+        a3.addDetalleAportacion(de4);
         de1.addToTipoAlimento(t1);
-
         de2.addToTipoAlimento(t2);
+        de3.addToTipoAlimento(t2);
+        de4.addToTipoAlimento(t1);
 
         aportacionRepository.save(a1);
+        aportacionRepository.save(a2);
+        aportacionRepository.save(a3);
 
         k1.addTipoAlimento(t1);
 
         k2.addTipoAlimento(t2);
-
-
-
 
         tipoAlimentoRepository.save(t1);
 
