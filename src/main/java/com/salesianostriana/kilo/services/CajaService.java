@@ -24,6 +24,8 @@ public class CajaService {
 
     private final KilosDisponiblesService kilosDisponiblesService;
 
+    private final DestinatarioService destinatarioService;
+
     private final TipoAlimentoService tipoAlimentoService;
     private final TipoAlimentoRepository tipoAlimentoRepository;
     private final DestinatarioRepository destinatarioRepository;
@@ -46,11 +48,16 @@ public class CajaService {
     }
 
     public Optional<Caja> editCaja(EditCajaDTO editCajaDTO, Long id){
-        if(editCajaDTO.getNumero() <= 0)
+        Optional<Destinatario> newDest = editCajaDTO.getDestinatarioId() == null ? Optional.empty() : destinatarioRepository.findById(editCajaDTO.getDestinatarioId());
+        if(editCajaDTO.getNumero() <= 0 || newDest.isEmpty())
             return Optional.empty();
         return repository.findById(id).map( cajaToEdit -> {
+            Destinatario actual = cajaToEdit.getDestinatario();
             cajaToEdit.setQr(editCajaDTO.getQr());
             cajaToEdit.setNumCaja(editCajaDTO.getNumero());
+            if(actual != null)
+                cajaToEdit.removeDestinatario(actual);
+            cajaToEdit.addDestinatario(newDest.get());
             return repository.save(cajaToEdit);
         });
     }

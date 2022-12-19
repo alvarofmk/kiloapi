@@ -5,7 +5,9 @@ import com.salesianostriana.kilo.dtos.CajaResponseDTO;
 import com.salesianostriana.kilo.dtos.cajas.CreateCajaDTO;
 import com.salesianostriana.kilo.dtos.cajas.EditCajaDTO;
 import com.salesianostriana.kilo.entities.Caja;
+import com.salesianostriana.kilo.entities.Destinatario;
 import com.salesianostriana.kilo.services.CajaService;
+import com.salesianostriana.kilo.services.DestinatarioService;
 import com.salesianostriana.kilo.services.TipoAlimentoService;
 import com.salesianostriana.kilo.views.View;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,8 +33,6 @@ import java.util.Optional;
 public class CajaController {
 
     private final CajaService cajaService;
-
-    private final TipoAlimentoService tipoAlimentoService;
 
     @Operation(summary = "Obtiene todas las cajas")
     @ApiResponses(value = {
