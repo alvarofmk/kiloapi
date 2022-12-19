@@ -17,5 +17,22 @@ public class KilosDisponiblesDTO {
 
     private String nombre;
 
+    private Long idAportacion;
+
+    private Long numLinea;
+
     private double cantidadKg;
+
+
+    public KilosDisponiblesDTO(Long id, String nombre, double cantidadKg){
+        this.id = id;
+        this.nombre = nombre;
+        this.cantidadKg = cantidadKg;
+    }
+
+    public KilosDisponiblesDTO(Long idAportacion, Long numLinea, double cantidadKg){
+        this.idAportacion = idAportacion;
+        this.numLinea = numLinea;
+        this.cantidadKg = cantidadKg;
+    }
 }
