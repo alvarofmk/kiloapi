@@ -12,10 +12,5 @@ import java.util.Optional;
 @Repository
 public interface CajaRepository extends JpaRepository<Caja, Long> {
 
-    @Query("""
-            SELECT CASE WHEN t.tipoAlimento.id = :id THEN true ELSE false END
-            FROM Tiene t
-            """)
-    public boolean tipoAlimentoInTiene(@Param("id") Long id);
 
 }

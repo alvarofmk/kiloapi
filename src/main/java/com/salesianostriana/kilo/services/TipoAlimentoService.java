@@ -20,7 +20,6 @@ public class TipoAlimentoService {
 
     private final AportacionService aportacionService;
 
-    private final CajaService cajaService;
 
     public List<TipoAlimento> findAll() {
         return tipoAlimentoRepository.findAll();
@@ -51,6 +50,13 @@ public class TipoAlimentoService {
         return tipoAlimentoRepository.save(creado);
     }
 
+    public boolean tipoAlimentoInTiene(Long id) {
+        List<Integer> lista = tipoAlimentoRepository.tipoAlimentoInTiene(id);
+        return lista
+                .stream()
+                .anyMatch(num -> num == 1);
+    }
+
     public Optional<TipoAlimento> editTipoAlimento(Long id, TipoAlimentoDTO dto) {
         Optional<TipoAlimento> toEdit = tipoAlimentoRepository.findById(id);
         double cantidadTotalKg = tipoAlimentoRepository.getCantidadTotalKg(id);
@@ -66,7 +72,7 @@ public class TipoAlimentoService {
 
     public void deleteTipoAlimento(Long id) {
         Optional<TipoAlimento> borrado = tipoAlimentoRepository.findById(id);
-        if((!cajaService.tipoAlimentoInTiene(id) && !aportacionService.tipoAlimentoInAportacion(id)) && borrado.isPresent())
+        if((!tipoAlimentoInTiene(id) && !aportacionService.tipoAlimentoInAportacion(id)) && borrado.isPresent())
             tipoAlimentoRepository.delete(borrado.get());
 
     }

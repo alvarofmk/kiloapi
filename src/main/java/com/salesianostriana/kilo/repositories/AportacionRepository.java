@@ -6,11 +6,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface AportacionRepository extends JpaRepository<Aportacion, Long> {
     @Query("""
-            SELECT CASE WHEN da.tipoAlimento.id = :id THEN true ELSE false END
+            SELECT CASE 
+                WHEN da.tipoAlimento.id = :id THEN 1 
+                ELSE 0 END
             FROM DetalleAportacion da
             """)
-    public boolean tipoAlimentoInAportacion(@Param("id") Long id);
+    List<Integer> tipoAlimentoInAportacion(@Param("id") Long id);
 }

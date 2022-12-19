@@ -21,7 +21,10 @@ public class AportacionService {
     }
 
     public boolean tipoAlimentoInAportacion(Long id) {
-        return aportacionRepository.tipoAlimentoInAportacion(id);
+        List<Integer> lista = aportacionRepository.tipoAlimentoInAportacion(id);
+        return lista
+                .stream()
+                .anyMatch(num -> num == 1);
     }
 
 }
