@@ -25,10 +25,20 @@ public class DestinatarioResponseDTO {
         this.kilosTotales = kilosTotales;
     }
 
+    public DestinatarioResponseDTO(String nombre, String direccion, String personaContacto, String telefono, double kilosTotales) {
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.personaContacto = personaContacto;
+        this.telefono = telefono;
+        this.kilosTotales = kilosTotales;
+    }
+
     @JsonView({View.DestinatarioView.DetailedDestinatarioView.class})
     private String nombre, direccion, personaContacto, telefono;
     private long numeroCajas;
     private double kilosTotales;
+
+    private int [] numerosDeCajas;
 
     @JsonView({View.DestinatarioView.DetailedDestinatarioView.class})
     private List<CajaResponseDTO> cajas;

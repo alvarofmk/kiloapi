@@ -32,4 +32,11 @@ public class View {
 
     }
 
+    public static interface KilosDisponiblesView {
+
+        public static interface KilosDisponiblesAllView{}
+
+        public static interface KilosDisponiblesDetailsView{}
+    }
+
 }

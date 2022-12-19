@@ -18,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +27,17 @@ import org.springframework.web.bind.annotation.*;
 public class DestinatarioController {
 
     private final DestinatarioService destinatarioService;
+
+    @GetMapping("/")
+    public ResponseEntity<List<DestinatarioResponseDTO>> getAllDestinatarios(){
+
+        List<DestinatarioResponseDTO> destinatarios = destinatarioService.getAllDestinatarios();
+
+        if(destinatarios.isEmpty())
+            return ResponseEntity.notFound().build();
+        else
+            return ResponseEntity.ok(destinatarios);
+    }
 
     @Operation(summary = "Borra un destinatario por su id",
             description = "Si el destinatario a borrar ya tiene cajas asociadas, " +
