@@ -2,12 +2,14 @@ package com.salesianostriana.kilo.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.salesianostriana.kilo.dtos.DestinatarioResponseDTO;
+import com.salesianostriana.kilo.dtos.cajas.CajaResponseDTO;
 import com.salesianostriana.kilo.dtos.destinatarios.CreateDestinatarioDTO;
 import com.salesianostriana.kilo.entities.Destinatario;
 import com.salesianostriana.kilo.services.DestinatarioService;
 import com.salesianostriana.kilo.views.View;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,6 +32,35 @@ public class DestinatarioController {
 
     private final DestinatarioService destinatarioService;
 
+    @Operation(summary = "Muestra todos los destinatarios")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Hay destinatarios, aquí tienes los datos",
+                    content = { @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = DestinatarioResponseDTO.class)),
+                            examples = @ExampleObject(value = """
+                                    [
+                                        {
+                                                 "nombre": "Mi abuela",
+                                                 "direccion": "La giralda basicamente",
+                                                 "personaContacto": "Pues mi abuela",
+                                                 "telefono": "686 567 397",
+                                                 "kilosTotales": 0.0,
+                                                 "numerosDeCajas": []
+                                        },
+                                        {
+                                                 "nombre": "Blizzard",
+                                                 "direccion": "Algún sitio de china",
+                                                 "personaContacto": "Jeff Kaplan",
+                                                 "telefono": "666 666 666",
+                                                 "kilosTotales": 0.0,
+                                                 "numerosDeCajas": [
+                                                     7
+                                                 ]
+                                        },
+                                    ]
+                                    """)) }),
+            @ApiResponse(responseCode = "404", description = "No hay destinatarios",
+                    content = @Content) })
     @JsonView(View.DestinatarioView.AllDestinatarioView.class)
     @GetMapping("/")
     public ResponseEntity<List<DestinatarioResponseDTO>> getAllDestinatarios(){
