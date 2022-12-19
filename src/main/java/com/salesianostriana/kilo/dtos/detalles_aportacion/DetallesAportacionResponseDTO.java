@@ -14,14 +14,24 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DetallesAportacionResponseDTO {
 
-    @JsonView({View.AportacionView.AportacionDetallesView.class})
+    @JsonView({View.KilosDisponiblesView.KilosDisponiblesDetailsView.class})
+    private Long aportacionId;
+
+    @JsonView({View.AportacionView.AportacionDetallesView.class, View.KilosDisponiblesView.KilosDisponiblesDetailsView.class})
     private Long numLinea;
 
-    @JsonView(View.AportacionView.AportacionDetallesView.class)
+    @JsonView({View.AportacionView.AportacionDetallesView.class, View.KilosDisponiblesView.KilosDisponiblesDetailsView.class})
     private double cantidadKg;
 
     @JsonView(View.AportacionView.AportacionDetallesView.class)
     private String nombre;
+
+
+    public DetallesAportacionResponseDTO(Long aportacionId, Long numLinea, double cantidadKg){
+        this.aportacionId = aportacionId;
+        this.numLinea = numLinea;
+        this.cantidadKg = cantidadKg;
+    }
 
 
     public static DetallesAportacionResponseDTO of (DetalleAportacion d){

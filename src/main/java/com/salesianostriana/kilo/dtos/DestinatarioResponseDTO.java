@@ -26,10 +26,29 @@ public class DestinatarioResponseDTO {
         this.kilosTotales = kilosTotales;
     }
 
-    @JsonView({View.DestinatarioView.DetailedDestinatarioView.class})
+    public DestinatarioResponseDTO(Long id, String nombre, String direccion, String personaContacto, String telefono, double kilosTotales) {
+        this.id = id;
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.personaContacto = personaContacto;
+        this.telefono = telefono;
+        this.kilosTotales = kilosTotales;
+    }
+
+    public DestinatarioResponseDTO(List<Integer> listaCajas){
+        this.numerosDeCajas = listaCajas;
+    }
+
+    private Long id;
+    @JsonView({View.DestinatarioView.DetailedDestinatarioView.class, View.DestinatarioView.AllDestinatarioView.class})
     private String nombre, direccion, personaContacto, telefono;
     private long numeroCajas;
+
+    @JsonView({View.DestinatarioView.AllDestinatarioView.class})
     private double kilosTotales;
+
+    @JsonView({View.DestinatarioView.AllDestinatarioView.class})
+    private List<Integer> numerosDeCajas;
 
     @JsonView({View.DestinatarioView.DetailedDestinatarioView.class})
     private List<CajaResponseDTO> cajas;

@@ -1,8 +1,10 @@
 package com.salesianostriana.kilo.controllers;
 
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.salesianostriana.kilo.dtos.kilos_disponibles.KilosDisponiblesDTO;
 import com.salesianostriana.kilo.services.KilosDisponiblesService;
+import com.salesianostriana.kilo.views.View;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("kilosDisponibles")
@@ -61,6 +64,7 @@ public class KilosDisponiblesController {
             content = @Content)
     })
     @GetMapping("/")
+    @JsonView(View.KilosDisponiblesView.class)
     public ResponseEntity<List<KilosDisponiblesDTO>> getAllKgDisponibles() {
         List<KilosDisponiblesDTO> result = kilosDisponiblesService.findAllKgDisponibles();
         return result.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() :
@@ -73,27 +77,30 @@ public class KilosDisponiblesController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = KilosDisponiblesDTO.class),
                             examples = @ExampleObject(value = """
-                                    [
-                                        {
-                                            "idAportacion": 8,
-                                            "numLinea": 1,
-                                            "cantidadKg": 7.5
-                                        },
-                                        {
-                                            "idAportacion": 9,
-                                            "numLinea": 3,
-                                            "cantidadKg": 4.5
-                                        }
-                                    ]
+                                    {
+                                        "nombre": "Pasta",
+                                        "cantidadKg": 10.0,
+                                        "listaDetallesConKg": [
+                                            {
+                                                "idAportacion": 8,
+                                                "numLinea": 1,
+                                                "cantidadKg": 7.5
+                                            },
+                                            {
+                                                "idAportacion": 9,
+                                                "numLinea": 3,
+                                                "cantidadKg": 4.5
+                                            }
+                                        ]
+                                    }
                                     """)) }),
             @ApiResponse(responseCode = "404", description = "No se encuentra el alimento en ninguna aportación",
                     content = @Content) })
     @Parameter(description = "El id del tipo de alimento que queremos buscar", name = "id", required = true)
     @GetMapping("/{id}")
-    public ResponseEntity<List<KilosDisponiblesDTO>> getKgDispobilesAlimento(@PathVariable Long id){
+    @JsonView(View.KilosDisponiblesView.KilosDisponiblesDetailsView.class)
+    public ResponseEntity<KilosDisponiblesDTO> getKgDispobilesAlimento(@PathVariable Long id){
 
-        List<KilosDisponiblesDTO> result = kilosDisponiblesService.getKgAlimento(id);
-
-        return result.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(result);
+        return ResponseEntity.of(kilosDisponiblesService.getKgAlimento(id));
     }
 }
