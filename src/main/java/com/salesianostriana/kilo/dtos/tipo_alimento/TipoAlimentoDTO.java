@@ -18,7 +18,8 @@ public class TipoAlimentoDTO {
     private Long id;
 
     @JsonView({View.TipoAlimentoView.AllTipoAlimentoView.class,
-    View.TipoAlimentoView.TipoAlimentoByIdView.class})
+    View.TipoAlimentoView.TipoAlimentoByIdView.class,
+            View.TipoAlimentoView.TipoAlimentoRequest.class})
     private String nombre;
 
     @JsonView({View.TipoAlimentoView.TipoAlimentoByIdView.class})

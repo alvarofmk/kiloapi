@@ -1,7 +1,6 @@
 package com.salesianostriana.kilo.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.salesianostriana.kilo.dtos.CajaResponseDTO;
 import com.salesianostriana.kilo.dtos.aportaciones.AportacionesReponseDTO;
 import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.services.AportacionService;
@@ -16,12 +15,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -67,5 +68,53 @@ public class AportacionController {
         Optional<Aportacion> aportacion = aportacionService.findById(id);
         return ResponseEntity.of(Optional.of(AportacionesReponseDTO.of(aportacion.get())));
 
+    }
+    @Operation(summary = "Obtiene todas las aportaciones")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+            description = "Se han encontrado aportaciones",
+            content = {
+                    @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = AportacionesReponseDTO.class)),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            [
+                                                {
+                                                    "id": 8,
+                                                    "fecha": "2018-01-01",
+                                                    "nombreClase": "2DAM",
+                                                    "cantidadTotalKg": 45.8
+                                                },
+                                                {
+                                                    "id": 9,
+                                                    "fecha": "2019-01-01",
+                                                    "nombreClase": "1DAM",
+                                                    "cantidadTotalKg": 22.5
+                                                },
+                                                {
+                                                    "id": 10,
+                                                    "fecha": "2020-01-01",
+                                                    "nombreClase": "1DAM",
+                                                    "cantidadTotalKg": 15.7
+                                                }
+                                            ]
+                                            """
+                            )
+                    })
+            }),
+            @ApiResponse(responseCode = "404",
+            description = "No se han encontrado aportaciones",
+            content = @Content)
+    })
+    @JsonView(View.AportacionView.AllAportacionView.class)
+    @GetMapping("/")
+    public ResponseEntity<List<AportacionesReponseDTO>> getAllAportaciones() {
+        List<AportacionesReponseDTO> lista = aportacionService.findAllAportaciones();
+        if(lista.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }else {
+            return ResponseEntity.status(HttpStatus.OK).body(lista);
+        }
     }
 }

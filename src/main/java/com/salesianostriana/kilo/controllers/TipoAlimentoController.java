@@ -155,7 +155,7 @@ public class TipoAlimentoController {
     })
     @JsonView(View.TipoAlimentoView.TipoAlimentoByIdView.class)
     @PostMapping("/")
-    public ResponseEntity<TipoAlimentoDTO> createTipoAlimento(@RequestBody TipoAlimentoDTO dto) {
+    public ResponseEntity<TipoAlimentoDTO> createTipoAlimento(@JsonView(View.TipoAlimentoView.TipoAlimentoRequest.class) @RequestBody TipoAlimentoDTO dto) {
         TipoAlimento creado = tipoAlimentoService.createTipoAlimento(dto);
         if(creado.getNombre() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -174,8 +174,7 @@ public class TipoAlimentoController {
                     @ExampleObject(
                             value = """
                                     {
-                                        "nombre": "Arroz",
-                                        "kilosDisponibles": 60
+                                        "nombre": "Arroz"
                                     }
                                     """
                     )
@@ -212,10 +211,27 @@ public class TipoAlimentoController {
                     name = "id",
                     required = true
             )
-            @PathVariable Long id, @RequestBody TipoAlimentoDTO dto) {
+            @PathVariable Long id, @JsonView(View.TipoAlimentoView.TipoAlimentoRequest.class) @RequestBody TipoAlimentoDTO dto) {
         Optional<TipoAlimento> editado = tipoAlimentoService.editTipoAlimento(id, dto);
         return editado.isPresent() ? ResponseEntity.status(HttpStatus.OK).body(TipoAlimentoDTO.of(editado.get())) :
                                         ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @Operation(summary = "Borra un tipo de alimento en base a su ID")
+    @ApiResponse(responseCode = "204",
+    description = "Se ha borrado el tipo de alimento",
+    content = @Content)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTipoAlimento(
+            @Parameter(
+                    description = "ID del tipo de alimento a borrar",
+                    schema = @Schema(implementation = Long.class),
+                    name = "id",
+                    required = true
+            )
+            @PathVariable Long id) {
+        tipoAlimentoService.deleteTipoAlimento(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
