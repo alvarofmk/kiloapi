@@ -117,4 +117,14 @@ public class AportacionController {
             return ResponseEntity.status(HttpStatus.OK).body(lista);
         }
     }
+    @JsonView(View.AportacionView.AportacionByClase.class)
+    @GetMapping("/clase/{id}")
+    public ResponseEntity<List<AportacionesReponseDTO>> getAllAportacionesByClase(@PathVariable Long id) {
+        List<AportacionesReponseDTO> lista = aportacionService.findAllAportacionesByClase(id);
+        if(lista.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }else {
+            return ResponseEntity.status(HttpStatus.OK).body(lista);
+        }
+    }
 }

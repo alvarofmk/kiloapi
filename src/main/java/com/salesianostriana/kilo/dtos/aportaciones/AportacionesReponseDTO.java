@@ -11,7 +11,11 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,7 +31,8 @@ public class AportacionesReponseDTO {
     private Long id;
 
     @JsonView({View.AportacionView.AportacionDetallesView.class,
-            View.AportacionView.AllAportacionView.class})
+            View.AportacionView.AllAportacionView.class,
+            View.AportacionView.AportacionByClase.class})
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fecha;
 
@@ -38,6 +43,13 @@ public class AportacionesReponseDTO {
     private String nombreClase;
     @JsonView({View.AportacionView.AllAportacionView.class})
     private double cantidadTotalKg;
+
+    private String nombreAlimento;
+
+    private double kgDetalleAportacion;
+
+    @JsonView(View.AportacionView.AportacionByClase.class)
+    private Map<String, Double> pares = new HashMap<>();
 
     public static AportacionesReponseDTO of (Aportacion a){
         return AportacionesReponseDTO.builder()
@@ -56,6 +68,20 @@ public class AportacionesReponseDTO {
         this.fecha = fecha;
         nombreClase = clase;
         cantidadTotalKg = totalKg;
+    }
+
+    public AportacionesReponseDTO(LocalDate fecha, String alimento, double kg) {
+        this.fecha = fecha;
+        nombreAlimento = alimento;
+        kgDetalleAportacion = kg;
+        pares = null;
+
+    }
+
+    public void maping(String nombre, double kilo) {
+        Map<String, Double> mapa = new HashMap<>();
+        mapa.put(nombre, kilo);
+        this.pares = mapa;
     }
 
 
