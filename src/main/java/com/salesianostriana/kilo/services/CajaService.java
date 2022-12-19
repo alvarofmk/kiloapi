@@ -6,10 +6,7 @@ import com.salesianostriana.kilo.dtos.cajas.EditCajaDTO;
 import com.salesianostriana.kilo.dtos.clase.ClaseResponseDTO;
 import com.salesianostriana.kilo.entities.*;
 import com.salesianostriana.kilo.entities.keys.TienePK;
-import com.salesianostriana.kilo.repositories.CajaRepository;
-import com.salesianostriana.kilo.repositories.DestinatarioRepository;
-import com.salesianostriana.kilo.repositories.TieneRepository;
-import com.salesianostriana.kilo.repositories.TipoAlimentoRepository;
+import com.salesianostriana.kilo.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +28,7 @@ public class CajaService {
     private final TipoAlimentoService tipoAlimentoService;
     private final TipoAlimentoRepository tipoAlimentoRepository;
     private final DestinatarioRepository destinatarioRepository;
+    private final KilosDisponiblesRepository kilosDisponiblesRepository;
 
     public List<Caja> findAll(){
         return repository.findAll();
@@ -135,7 +133,12 @@ public class CajaService {
 
             }
 
-            caja.getAlimentos().
+            KilosDisponibles kD = kilosDisponiblesService.findById(idAlim).get();
+
+            kD.setCantidadDisponible(kD.getCantidadDisponible()+t.getCantidadKgs());
+
+            kilosDisponiblesRepository.save(kD);
+
 
 
         }
