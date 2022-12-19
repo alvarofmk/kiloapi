@@ -17,7 +17,4 @@ public interface ClaseRepository extends JpaRepository<Clase, Long> {
             "FROM Aportacion a JOIN DetalleAportacion d ON a.id = d.aportacion GROUP BY a.id")
     public List<RankQueryResponseDTO> findClasesOrderedByRank();
 
-    @Query("SELECT new com.salesianostriana.kilo.dtos.clase.ClaseQueryResponseDTO(c.id, c.nombre) FROM Clase c")
-    public List<ClaseQueryResponseDTO> findClassReferences();
-
 }
