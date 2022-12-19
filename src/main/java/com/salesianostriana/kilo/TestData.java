@@ -24,7 +24,6 @@ public class TestData {
     private final ClaseService claseService;
     private final KilosDisponiblesRepository kilosDisponiblesRepository;
     private final AportacionRepository aportacionRepository;
-    private final DetalleAportacionRepository detalleAportacionRepository;
     private final DestinatarioRepository destinatarioRepository;
 
 
@@ -46,7 +45,7 @@ public class TestData {
                 .build();
 
         Caja c1 = Caja.builder()
-                .qr("http://localhots:8080/caja/3")
+                .qr("http://localhost:8080/caja/3")
                 .numCaja(7)
                 .build();
 
@@ -145,7 +144,17 @@ public class TestData {
         de3.addToTipoAlimento(t2);
         de4.addToTipoAlimento(t1);
 
-        detalleAportacionRepository.saveAll(List.of(de1, de2, de3, de4));
+        aportacionRepository.save(a1);
+        aportacionRepository.save(a2);
+        aportacionRepository.save(a3);
+
+        k1.addTipoAlimento(t1);
+
+        k2.addTipoAlimento(t2);
+
+        tipoAlimentoRepository.save(t1);
+
+        tipoAlimentoRepository.save(t2);
 
         
     }

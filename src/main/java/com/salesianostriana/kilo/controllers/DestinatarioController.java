@@ -1,21 +1,23 @@
 package com.salesianostriana.kilo.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.salesianostriana.kilo.dtos.CajaResponseDTO;
 import com.salesianostriana.kilo.dtos.DestinatarioResponseDTO;
+import com.salesianostriana.kilo.dtos.destinatarios.CreateDestinatarioDTO;
+import com.salesianostriana.kilo.entities.Destinatario;
 import com.salesianostriana.kilo.services.DestinatarioService;
 import com.salesianostriana.kilo.views.View;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -94,5 +96,87 @@ public class DestinatarioController {
     public ResponseEntity<DestinatarioResponseDTO> getDestinatarioDetail(@PathVariable Long id){
         return ResponseEntity.of(destinatarioService.findById(id).map(DestinatarioResponseDTO::of));
     }
+
+    @Operation(summary = "Crea un nuevo destinatario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Destinatario creado con éxito",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Destinatario.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "id": 10,
+                                        "nombre": "Hijas de la caridad",
+                                        "direccion": "Calle Sin nombre Nº7",
+                                        "personaContacto": "Sor María",
+                                        "telefono": "689624528",
+                                        "cajas": [],
+                                    }
+                                    """)) }),
+            @ApiResponse(responseCode = "400", description = "Los datos proporcionados no son correctos",
+                    content = @Content) })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "Datos del nuevo destinatario",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = CreateDestinatarioDTO.class),
+                    examples = @ExampleObject(value = """
+                            {
+                                "nombre": "Hijas de la caridad",
+                                "direccion": "Calle Sin nombre Nº7",
+                                "personaContacto": "Sor María",
+                                "telefono": "689624528",
+                            }
+                            """)
+            )}
+    )
+    @PostMapping("/")
+    public ResponseEntity<Destinatario> createDestinatario(@RequestBody CreateDestinatarioDTO newDest){
+        if(newDest.getNombre()!= null && newDest.getDireccion()!= null)
+            return ResponseEntity.status(HttpStatus.CREATED).body(destinatarioService.createDestinatario(newDest));
+        else
+            return ResponseEntity.badRequest().build();
+    }
+
+    @Operation(summary = "Edita un destinatario especificado por el id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Destinatario editado con éxito",
+                    content = { @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Destinatario.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "id": 10,
+                                        "nombre": "Nietas de la Caridad",
+                                        "direccion": "Calle Con Nombre Nº7",
+                                        "personaContacto": "Sor María II",
+                                        "telefono": "689547563",
+                                        "cajas": []
+                                    }
+                                    """)
+                            )
+                    }
+            ),
+            @ApiResponse(responseCode = "400", description = "Los datos proporcionados no son correctos",
+                    content = @Content)
+    })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "Datos del destinatario actualizados",
+            content = { @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = CreateDestinatarioDTO.class),
+                    examples = @ExampleObject( value = """
+                                {
+                                    "nombre": "Nietas de la Caridad",
+                                    "direccion": "Calle Con Nombre Nº7",
+                                    "personaContacto": "Sor María II",
+                                    "telefono": "689547563",
+                                }
+                            """)
+            )}
+    )
+    @Parameter(description = "Id del destinatario a modificar", name = "id", required = true)
+    @PutMapping("/{id}")
+    public ResponseEntity<Destinatario> editDestinatario(@PathVariable Long id, @RequestBody CreateDestinatarioDTO editDest){
+
+        return destinatarioService.editDestinatario(id, editDest).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
 
 }

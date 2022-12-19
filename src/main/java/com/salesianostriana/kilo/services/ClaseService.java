@@ -56,4 +56,28 @@ public class ClaseService {
         });
         return result;
     }
+
+    /*
+    public void deleteClase(Long id) {
+
+        if (repository.findById(id).isPresent()) repository.deleteById(id);
+
+    }
+    
+     */
+
+    public void deleteClase(Long id) {
+        Optional<Clase> c = repository.findById(id);
+
+        if (c.isPresent()) {
+            Clase cl = c.get();
+            cl.getAportaciones()
+                    .forEach( clase -> {
+                        clase.setClase(null);
+                    });
+
+            repository.delete(cl);
+        }
+    }
+
 }

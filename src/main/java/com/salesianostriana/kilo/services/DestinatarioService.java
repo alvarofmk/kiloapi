@@ -1,6 +1,7 @@
 package com.salesianostriana.kilo.services;
 
 import com.salesianostriana.kilo.dtos.DestinatarioResponseDTO;
+import com.salesianostriana.kilo.dtos.destinatarios.CreateDestinatarioDTO;
 import com.salesianostriana.kilo.entities.Destinatario;
 import com.salesianostriana.kilo.repositories.DestinatarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,4 +29,34 @@ public class DestinatarioService {
     }
 
     public Optional<Destinatario> findById(Long id){ return destinatarioRepository.findById(id); }
+
+    public Destinatario createDestinatario(CreateDestinatarioDTO createDestinatarioDTO){
+        return destinatarioRepository.save(Destinatario.builder()
+                .nombre(createDestinatarioDTO.getNombre())
+                .direccion(createDestinatarioDTO.getDireccion())
+                .personaContacto(createDestinatarioDTO.getPersonaContacto())
+                .telefono(createDestinatarioDTO.getTelefono())
+                .build()
+        );
+    }
+
+    public Optional<Destinatario> editDestinatario(Long id, CreateDestinatarioDTO editDest){
+        Optional<Destinatario> destinatario = destinatarioRepository.findById(id);
+
+        if(destinatario.isPresent()){
+            if(editDest.getNombre()== null || editDest.getDireccion()==null)
+                return Optional.empty();
+            else
+                return destinatario.map(d -> {
+                    d.setNombre(editDest.getNombre());
+                    d.setDireccion(editDest.getDireccion());
+                    d.setPersonaContacto(editDest.getPersonaContacto()==null ? d.getPersonaContacto() : editDest.getPersonaContacto());
+                    d.setTelefono(editDest.getTelefono()==null ? d.getTelefono() : editDest.getTelefono());
+                    return destinatarioRepository.save(d);
+                });
+        }
+        else
+            return Optional.empty();
+    }
+
 }
