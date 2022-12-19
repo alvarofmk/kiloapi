@@ -1,5 +1,6 @@
 package com.salesianostriana.kilo.services;
 
+import com.salesianostriana.kilo.dtos.aportaciones.AportacionesReponseDTO;
 import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.repositories.AportacionRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,10 @@ public class AportacionService {
         return lista
                 .stream()
                 .anyMatch(num -> num == 1);
+    }
+
+    public List<AportacionesReponseDTO> findAllAportaciones() {
+        return aportacionRepository.getAllAportaciones();
     }
 
 }
