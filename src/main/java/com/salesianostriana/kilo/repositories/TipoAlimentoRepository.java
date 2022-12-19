@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface TipoAlimentoRepository extends JpaRepository<TipoAlimento, Long> {
 
@@ -14,5 +17,13 @@ public interface TipoAlimentoRepository extends JpaRepository<TipoAlimento, Long
             FROM DetalleAportacion da JOIN TipoAlimento ta ON ta.id = da.tipoAlimento
             WHERE ta.id = :id
             """)
-    public double getCantidadTotalKg(@Param("id") Long id);
+    double getCantidadTotalKg(@Param("id") Long id);
+
+    @Query("""
+            SELECT CASE 
+                WHEN COALESCE(t.tipoAlimento.id, 0) = :id THEN 1
+                ELSE 0 END
+            FROM Tiene t
+            """)
+    List<Integer> tipoAlimentoInTiene(@Param("id") Long id);
 }

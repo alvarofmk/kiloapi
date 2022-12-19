@@ -218,4 +218,21 @@ public class TipoAlimentoController {
                                         ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @Operation(summary = "Borra un tipo de alimento en base a su ID")
+    @ApiResponse(responseCode = "204",
+    description = "Se ha borrado el tipo de alimento",
+    content = @Content)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTipoAlimento(
+            @Parameter(
+                    description = "ID del tipo de alimento a borrar",
+                    schema = @Schema(implementation = Long.class),
+                    name = "id",
+                    required = true
+            )
+            @PathVariable Long id) {
+        tipoAlimentoService.deleteTipoAlimento(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }

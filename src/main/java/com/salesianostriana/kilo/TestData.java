@@ -45,7 +45,7 @@ public class TestData {
                 .build();
 
         Caja c1 = Caja.builder()
-                .qr("http://localhots:8080/caja/3")
+                .qr("http://localhost:8080/caja/3")
                 .numCaja(7)
                 .build();
 
@@ -108,19 +108,33 @@ public class TestData {
                 .cantidadKg(45.8)
                 .build();
 
+        DetalleAportacion de2 = DetalleAportacion.builder()
+                .detalleAportacionPK(new DetalleAportacionPK(2L, a1.getId()))
+                .cantidadKg(1)
+                .build();
+
+
 
         a1.addDetalleAportacion(de1);
 
+        a1.addDetalleAportacion(de2);
+
         de1.addToTipoAlimento(t1);
+
+        de2.addToTipoAlimento(t2);
 
         aportacionRepository.save(a1);
 
         k1.addTipoAlimento(t1);
 
+        k2.addTipoAlimento(t2);
+
 
 
 
         tipoAlimentoRepository.save(t1);
+
+        tipoAlimentoRepository.save(t2);
 
         
     }

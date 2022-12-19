@@ -2,6 +2,7 @@ package com.salesianostriana.kilo.services;
 
 
 import com.salesianostriana.kilo.dtos.tipo_alimento.TipoAlimentoDTO;
+import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.entities.KilosDisponibles;
 import com.salesianostriana.kilo.entities.TipoAlimento;
 import com.salesianostriana.kilo.repositories.TipoAlimentoRepository;
@@ -16,6 +17,9 @@ import java.util.Optional;
 public class TipoAlimentoService {
 
     private final TipoAlimentoRepository tipoAlimentoRepository;
+
+    private final AportacionService aportacionService;
+
 
     public List<TipoAlimento> findAll() {
         return tipoAlimentoRepository.findAll();
@@ -46,6 +50,13 @@ public class TipoAlimentoService {
         return tipoAlimentoRepository.save(creado);
     }
 
+    public boolean tipoAlimentoInTiene(Long id) {
+        List<Integer> lista = tipoAlimentoRepository.tipoAlimentoInTiene(id);
+        return lista
+                .stream()
+                .anyMatch(num -> num == 1);
+    }
+
     public Optional<TipoAlimento> editTipoAlimento(Long id, TipoAlimentoDTO dto) {
         Optional<TipoAlimento> toEdit = tipoAlimentoRepository.findById(id);
         double cantidadTotalKg = tipoAlimentoRepository.getCantidadTotalKg(id);
@@ -58,6 +69,15 @@ public class TipoAlimentoService {
             return tipoAlimentoRepository.save(editado);
         });
     }
+
+    public void deleteTipoAlimento(Long id) {
+        Optional<TipoAlimento> borrado = tipoAlimentoRepository.findById(id);
+        if((!tipoAlimentoInTiene(id) && !aportacionService.tipoAlimentoInAportacion(id)) && borrado.isPresent())
+            tipoAlimentoRepository.delete(borrado.get());
+
+    }
+
+
 
 
 
