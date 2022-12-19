@@ -1,7 +1,7 @@
 package com.salesianostriana.kilo.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.salesianostriana.kilo.dtos.CajaResponseDTO;
+import com.salesianostriana.kilo.dtos.cajas.CajaResponseDTO;
 import com.salesianostriana.kilo.dtos.cajas.CreateCajaDTO;
 import com.salesianostriana.kilo.dtos.cajas.EditCajaDTO;
 import com.salesianostriana.kilo.entities.Caja;
@@ -187,4 +187,11 @@ public class CajaController {
     }
 
 
+    @DeleteMapping("/{id}/tipo/{idTipoAlim}")
+    public ResponseEntity<CajaResponseDTO> deleteAlimFromCaja (@PathVariable Long id, Long idTipoAlim) {
+
+        return ResponseEntity
+                .of(cajaService.deleteAlimFromCaja(id, idTipoAlim));
+
+    }
 }

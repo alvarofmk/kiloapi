@@ -1,7 +1,9 @@
 package com.salesianostriana.kilo.services;
 
+import com.salesianostriana.kilo.dtos.cajas.CajaResponseDTO;
 import com.salesianostriana.kilo.dtos.cajas.CreateCajaDTO;
 import com.salesianostriana.kilo.dtos.cajas.EditCajaDTO;
+import com.salesianostriana.kilo.dtos.clase.ClaseResponseDTO;
 import com.salesianostriana.kilo.entities.*;
 import com.salesianostriana.kilo.entities.keys.TienePK;
 import com.salesianostriana.kilo.repositories.CajaRepository;
@@ -104,5 +106,21 @@ public class CajaService {
             repository.delete(toDelete);
 
         }
+    }
+
+    public Optional<CajaResponseDTO> deleteAlimFromCaja (Long idCaja, Long idAlim) {
+        Caja c = repository.findById(idCaja).get();
+        TipoAlimento alim = tipoAlimentoRepository.findById(idAlim).get();
+
+        if (c.getAlimentos().contains(tipoAlimentoRepository.findById(idAlim))) {
+            c.getAlimentos().remove(alim);
+
+            repository.save(c);
+
+            return Optional.of(CajaResponseDTO.of(c));
+
+        }
+        return Optional.empty();
+
     }
 }
