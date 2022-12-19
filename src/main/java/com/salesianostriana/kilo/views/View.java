@@ -13,6 +13,8 @@ public class View {
 
         public static interface AportacionDetallesView{}
 
+        public static interface AllAportacionView{}
+
 
     }
 

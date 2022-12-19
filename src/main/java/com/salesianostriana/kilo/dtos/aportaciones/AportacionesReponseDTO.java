@@ -22,19 +22,21 @@ import java.util.List;
 public class AportacionesReponseDTO {
 
     //Puede que uses id tu tambien durbán :)
-    @JsonView({View.AportacionView.AportacionDetallesView.class})
+    @JsonView({View.AportacionView.AportacionDetallesView.class,
+    View.AportacionView.AllAportacionView.class})
     private Long id;
 
-    @JsonView({View.AportacionView.AportacionDetallesView.class})
+    @JsonView({View.AportacionView.AportacionDetallesView.class,
+            View.AportacionView.AllAportacionView.class})
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fecha;
 
     @JsonView({View.AportacionView.AportacionDetallesView.class})
     private List<DetallesAportacionResponseDTO> detallesAportacion = new ArrayList<>();
 
-
+    @JsonView({View.AportacionView.AllAportacionView.class})
     private String nombreClase;
-
+    @JsonView({View.AportacionView.AllAportacionView.class})
     private double cantidadTotalKg;
 
     public static AportacionesReponseDTO of (Aportacion a){

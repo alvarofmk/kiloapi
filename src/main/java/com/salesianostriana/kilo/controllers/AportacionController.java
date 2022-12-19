@@ -7,6 +7,7 @@ import com.salesianostriana.kilo.services.AportacionService;
 import com.salesianostriana.kilo.views.View;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -68,6 +69,45 @@ public class AportacionController {
         return ResponseEntity.of(Optional.of(AportacionesReponseDTO.of(aportacion.get())));
 
     }
+    @Operation(summary = "Obtiene todas las aportaciones")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+            description = "Se han encontrado aportaciones",
+            content = {
+                    @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = AportacionesReponseDTO.class)),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            [
+                                                {
+                                                    "id": 8,
+                                                    "fecha": "2018-01-01",
+                                                    "nombreClase": "2DAM",
+                                                    "cantidadTotalKg": 45.8
+                                                },
+                                                {
+                                                    "id": 9,
+                                                    "fecha": "2019-01-01",
+                                                    "nombreClase": "1DAM",
+                                                    "cantidadTotalKg": 22.5
+                                                },
+                                                {
+                                                    "id": 10,
+                                                    "fecha": "2020-01-01",
+                                                    "nombreClase": "1DAM",
+                                                    "cantidadTotalKg": 15.7
+                                                }
+                                            ]
+                                            """
+                            )
+                    })
+            }),
+            @ApiResponse(responseCode = "404",
+            description = "No se han encontrado aportaciones",
+            content = @Content)
+    })
+    @JsonView(View.AportacionView.AllAportacionView.class)
     @GetMapping("/")
     public ResponseEntity<List<AportacionesReponseDTO>> getAllAportaciones() {
         List<AportacionesReponseDTO> lista = aportacionService.findAllAportaciones();
