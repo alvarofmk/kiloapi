@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -37,5 +38,15 @@ public class Clase {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @PreRemove
+    public void deleteClase() {
+
+            this.getAportaciones()
+                    .forEach( clase -> {
+                        clase.setClase(null);
+                    });
+
     }
 }

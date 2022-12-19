@@ -198,4 +198,19 @@ public class ClaseController {
         return ResponseEntity
                 .of(oldClase.map(ClaseResponseDTO::of));
     }
+
+    @Operation(summary = "Borra una clase por su id",
+            description = "Si el destinatario a borrar ya tiene aportaciones asociadas, " +
+                    "el método setea la clase a nula en todas las aportaciones.")
+    @ApiResponse(responseCode = "204", description = "Clase borrada con éxito",
+            content = @Content)
+    @Parameter(description = "El id de la clase a borrar", name = "id", required = true)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteClase(@PathVariable Long id) {
+        service.deleteClase(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
 }
