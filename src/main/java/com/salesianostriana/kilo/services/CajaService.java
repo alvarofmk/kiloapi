@@ -116,17 +116,31 @@ public class CajaService {
     }
 
     public Optional<CajaResponseDTO> deleteAlimFromCaja (Long idCaja, Long idAlim) {
-        Caja c = repository.findById(idCaja).get();
-        TipoAlimento alim = tipoAlimentoRepository.findById(idAlim).get();
+        Optional<Caja> c = repository.findById(idCaja);
+        Optional<TipoAlimento> alim = tipoAlimentoRepository.findById(idAlim);
 
-        if (c.getAlimentos().contains(tipoAlimentoRepository.findById(idAlim))) {
-            c.getAlimentos().remove(alim);
+        if (c.isPresent() && alim.isPresent()) {
+            Caja caja = c.get();
+            Tiene t = Tiene.builder()
+                    .caja(caja)
+                    .tipoAlimento(alim.get())
+                    .tienePK(new TienePK(caja.getId(), alim.get().getId()))
+                    .build();
+            if (caja.getAlimentos().contains(t)) {
+                caja.removeTiene(t);
 
-            repository.save(c);
+                repository.save(caja);
 
-            return Optional.of(CajaResponseDTO.of(c));
+                return Optional.of(CajaResponseDTO.of(caja));
+
+            }
+
+            caja.getAlimentos().
+
 
         }
+
+
         return Optional.empty();
 
     }

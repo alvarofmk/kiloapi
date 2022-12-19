@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @AllArgsConstructor
@@ -76,8 +77,10 @@ public class Caja {
     }
 
     public void removeTiene(Tiene tiene){
+        Tiene t = this.alimentos.stream()
+                .filter(w -> w.getTienePK().equals(tiene.getTienePK())).findFirst().get();
         this.alimentos.remove(tiene);
-        this.kilosTotales -= tiene.getCantidadKgs();
+        this.kilosTotales -= t.getCantidadKgs();
         tiene.setCaja(null);
     }
   
