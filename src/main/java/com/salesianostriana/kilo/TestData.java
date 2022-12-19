@@ -148,16 +148,23 @@ public class TestData {
                 .cantidadKg(10)
                 .build();
 
+        DetalleAportacion de6 = DetalleAportacion.builder()
+                .detalleAportacionPK(new DetalleAportacionPK(3L, a3.getId()))
+                .cantidadKg(5)
+                .build();
+
         a1.addDetalleAportacion(de1);
         a2.addDetalleAportacion(de2);
         a2.addDetalleAportacion(de3);
         a3.addDetalleAportacion(de4);
         a3.addDetalleAportacion(de5);
+        a3.addDetalleAportacion(de6);
         de1.addToTipoAlimento(t1);
         de2.addToTipoAlimento(t2);
         de3.addToTipoAlimento(t2);
         de4.addToTipoAlimento(t1);
         de5.addToTipoAlimento(t3);
+        de6.addToTipoAlimento(t1);
 
         aportacionRepository.save(a1);
         aportacionRepository.save(a2);
@@ -174,11 +181,13 @@ public class TestData {
         tipoAlimentoRepository.save(t3);
 
         Tiene ti = new Tiene(c1, t3, 10);
+        Tiene ti1 = new Tiene(c1, t2, 5);
 
         c1.addTiene(ti);
+        c1.addTiene(ti1);
 
         cajaRepository.save(c1);
-        tieneRepository.save(ti);
+        tieneRepository.saveAll(List.of(ti,ti1));
 
         System.out.println(tipoAlimentoRepository.findAlimentosEmpaquetados());
         

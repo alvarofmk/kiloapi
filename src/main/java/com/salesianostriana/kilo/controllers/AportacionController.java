@@ -2,7 +2,6 @@ package com.salesianostriana.kilo.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.salesianostriana.kilo.dtos.aportaciones.AportacionesReponseDTO;
-import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.services.AportacionService;
 import com.salesianostriana.kilo.views.View;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/aportacion")
@@ -50,22 +48,19 @@ public class AportacionController {
                                                 "cantidadKg": 9.5,
                                                 "nombre": Arroz
                                             }
-                                        ]                       
+                                        ]
                                     ]
                                     """)) }),
             @ApiResponse(responseCode = "404", description = "No se encuentra esta aportación",
                     content = @Content) })
+    @Parameter(description = "ID de la aportación buscada", required = true)
     @GetMapping("/{id}")
     @JsonView(View.AportacionView.AportacionDetallesView.class)
-    public ResponseEntity<AportacionesReponseDTO> getDetallesAportacion(
-            @Parameter(description = "ID de la aportación buscada", required = true)
-            @PathVariable Long id
-    )
-    {
-        Optional<Aportacion> aportacion = aportacionService.findById(id);
-        return ResponseEntity.of(Optional.of(AportacionesReponseDTO.of(aportacion.get())));
+    public ResponseEntity<AportacionesReponseDTO> getDetallesAportacion(@PathVariable Long id) {
 
+        return ResponseEntity.of(aportacionService.findById(id).map(AportacionesReponseDTO::of));
     }
+
     @Operation(summary = "Obtiene todas las aportaciones")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",

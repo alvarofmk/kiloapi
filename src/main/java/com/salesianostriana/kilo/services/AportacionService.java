@@ -4,6 +4,7 @@ import com.salesianostriana.kilo.dtos.aportaciones.AportacionesReponseDTO;
 import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.entities.DetalleAportacion;
 import com.salesianostriana.kilo.repositories.AportacionRepository;
+import com.salesianostriana.kilo.repositories.KilosDisponiblesRepository;
 import com.salesianostriana.kilo.repositories.TipoAlimentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class AportacionService {
     private final AportacionRepository aportacionRepository;
 
     private final TipoAlimentoRepository tipoAlimentoRepository;
+
 
     public Optional<Aportacion> findById(Long id){ return aportacionRepository.findById(id); }
 
@@ -48,7 +50,14 @@ public class AportacionService {
                 if(!tipoAlimentoRepository.findAlimentosEmpaquetados().contains(detalle.getTipoAlimento())){
 
                     if(detalle.getCantidadKg()<= detalle.getTipoAlimento().getKilosDisponibles().getCantidadDisponible()){
+                        detalle
+                                .getTipoAlimento()
+                                .getKilosDisponibles()
+                                .setCantidadDisponible(
+                                        (double) Math.round((detalle.getTipoAlimento().getKilosDisponibles().getCantidadDisponible() - detalle.getCantidadKg())* 100d) /100d
+                                );
                         a.getDetalleAportaciones().remove(detalle);
+                        tipoAlimentoRepository.save(detalle.getTipoAlimento());
                         aportacionRepository.save(a);
                         //Faltan kilos
                     }
