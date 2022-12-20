@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface TipoAlimentoRepository extends JpaRepository<TipoAlimento, Long> {
@@ -20,4 +19,5 @@ public interface TipoAlimentoRepository extends JpaRepository<TipoAlimento, Long
             FROM Tiene t
             """)
     List<Integer> tipoAlimentoInTiene(@Param("id") Long id);
+
 }

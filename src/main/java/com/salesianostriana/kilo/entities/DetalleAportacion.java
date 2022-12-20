@@ -5,15 +5,14 @@ import com.salesianostriana.kilo.entities.keys.DetalleAportacionPK;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
 @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter
 @Builder
-public class DetalleAportacion {
+public class
+DetalleAportacion {
 
 
     @EmbeddedId

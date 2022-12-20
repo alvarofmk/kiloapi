@@ -35,6 +35,8 @@ public class View {
         public static interface DetailedDestinatarioView {}
 
         public static interface AllDestinatarioView{}
+
+        public static interface JustDestinatarioView{}
     }
 
     public static interface KilosDisponiblesView {
