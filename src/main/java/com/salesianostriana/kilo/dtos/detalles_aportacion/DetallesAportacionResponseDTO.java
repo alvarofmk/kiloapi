@@ -41,4 +41,10 @@ public class DetallesAportacionResponseDTO {
                 .nombre(d.getTipoAlimento().getNombre() != null ? d.getTipoAlimento().getNombre() : null)
                 .build();
     }
+
+    public DetallesAportacionResponseDTO(String nombre, double kg) {
+        this.nombre = nombre;
+        cantidadKg = kg;
+    }
+
 }

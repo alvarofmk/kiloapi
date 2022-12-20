@@ -70,17 +70,20 @@ public class AportacionesReponseDTO {
         cantidadTotalKg = totalKg;
     }
 
-    public AportacionesReponseDTO(LocalDate fecha, String alimento, double kg) {
+    public AportacionesReponseDTO(LocalDate fecha) {
         this.fecha = fecha;
-        nombreAlimento = alimento;
-        kgDetalleAportacion = kg;
         pares = null;
 
     }
 
-    public void maping(String nombre, double kilo) {
+    public void maping(List<DetallesAportacionResponseDTO> detalles) {
+        List<String> nombres = detalles.stream().map(de -> de.getNombre()).toList();
+        List<Double> kilos = detalles.stream().map(de -> de.getCantidadKg()).toList();
+
         Map<String, Double> mapa = new HashMap<>();
-        mapa.put(nombre, kilo);
+        mapa = IntStream.range(0, detalles.size())
+                .boxed()
+                .collect(Collectors.toMap(nombres::get, kilos::get));
         this.pares = mapa;
     }
 

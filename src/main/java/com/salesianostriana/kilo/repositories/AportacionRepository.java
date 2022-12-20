@@ -1,6 +1,7 @@
 package com.salesianostriana.kilo.repositories;
 
 import com.salesianostriana.kilo.dtos.aportaciones.AportacionesReponseDTO;
+import com.salesianostriana.kilo.dtos.detalles_aportacion.DetallesAportacionResponseDTO;
 import com.salesianostriana.kilo.entities.Aportacion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,10 +29,19 @@ public interface AportacionRepository extends JpaRepository<Aportacion, Long> {
     List<AportacionesReponseDTO> getAllAportaciones();
 
     @Query("""
-            SELECT new com.salesianostriana.kilo.dtos.aportaciones.AportacionesReponseDTO(a.fecha, ta.nombre, da.cantidadKg)
+            SELECT new com.salesianostriana.kilo.dtos.aportaciones.AportacionesReponseDTO(a.fecha)
             FROM Aportacion a JOIN DetalleAportacion da ON a.id = da.aportacion.id
                                                    JOIN TipoAlimento ta ON da.tipoAlimento.id = ta.id
             WHERE a.clase.id = :id
             """)
     List<AportacionesReponseDTO> getAllAportacionesOfClass(@Param("id") Long id);
+
+
+    @Query("""
+            SELECT new com.salesianostriana.kilo.dtos.detalles_aportacion.DetallesAportacionResponseDTO(da.tipoAlimento.nombre, da.cantidadKg)
+            FROM DetalleAportacion da JOIN Aportacion a ON a.id = da.aportacion.id
+                                      JOIN Clase c ON c.id = a.clase.id
+            WHERE a.clase.id = c.id
+            """)
+    List<DetallesAportacionResponseDTO> getAllDetalleAportacion(@Param("id") Long id);
 }
