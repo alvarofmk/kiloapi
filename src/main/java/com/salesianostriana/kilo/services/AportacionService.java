@@ -41,7 +41,6 @@ public class AportacionService {
         List<DetallesAportacionResponseDTO> detalles = aportacionRepository.getAllDetalleAportacion(id);
         List<AportacionesReponseDTO> lista = aportacionRepository.getAllAportacionesOfClass(id);
         lista.forEach(a-> a.setPares(detalles, a.getId()));
-        lista.forEach(a -> System.out.println(a.getPares()));
         return lista;
     }
 

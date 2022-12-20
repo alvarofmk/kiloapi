@@ -110,9 +110,51 @@ public class AportacionController {
             return ResponseEntity.status(HttpStatus.OK).body(lista);
         }
     }
+    @Operation(summary = "Obtiene todas las aportaciones que ha hecho una clase")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+            description = "Se han encontrado aportaciones",
+            content = {
+                    @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = AportacionesReponseDTO.class)),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            [
+                                                {
+                                                    "fecha": "2019-01-01",
+                                                    "alimentos": {
+                                                        "Chocolate": 20.2,
+                                                        "Polvorones": 2.3
+                                                    }
+                                                },
+                                                {
+                                                    "fecha": "2020-01-01",
+                                                    "alimentos": {
+                                                        "Chocolate": 5.0,
+                                                        "Pasta": 15.7,
+                                                        "Polvorones": 10.0
+                                                    }
+                                                }
+                                            ]
+                                            """
+                            )
+                    })
+            }),
+            @ApiResponse(responseCode = "404",
+            description = "No se han encontrado aportaciones",
+            content = @Content)
+    })
     @JsonView(View.AportacionView.AportacionByClase.class)
     @GetMapping("/clase/{id}")
-    public ResponseEntity<List<AportacionesReponseDTO>> getAllAportacionesByClase(@PathVariable Long id) {
+    public ResponseEntity<List<AportacionesReponseDTO>> getAllAportacionesByClase(
+            @Parameter(
+                    description = "ID de la clase la cual buscamos sus aportaciones",
+                    schema = @Schema(implementation = Long.class),
+                    name = "id",
+                    required = true
+            )
+            @PathVariable Long id) {
         List<AportacionesReponseDTO> lista = aportacionService.findAllAportacionesByClase(id);
         if(lista.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

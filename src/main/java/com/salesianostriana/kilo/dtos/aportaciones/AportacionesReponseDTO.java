@@ -28,8 +28,7 @@ import java.util.stream.IntStream;
 public class AportacionesReponseDTO {
 
     @JsonView({View.AportacionView.AportacionDetallesView.class,
-    View.AportacionView.AllAportacionView.class,
-    View.AportacionView.AportacionByClase.class})
+    View.AportacionView.AllAportacionView.class})
     private Long id;
 
     @JsonView({View.AportacionView.AportacionDetallesView.class,
@@ -50,9 +49,13 @@ public class AportacionesReponseDTO {
 
     private double kgDetalleAportacion;
 
+    /*@JsonView({View.AportacionView.AportacionByClase.class})
+    @Builder.Default
+    private List<Pair<String, Double>> pares = new ArrayList<>();*/
     @JsonView({View.AportacionView.AportacionByClase.class})
     @Builder.Default
-    private List<Pair<String, Double>> pares = new ArrayList<>();
+    private Map<String, Double> alimentos = new HashMap<>();
+
 
     public static AportacionesReponseDTO of (Aportacion a){
         return AportacionesReponseDTO.builder()
@@ -76,28 +79,50 @@ public class AportacionesReponseDTO {
     public AportacionesReponseDTO(Long id, LocalDate fecha) {
         this.id = id;
         this.fecha = fecha;
-        pares = null;
+        alimentos = null;
 
     }
     @JsonAnySetter
     public AportacionesReponseDTO setPares(List<DetallesAportacionResponseDTO> detalles, Long id) {
 
-        List<Pair<String, Double>> aux = new ArrayList<>();
+        /*List<Pair<String, Double>> aux = new ArrayList<>();
 
         detalles.forEach(d -> {
             if(d.getAportacionId() == id)
                 aux.add(Pair.of(d.getNombre(), d.getCantidadKg()));
-        });
+        });*/
 
 
+        /*Map<String, Double> mapa = aux.stream().collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
+        pares = mapa;*/
 
-        pares = aux;
+        /*pares = aux;
 
         return AportacionesReponseDTO
                 .builder()
                 .id(this.id)
                 .fecha(this.fecha)
                 .pares(aux)
+                .build();*/
+
+        /*Map<String, Double> mapa = aux.stream().collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));*/
+
+        Map<String, Double> mapa = new HashMap<>();
+        detalles.forEach(d -> {
+            List<Double> aux;
+            if(d.getAportacionId() == id && !mapa.containsKey(d.getNombre())) {
+                mapa.put(d.getNombre(), d.getCantidadKg());
+            }else if(d.getAportacionId() == id && mapa.containsKey(d.getNombre())) {
+                mapa.put(d.getNombre(), (mapa.get(d.getNombre()) + d.getCantidadKg()));
+            }
+        });
+        alimentos = mapa;
+
+        return AportacionesReponseDTO
+                .builder()
+                .id(this.id)
+                .fecha(this.fecha)
+                .alimentos(mapa)
                 .build();
     }
 

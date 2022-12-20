@@ -24,12 +24,10 @@ public class DetallesAportacionResponseDTO {
     private Long numLinea;
 
     @JsonView({View.AportacionView.AportacionDetallesView.class,
-            View.KilosDisponiblesView.KilosDisponiblesDetailsView.class,
-            View.AportacionView.AportacionByClase.class})
+            View.KilosDisponiblesView.KilosDisponiblesDetailsView.class})
     private double cantidadKg;
 
-    @JsonView({View.AportacionView.AportacionDetallesView.class,
-                View.AportacionView.AportacionByClase.class})
+    @JsonView({View.AportacionView.AportacionDetallesView.class})
     private String nombre;
 
 

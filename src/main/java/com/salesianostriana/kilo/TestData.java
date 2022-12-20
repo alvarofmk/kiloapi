@@ -160,7 +160,7 @@ public class TestData {
         a3.addDetalleAportacion(de5);
         a3.addDetalleAportacion(de6);
         de1.addToTipoAlimento(t1);
-        de2.addToTipoAlimento(t2);
+        de2.addToTipoAlimento(t3);
         de3.addToTipoAlimento(t2);
         de4.addToTipoAlimento(t1);
         de5.addToTipoAlimento(t3);
