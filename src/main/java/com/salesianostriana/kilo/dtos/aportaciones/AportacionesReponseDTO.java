@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.salesianostriana.kilo.dtos.detalles_aportacion.DetallesAportacionResponseDTO;
 import com.salesianostriana.kilo.entities.Aportacion;
+import com.salesianostriana.kilo.entities.Clase;
 import com.salesianostriana.kilo.views.View;
 import lombok.*;
 
@@ -21,15 +22,22 @@ import java.util.List;
 public class AportacionesReponseDTO {
 
     //Puede que uses id tu tambien durbán :)
-    @JsonView({View.AportacionView.AportacionDetallesView.class})
+    @JsonView({View.AportacionView.AportacionDetallesView.class,
+    View.AportacionView.AllAportacionView.class})
     private Long id;
 
-    @JsonView({View.AportacionView.AportacionDetallesView.class})
+    @JsonView({View.AportacionView.AportacionDetallesView.class,
+            View.AportacionView.AllAportacionView.class})
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fecha;
 
     @JsonView({View.AportacionView.AportacionDetallesView.class})
     private List<DetallesAportacionResponseDTO> detallesAportacion = new ArrayList<>();
+
+    @JsonView({View.AportacionView.AllAportacionView.class})
+    private String nombreClase;
+    @JsonView({View.AportacionView.AllAportacionView.class})
+    private double cantidadTotalKg;
 
     public static AportacionesReponseDTO of (Aportacion a){
         return AportacionesReponseDTO.builder()
@@ -41,7 +49,13 @@ public class AportacionesReponseDTO {
                         .toList()
                 )
                 .build();
+    }
 
+    public AportacionesReponseDTO(Long id, LocalDate fecha, String clase, double totalKg) {
+        this.id = id;
+        this.fecha = fecha;
+        nombreClase = clase;
+        cantidadTotalKg = totalKg;
     }
 
 

@@ -12,12 +12,6 @@ import java.util.Optional;
 @Repository
 public interface TipoAlimentoRepository extends JpaRepository<TipoAlimento, Long> {
 
-    @Query("""
-            SELECT COALESCE(SUM(da.cantidadKg), 0.0)
-            FROM DetalleAportacion da JOIN TipoAlimento ta ON ta.id = da.tipoAlimento
-            WHERE ta.id = :id
-            """)
-    double getCantidadTotalKg(@Param("id") Long id);
 
     @Query("""
             SELECT CASE 

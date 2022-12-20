@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/caja")
 @RequiredArgsConstructor
+@Tag(name = "Caja", description = "Este es el controlador para gestionar las cajas")
 public class CajaController {
 
     private final CajaService cajaService;
