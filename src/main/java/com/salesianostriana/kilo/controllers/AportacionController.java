@@ -6,6 +6,7 @@ import com.salesianostriana.kilo.services.AportacionService;
 import com.salesianostriana.kilo.views.View;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -110,10 +111,37 @@ public class AportacionController {
         }
     }
 
+    @Operation(summary = "Borra un detalle de aportación por su número de línea dentro de una aportación especificada por id")
+    @ApiResponse(responseCode = "200", description = "Detalle de aportación borrada",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = AportacionesReponseDTO.class),
+                    examples = @ExampleObject(value = """
+                                    [
+                                        "id": 1,
+                                        "fecha": "2001-01-01",
+                                        "detallesAportacion": [
+                                            {
+                                                "numLinea": 1,
+                                                "cantidadKg": 10.5,
+                                                "nombre": Queso
+                                            },
+                                            {
+                                                "numLinea": 2,
+                                                "cantidadKg": 9.5,
+                                                "nombre": Arroz
+                                            }
+                                        ]
+                                    ]
+                                    """)) })
+    @Parameters(value = {
+            @Parameter(description = "Id de la aportación", name = "id", required = true),
+            @Parameter(description = "Id de la linea de detalle de la aportación", name = "num", required = true)
+    })
     @DeleteMapping("/{id}/linea/{num}")
-    public ResponseEntity<?> deleteDetalleDeAportacion(@PathVariable("id") Long id, @PathVariable("num") Long numLinea){
+    @JsonView(View.AportacionView.AportacionDetallesView.class)
+    public ResponseEntity<AportacionesReponseDTO> deleteDetalleDeAportacion(@PathVariable("id") Long id, @PathVariable("num") Long numLinea){
 
         aportacionService.deleteLinea(id, numLinea);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.of(aportacionService.findById(id).map(AportacionesReponseDTO::of));
     }
 }

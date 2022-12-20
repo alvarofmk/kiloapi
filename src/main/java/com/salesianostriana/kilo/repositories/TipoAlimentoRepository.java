@@ -20,6 +20,4 @@ public interface TipoAlimentoRepository extends JpaRepository<TipoAlimento, Long
             """)
     List<Integer> tipoAlimentoInTiene(@Param("id") Long id);
 
-    @Query("SELECT a FROM TipoAlimento a JOIN KilosDisponibles k ON a.id = k.tipoAlimento JOIN Tiene t ON t.tienePK.tipoAlimentoId = k.tipoAlimento WHERE t.tienePK.tipoAlimentoId = a.id AND k.cantidadDisponible = 0")
-    List<TipoAlimento> findAlimentosEmpaquetados();
 }

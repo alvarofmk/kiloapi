@@ -18,7 +18,6 @@ public class TestData {
     private final CajaRepository cajaRepository;
     private final TipoAlimentoRepository tipoAlimentoRepository;
     private final ClaseService claseService;
-    private final KilosDisponiblesRepository kilosDisponiblesRepository;
     private final AportacionRepository aportacionRepository;
     private final DestinatarioRepository destinatarioRepository;
 
@@ -153,6 +152,7 @@ public class TestData {
                 .cantidadKg(5)
                 .build();
 
+
         a1.addDetalleAportacion(de1);
         a2.addDetalleAportacion(de2);
         a2.addDetalleAportacion(de3);
@@ -185,11 +185,10 @@ public class TestData {
 
         c1.addTiene(ti);
         c1.addTiene(ti1);
+        c1.addDestinatario(d1);
 
         cajaRepository.save(c1);
         tieneRepository.saveAll(List.of(ti,ti1));
-
-        System.out.println(tipoAlimentoRepository.findAlimentosEmpaquetados());
         
     }
 }

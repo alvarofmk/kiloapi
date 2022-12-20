@@ -4,7 +4,6 @@ import com.salesianostriana.kilo.dtos.aportaciones.AportacionesReponseDTO;
 import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.entities.DetalleAportacion;
 import com.salesianostriana.kilo.repositories.AportacionRepository;
-import com.salesianostriana.kilo.repositories.KilosDisponiblesRepository;
 import com.salesianostriana.kilo.repositories.TipoAlimentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -44,22 +43,9 @@ public class AportacionService {
             Aportacion a = aportacion.get();
             Optional<DetalleAportacion> detalles = buscarLinea(numLinea, a.getDetalleAportaciones());
 
-            if(!detalles.isEmpty()){
+            if(detalles.isPresent()){
                 DetalleAportacion detalle = detalles.get();
-
-
-                    if(detalle.getCantidadKg()<= detalle.getTipoAlimento().getKilosDisponibles().getCantidadDisponible() &&
-                            !tipoAlimentoRepository.findAlimentosEmpaquetados().contains(detalle.getTipoAlimento())){
-
-                        detalle
-                                .getTipoAlimento()
-                                .getKilosDisponibles()
-                                .setCantidadDisponible(
-                                        (double) Math.round((detalle.getTipoAlimento().getKilosDisponibles().getCantidadDisponible() - detalle.getCantidadKg())* 100d) /100d
-                                );
-                        a.removeDetalleAportacion(detalle);
-                        tipoAlimentoRepository.save(detalle.getTipoAlimento());
-                    }
+                borrarDetalle(detalle, a);
             }
         }
     }
@@ -69,6 +55,20 @@ public class AportacionService {
                 .stream()
                 .filter(d -> d.getDetalleAportacionPK().getLineaId() == numLinea)
                 .findFirst();
+    }
+
+    public void borrarDetalle(DetalleAportacion detalle, Aportacion a){
+        if(aportacionRepository.findDetallesBorrables().contains(detalle)){
+
+            detalle
+                    .getTipoAlimento()
+                    .getKilosDisponibles()
+                    .setCantidadDisponible(
+                            (double) Math.round((detalle.getTipoAlimento().getKilosDisponibles().getCantidadDisponible() - detalle.getCantidadKg())* 100d) /100d
+                    );
+            a.removeDetalleAportacion(detalle);
+            tipoAlimentoRepository.save(detalle.getTipoAlimento());
+        }
     }
 
 }
