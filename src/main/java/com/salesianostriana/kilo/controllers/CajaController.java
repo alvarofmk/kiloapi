@@ -219,4 +219,46 @@ public class CajaController {
     }
 
 
+
+    @Operation(summary = "Edita la cantidad de kilos de un tipoAlimento indicando el tipo mediante Id y los kilos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Caja editada con éxito",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CajaResponseDTO.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "id": 3,
+                                        "qr": "No me lo se",
+                                        "numCaja": 10,
+                                        "kilosTotales": 1.0,
+                                        "contenido": [
+                                            {
+                                                "id": 5,
+                                                "nombre": "Chocolate",
+                                                "kg": 1.0
+                                            }
+                                        ]
+                                    }
+                                    """))}),
+            @ApiResponse(responseCode = "400", description = "Los datos son incorrectos",
+                    content = @Content)
+    })
+    @Parameter(description = "El id de la caja a modificar", name = "id", required = true)
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "Los datos actualizados de la caja")
+    @JsonView(View.CajaView.DetailResponseView.class)
+    @PutMapping("/{id}/tipo/{idTipoAlim}/kg/{cantidad}")
+    public ResponseEntity<CajaResponseDTO> editKgOfAlimento (
+            @PathVariable Long id,
+            @PathVariable Long idTipoAlim,
+            @PathVariable Double cantidad )
+    {
+        Optional<CajaResponseDTO> result = cajaService.editKgOfALim(id, idTipoAlim, cantidad);
+        if (result.isPresent())
+            return ResponseEntity.status(HttpStatus.OK).body(result.get());
+        else
+            return ResponseEntity.badRequest().build();
+
+    }
+
+
 }
