@@ -2,7 +2,6 @@ package com.salesianostriana.kilo.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.salesianostriana.kilo.dtos.DestinatarioResponseDTO;
-import com.salesianostriana.kilo.dtos.cajas.CajaResponseDTO;
 import com.salesianostriana.kilo.dtos.destinatarios.CreateDestinatarioDTO;
 import com.salesianostriana.kilo.entities.Destinatario;
 import com.salesianostriana.kilo.services.DestinatarioService;
@@ -22,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -163,13 +163,15 @@ public class DestinatarioController {
                     content = @Content) })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "Datos del nuevo destinatario",
             content = {@Content(mediaType = "application/json",
-                    schema = @Schema(implementation = CreateDestinatarioDTO.class),
+                    schema = @Schema(implementation = Destinatario.class),
                     examples = @ExampleObject(value = """
                             {
+                                "id": 1,
                                 "nombre": "Hijas de la caridad",
                                 "direccion": "Calle Sin nombre Nº7",
                                 "personaContacto": "Sor María",
                                 "telefono": "689624528",
+                                "cajas": []
                             }
                             """)
             )}
@@ -195,7 +197,6 @@ public class DestinatarioController {
                                         "direccion": "Calle Con Nombre Nº7",
                                         "personaContacto": "Sor María II",
                                         "telefono": "689547563",
-                                        "cajas": []
                                     }
                                     """)
                             )
@@ -207,7 +208,7 @@ public class DestinatarioController {
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "Datos del destinatario actualizados",
             content = { @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = CreateDestinatarioDTO.class),
+                    schema = @Schema(implementation = DestinatarioResponseDTO.class),
                     examples = @ExampleObject( value = """
                                 {
                                     "nombre": "Nietas de la Caridad",
@@ -220,10 +221,11 @@ public class DestinatarioController {
     )
     @Parameter(description = "Id del destinatario a modificar", name = "id", required = true)
     @PutMapping("/{id}")
-    public ResponseEntity<Destinatario> editDestinatario(@PathVariable Long id, @RequestBody CreateDestinatarioDTO editDest){
+    @JsonView(View.DestinatarioView.JustDestinatarioView.class)
+    public ResponseEntity<DestinatarioResponseDTO> editDestinatario(@PathVariable Long id, @RequestBody CreateDestinatarioDTO editDest){
+        Optional<Destinatario> destinatarioEditado = destinatarioService.editDestinatario(id, editDest);
 
-        return destinatarioService.editDestinatario(id, editDest).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+        return destinatarioEditado.isPresent()? ResponseEntity.ok(destinatarioEditado.map(DestinatarioResponseDTO::of).get()) : ResponseEntity.badRequest().build();
     }
-
 
 }

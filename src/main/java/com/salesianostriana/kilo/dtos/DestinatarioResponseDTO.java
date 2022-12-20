@@ -39,8 +39,9 @@ public class DestinatarioResponseDTO {
         this.numerosDeCajas = listaCajas;
     }
 
+    @JsonView({View.DestinatarioView.AllDestinatarioView.class, View.DestinatarioView.JustDestinatarioView.class})
     private Long id;
-    @JsonView({View.DestinatarioView.DetailedDestinatarioView.class, View.DestinatarioView.AllDestinatarioView.class})
+    @JsonView({View.DestinatarioView.DetailedDestinatarioView.class, View.DestinatarioView.AllDestinatarioView.class, View.DestinatarioView.JustDestinatarioView.class})
     private String nombre, direccion, personaContacto, telefono;
     private long numeroCajas;
 

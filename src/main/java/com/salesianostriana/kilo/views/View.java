@@ -15,6 +15,8 @@ public class View {
 
         public static interface AllAportacionView{}
 
+        public static interface AportacionByClase{}
+
 
     }
 
@@ -35,6 +37,8 @@ public class View {
         public static interface DetailedDestinatarioView {}
 
         public static interface AllDestinatarioView{}
+
+        public static interface JustDestinatarioView{}
     }
 
     public static interface KilosDisponiblesView {
