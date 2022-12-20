@@ -42,35 +42,33 @@ public class AportacionService {
 
         if(aportacion.isPresent()){
             Aportacion a = aportacion.get();
-            List<DetalleAportacion> detalles = buscarLinea(numLinea, a.getDetalleAportaciones());
+            Optional<DetalleAportacion> detalles = buscarLinea(numLinea, a.getDetalleAportaciones());
 
             if(!detalles.isEmpty()){
-                DetalleAportacion detalle = detalles.stream().findFirst().get();
+                DetalleAportacion detalle = detalles.get();
 
-                if(!tipoAlimentoRepository.findAlimentosEmpaquetados().contains(detalle.getTipoAlimento())){
 
-                    if(detalle.getCantidadKg()<= detalle.getTipoAlimento().getKilosDisponibles().getCantidadDisponible()){
+                    if(detalle.getCantidadKg()<= detalle.getTipoAlimento().getKilosDisponibles().getCantidadDisponible() &&
+                            !tipoAlimentoRepository.findAlimentosEmpaquetados().contains(detalle.getTipoAlimento())){
+
                         detalle
                                 .getTipoAlimento()
                                 .getKilosDisponibles()
                                 .setCantidadDisponible(
                                         (double) Math.round((detalle.getTipoAlimento().getKilosDisponibles().getCantidadDisponible() - detalle.getCantidadKg())* 100d) /100d
                                 );
-                        a.getDetalleAportaciones().remove(detalle);
+                        a.removeDetalleAportacion(detalle);
                         tipoAlimentoRepository.save(detalle.getTipoAlimento());
-                        aportacionRepository.save(a);
-                        //Faltan kilos
                     }
-                }
             }
         }
     }
 
-    public List<DetalleAportacion> buscarLinea(Long numLinea, List<DetalleAportacion> detalles ){
+    public Optional<DetalleAportacion> buscarLinea(Long numLinea, List<DetalleAportacion> detalles ){
         return detalles
                 .stream()
                 .filter(d -> d.getDetalleAportacionPK().getLineaId() == numLinea)
-                .toList();
+                .findFirst();
     }
 
 }
