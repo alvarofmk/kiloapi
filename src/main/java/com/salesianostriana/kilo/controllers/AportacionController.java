@@ -196,4 +196,15 @@ public class AportacionController {
         aportacionService.deleteLinea(id, numLinea);
         return ResponseEntity.of(aportacionService.findById(id).map(AportacionesReponseDTO::of));
     }
+
+    @Operation(summary = "Borra una aportación por su id")
+    @ApiResponse(responseCode = "204", description = "Aportación borrada con éxito",
+            content = @Content)
+    @Parameter(description = "El id de la clase a borrar", name = "id", required = true)
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteAportacionById(@PathVariable Long id){
+
+        aportacionService.deleteAportacionById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
