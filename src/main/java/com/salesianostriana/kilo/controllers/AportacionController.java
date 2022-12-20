@@ -2,11 +2,11 @@ package com.salesianostriana.kilo.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.salesianostriana.kilo.dtos.aportaciones.AportacionesReponseDTO;
-import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.services.AportacionService;
 import com.salesianostriana.kilo.views.View;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -17,13 +17,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/aportacion")
@@ -52,23 +48,20 @@ public class AportacionController {
                                                 "numLinea": 2,
                                                 "cantidadKg": 9.5,
                                                 "nombre": Arroz
-                                            }      
-                                        ]                       
+                                            }
+                                        ]
                                     ]
                                     """)) }),
             @ApiResponse(responseCode = "404", description = "No se encuentra esta aportación",
                     content = @Content) })
+    @Parameter(description = "ID de la aportación buscada", required = true)
     @GetMapping("/{id}")
     @JsonView(View.AportacionView.AportacionDetallesView.class)
-    public ResponseEntity<AportacionesReponseDTO> getDetallesAportacion(
-            @Parameter(description = "ID de la aportación buscada", required = true)
-            @PathVariable Long id
-    )
-    {
-        Optional<Aportacion> aportacion = aportacionService.findById(id);
-        return ResponseEntity.of(Optional.of(AportacionesReponseDTO.of(aportacion.get())));
+    public ResponseEntity<AportacionesReponseDTO> getDetallesAportacion(@PathVariable Long id) {
 
+        return ResponseEntity.of(aportacionService.findById(id).map(AportacionesReponseDTO::of));
     }
+
     @Operation(summary = "Obtiene todas las aportaciones")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
@@ -126,5 +119,39 @@ public class AportacionController {
         }else {
             return ResponseEntity.status(HttpStatus.OK).body(lista);
         }
+    }
+
+    @Operation(summary = "Borra un detalle de aportación por su número de línea dentro de una aportación especificada por id")
+    @ApiResponse(responseCode = "200", description = "Detalle de aportación borrada",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = AportacionesReponseDTO.class),
+                    examples = @ExampleObject(value = """
+                                    [
+                                        "id": 1,
+                                        "fecha": "2001-01-01",
+                                        "detallesAportacion": [
+                                            {
+                                                "numLinea": 1,
+                                                "cantidadKg": 10.5,
+                                                "nombre": Queso
+                                            },
+                                            {
+                                                "numLinea": 2,
+                                                "cantidadKg": 9.5,
+                                                "nombre": Arroz
+                                            }
+                                        ]
+                                    ]
+                                    """)) })
+    @Parameters(value = {
+            @Parameter(description = "Id de la aportación", name = "id", required = true),
+            @Parameter(description = "Id de la linea de detalle de la aportación", name = "num", required = true)
+    })
+    @DeleteMapping("/{id}/linea/{num}")
+    @JsonView(View.AportacionView.AportacionDetallesView.class)
+    public ResponseEntity<AportacionesReponseDTO> deleteDetalleDeAportacion(@PathVariable("id") Long id, @PathVariable("num") Long numLinea){
+
+        aportacionService.deleteLinea(id, numLinea);
+        return ResponseEntity.of(aportacionService.findById(id).map(AportacionesReponseDTO::of));
     }
 }

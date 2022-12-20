@@ -3,6 +3,7 @@ package com.salesianostriana.kilo.repositories;
 import com.salesianostriana.kilo.dtos.aportaciones.AportacionesReponseDTO;
 import com.salesianostriana.kilo.dtos.detalles_aportacion.DetallesAportacionResponseDTO;
 import com.salesianostriana.kilo.entities.Aportacion;
+import com.salesianostriana.kilo.entities.DetalleAportacion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -42,4 +43,11 @@ public interface AportacionRepository extends JpaRepository<Aportacion, Long> {
             WHERE da.aportacion.clase.id = :id
             """)
     List<DetallesAportacionResponseDTO> getAllDetalleAportacion(@Param("id") Long id);
+
+    @Query("""            
+            SELECT d
+            FROM DetalleAportacion d JOIN TipoAlimento t ON d.tipoAlimento = t.id JOIN KilosDisponibles k ON t.id = k.tipoAlimento
+            WHERE d.cantidadKg <= k.cantidadDisponible
+            """)
+    List<DetalleAportacion> findDetallesBorrables();
 }

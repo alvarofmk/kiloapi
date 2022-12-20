@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.salesianostriana.kilo.dtos.detalles_aportacion.DetallesAportacionResponseDTO;
 import com.salesianostriana.kilo.entities.Aportacion;
-import com.salesianostriana.kilo.entities.Clase;
 import com.salesianostriana.kilo.views.View;
 import lombok.*;
 import org.springframework.data.util.Pair;
@@ -28,7 +27,6 @@ import java.util.stream.IntStream;
 
 public class AportacionesReponseDTO {
 
-    //Puede que uses id tu tambien durbán :)
     @JsonView({View.AportacionView.AportacionDetallesView.class,
     View.AportacionView.AllAportacionView.class,
     View.AportacionView.AportacionByClase.class})
