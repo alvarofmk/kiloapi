@@ -29,19 +29,17 @@ public interface AportacionRepository extends JpaRepository<Aportacion, Long> {
     List<AportacionesReponseDTO> getAllAportaciones();
 
     @Query("""
-            SELECT new com.salesianostriana.kilo.dtos.aportaciones.AportacionesReponseDTO(a.fecha)
-            FROM Aportacion a JOIN DetalleAportacion da ON a.id = da.aportacion.id
-                                                   JOIN TipoAlimento ta ON da.tipoAlimento.id = ta.id
+            SELECT new com.salesianostriana.kilo.dtos.aportaciones.AportacionesReponseDTO(a.id, a.fecha)
+            FROM Aportacion a
             WHERE a.clase.id = :id
             """)
     List<AportacionesReponseDTO> getAllAportacionesOfClass(@Param("id") Long id);
 
 
     @Query("""
-            SELECT new com.salesianostriana.kilo.dtos.detalles_aportacion.DetallesAportacionResponseDTO(da.tipoAlimento.nombre, da.cantidadKg)
-            FROM DetalleAportacion da JOIN Aportacion a ON a.id = da.aportacion.id
-                                      JOIN Clase c ON c.id = a.clase.id
-            WHERE a.clase.id = c.id
+            SELECT new com.salesianostriana.kilo.dtos.detalles_aportacion.DetallesAportacionResponseDTO(da.aportacion.id, da.tipoAlimento.nombre, da.cantidadKg)
+            FROM DetalleAportacion da
+            WHERE da.aportacion.clase.id = :id
             """)
     List<DetallesAportacionResponseDTO> getAllDetalleAportacion(@Param("id") Long id);
 }

@@ -36,15 +36,8 @@ public class AportacionService {
     public List<AportacionesReponseDTO> findAllAportacionesByClase(Long id) {
         List<DetallesAportacionResponseDTO> detalles = aportacionRepository.getAllDetalleAportacion(id);
         List<AportacionesReponseDTO> lista = aportacionRepository.getAllAportacionesOfClass(id);
-        /*List<String> claves = lista
-                                .stream()
-                                .map(a -> a.getNombreAlimento())
-                                .toList();
-        List<Double> valores = lista.stream()
-                                .map(a -> a.getKgDetalleAportacion())
-                                .toList();
-        lista.forEach(a -> a.maping(claves));*/
-        lista.forEach(a-> a.maping(detalles));
+        lista.forEach(a-> a.setPares(detalles, a.getId()));
+        lista.forEach(a -> System.out.println(a.getPares()));
         return lista;
 
     }
