@@ -2,6 +2,7 @@ package com.salesianostriana.kilo.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.salesianostriana.kilo.dtos.aportaciones.AportacionesReponseDTO;
+import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.services.AportacionService;
 import com.salesianostriana.kilo.views.View;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/aportacion")
@@ -206,5 +208,13 @@ public class AportacionController {
 
         aportacionService.deleteAportacionById(id);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @PutMapping("/{id}/linea/{num}/kg/{numKg}")
+    public ResponseEntity<AportacionesReponseDTO> editAportacion(@PathVariable("id") Long idAportacion, @PathVariable("num") Long numLinea, @PathVariable("numKg") Long numKg){
+        Optional<Aportacion> aportacion = aportacionService.findById(idAportacion);
+
+        return aportacion.isPresent()? ResponseEntity.ok(aportacion.map(AportacionesReponseDTO::of).get()) : ResponseEntity.badRequest().build();
     }
 }
