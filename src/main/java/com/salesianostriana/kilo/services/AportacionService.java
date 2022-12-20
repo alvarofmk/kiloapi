@@ -8,6 +8,7 @@ import com.salesianostriana.kilo.repositories.TipoAlimentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -68,6 +69,40 @@ public class AportacionService {
                     );
             a.removeDetalleAportacion(detalle);
             tipoAlimentoRepository.save(detalle.getTipoAlimento());
+        }
+    }
+
+    public void borrarDetallesAportacion(Aportacion a){
+        Iterator<DetalleAportacion> it = a.getDetalleAportaciones().iterator();
+
+        while(it.hasNext()){
+            DetalleAportacion detalle = it.next();
+            if(aportacionRepository.findDetallesBorrables().contains(detalle)){
+
+                detalle
+                        .getTipoAlimento()
+                        .getKilosDisponibles()
+                        .setCantidadDisponible(
+                                (double) Math.round((detalle.getTipoAlimento().getKilosDisponibles().getCantidadDisponible() - detalle.getCantidadKg())* 100d) /100d
+                        );
+
+                tipoAlimentoRepository.save(detalle.getTipoAlimento());
+                it.remove();
+            }
+        }
+        aportacionRepository.save(a);
+    }
+
+    public void deleteAportacionById(Long id){
+
+        Optional<Aportacion> a = aportacionRepository.findById(id);
+
+        if(a.isPresent()){
+            Aportacion aportacion = a.get();
+            borrarDetallesAportacion(aportacion);
+
+            if(aportacion.getDetalleAportaciones().isEmpty())
+                aportacionRepository.deleteById(id);
         }
     }
 
