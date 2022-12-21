@@ -29,11 +29,16 @@ public class KilosDisponiblesService {
         return repository.getAllKgDisponibles();
     }
 
-    public List<KilosDisponiblesDTO> getKgAlimento(Long id){
-        if(tipoAlimentoService.findById(id).isPresent())
-            return repository.getKgPorAlimentos(id);
+    public Optional<KilosDisponiblesDTO> getKgAlimento(Long id){
+        KilosDisponiblesDTO detalles;
+
+        if(tipoAlimentoService.findById(id).isPresent()){
+            detalles = repository.getAllKgDisponiblesById(id);
+            detalles.setListaDetallesConKg(repository.getKgPorAlimentos(id));
+            return Optional.of(detalles);
+        }
         else
-            return List.of();
+            return Optional.empty();
     }
 
 }

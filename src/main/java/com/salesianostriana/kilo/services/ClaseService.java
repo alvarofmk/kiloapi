@@ -1,20 +1,28 @@
 package com.salesianostriana.kilo.services;
 
+
 import com.salesianostriana.kilo.dtos.clase.ClaseResponseDTO;
+
+import com.salesianostriana.kilo.dtos.RankQueryResponseDTO;
+import com.salesianostriana.kilo.dtos.RankingResponseDTO;
+
 import com.salesianostriana.kilo.dtos.clase.CreateClaseDTO;
 import com.salesianostriana.kilo.entities.Clase;
 import com.salesianostriana.kilo.repositories.ClaseRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.util.stream.Collectors.*;
 
 @Service
+@RequiredArgsConstructor
 public class ClaseService {
 
-    @Autowired
-    private ClaseRepository repository;
+    private final ClaseRepository repository;
 
     public Clase add(Clase c) {
         return repository.save(c);
@@ -24,7 +32,11 @@ public class ClaseService {
         return repository.findById(id);
     }
 
-    public Optional<ClaseResponseDTO> findFull (Long id) { return repository.findFull(id) ; }
+
+    public Double findKilos(Long id) { return repository.findKilos(id); }
+
+
+
 
     public List<Clase> findAll(){
         return repository.findAll();
@@ -42,6 +54,19 @@ public class ClaseService {
         return repository.save(clase);
     }
 
+    public List<RankingResponseDTO> getRanking(){
+        AtomicInteger position = new AtomicInteger(1);
+        List<RankQueryResponseDTO> resumenAportaciones = repository.findClasesOrderedByRank();
+        List<RankingResponseDTO> result = new ArrayList<>(resumenAportaciones.stream().collect(groupingBy(RankQueryResponseDTO::getClaseId)).values().stream().map(v -> {
+            return new RankingResponseDTO(v.get(0).getNombre(), v.size(), v.stream().mapToDouble(RankQueryResponseDTO::getSumaKilos).average().getAsDouble(), v.stream().mapToDouble(RankQueryResponseDTO::getSumaKilos).sum());
+        }).toList());
+        Collections.sort(result);
+        result.stream().forEachOrdered(r -> {
+            r.setPosicion(position.get());
+            position.getAndIncrement();
+        });
+        return result;
+    }
 
     /*
     public void deleteClase(Long id) {
@@ -51,9 +76,6 @@ public class ClaseService {
     }
     
      */
-
-
-
 
     public void deleteClase(Long id) {
         Optional<Clase> c = repository.findById(id);

@@ -12,6 +12,12 @@ public class View {
     public static interface AportacionView{
 
         public static interface AportacionDetallesView{}
+
+        public static interface AllAportacionView{}
+
+        public static interface AportacionByClase{}
+
+
     }
 
     public static interface DetalleAportacionView{
@@ -21,14 +27,32 @@ public class View {
     public static interface TipoAlimentoView {
 
         public static interface AllTipoAlimentoView{}
-        public static interface TipoAlimentoByIdView{
+        public static interface TipoAlimentoByIdView{}
 
-        }
+        public static interface TipoAlimentoRequest{}
     }
 
     public static interface DestinatarioView {
 
         public static interface DetailedDestinatarioView {}
+
+        public static interface AllDestinatarioView{}
+
+        public static interface JustDestinatarioView{}
+    }
+
+    public static interface KilosDisponiblesView {
+
+        public static interface KilosDisponiblesAllView{}
+
+        public static interface KilosDisponiblesDetailsView{}
+    }
+
+    public interface ClaseView {
+        public static interface GenericClaseView{}
+
+        public static interface DetailClaseView extends CajaView.GenericResponseView {}
+
 
     }
 

@@ -31,6 +31,7 @@ public class ClaseController {
 
     private final ClaseService service;
 
+
     @Operation(summary = "Lista una clase segun su Id")
     @ApiResponses(value = {
             @ApiResponse(
@@ -53,6 +54,7 @@ public class ClaseController {
                     content = @Content
             )
     })
+
     @GetMapping("/{id}")
     public ResponseEntity<ClaseResponseDTO> findById (
             @Parameter(description = "ID de la clase buscada", required = true)
@@ -60,13 +62,18 @@ public class ClaseController {
     ) {
         Optional<Clase> c = service.findById(id);
 
-        if (c == null) {
+        if (c.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .build();
         }
-        return ResponseEntity.of(service.findFull(id));
+        Double kilosTot = service.findKilos(id);
+        ClaseResponseDTO responseDTO = ClaseResponseDTO.convertClaseToResponse(c.get(),kilosTot );
+        return ResponseEntity.ok()
+                .body(responseDTO);
     }
+
+
 
     @Operation(summary = "Lista todas las clases")
     @ApiResponses(value = {
@@ -102,7 +109,7 @@ public class ClaseController {
             )
     })
     @GetMapping("/")
-    public ResponseEntity<List<ClaseResponseDTO>> findAll() {
+    public ResponseEntity<List<Clase>> findAll() {
         List<Clase> clases = service.findAll();
 
         if (clases.isEmpty()) {
@@ -110,11 +117,10 @@ public class ClaseController {
                     .status(HttpStatus.NO_CONTENT)
                     .build();
         } else {
-            return ResponseEntity.ok(
-                    clases.stream()
-                            .map(ClaseResponseDTO::of)
-                            .toList()
-        );}
+            return ResponseEntity.ok()
+                    .body(clases);
+        }
+
     }
 
     @Operation(summary = "Crea una nueva clase")
@@ -149,6 +155,7 @@ public class ClaseController {
         }
 
     }
+
 
     @Operation(summary = "Edita clase")
     @ApiResponses(value = {
@@ -192,8 +199,12 @@ public class ClaseController {
 
             return c;
         });
-        return ResponseEntity.of(service.findFull(id));
+        Double kilosTot = service.findKilos(id);
+        ClaseResponseDTO responseDTO = ClaseResponseDTO.convertClaseToResponse(oldClase.get(),kilosTot );
+        return ResponseEntity.ok()
+                .body(responseDTO);
     }
+
 
     @Operation(summary = "Borra una clase por su id",
             description = "Si el destinatario a borrar ya tiene aportaciones asociadas, " +

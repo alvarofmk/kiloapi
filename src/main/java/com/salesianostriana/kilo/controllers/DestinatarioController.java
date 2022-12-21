@@ -8,23 +8,70 @@ import com.salesianostriana.kilo.services.DestinatarioService;
 import com.salesianostriana.kilo.views.View;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/destinatario/")
+@Tag(name = "Destinatario", description = "Este es el controlador para gestionar las cajas")
 public class DestinatarioController {
 
     private final DestinatarioService destinatarioService;
+
+    @Operation(summary = "Muestra todos los destinatarios")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Hay destinatarios, aquí tienes los datos",
+                    content = { @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = DestinatarioResponseDTO.class)),
+                            examples = @ExampleObject(value = """
+                                    [
+                                        {
+                                                 "nombre": "Mi abuela",
+                                                 "direccion": "La giralda basicamente",
+                                                 "personaContacto": "Pues mi abuela",
+                                                 "telefono": "686 567 397",
+                                                 "kilosTotales": 0.0,
+                                                 "numerosDeCajas": []
+                                        },
+                                        {
+                                                 "nombre": "Blizzard",
+                                                 "direccion": "Algún sitio de china",
+                                                 "personaContacto": "Jeff Kaplan",
+                                                 "telefono": "666 666 666",
+                                                 "kilosTotales": 0.0,
+                                                 "numerosDeCajas": [
+                                                     7
+                                                 ]
+                                        },
+                                    ]
+                                    """)) }),
+            @ApiResponse(responseCode = "404", description = "No hay destinatarios",
+                    content = @Content) })
+    @JsonView(View.DestinatarioView.AllDestinatarioView.class)
+    @GetMapping("/")
+    public ResponseEntity<List<DestinatarioResponseDTO>> getAllDestinatarios(){
+
+        List<DestinatarioResponseDTO> destinatarios = destinatarioService.getAllDestinatarios();
+
+        if(destinatarios.isEmpty())
+            return ResponseEntity.notFound().build();
+        else
+            return ResponseEntity.ok(destinatarios);
+    }
 
     @Operation(summary = "Borra un destinatario por su id",
             description = "Si el destinatario a borrar ya tiene cajas asociadas, " +
@@ -116,13 +163,15 @@ public class DestinatarioController {
                     content = @Content) })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "Datos del nuevo destinatario",
             content = {@Content(mediaType = "application/json",
-                    schema = @Schema(implementation = CreateDestinatarioDTO.class),
+                    schema = @Schema(implementation = Destinatario.class),
                     examples = @ExampleObject(value = """
                             {
+                                "id": 1,
                                 "nombre": "Hijas de la caridad",
                                 "direccion": "Calle Sin nombre Nº7",
                                 "personaContacto": "Sor María",
                                 "telefono": "689624528",
+                                "cajas": []
                             }
                             """)
             )}
@@ -148,7 +197,6 @@ public class DestinatarioController {
                                         "direccion": "Calle Con Nombre Nº7",
                                         "personaContacto": "Sor María II",
                                         "telefono": "689547563",
-                                        "cajas": []
                                     }
                                     """)
                             )
@@ -160,7 +208,7 @@ public class DestinatarioController {
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "Datos del destinatario actualizados",
             content = { @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = CreateDestinatarioDTO.class),
+                    schema = @Schema(implementation = DestinatarioResponseDTO.class),
                     examples = @ExampleObject( value = """
                                 {
                                     "nombre": "Nietas de la Caridad",
@@ -173,10 +221,11 @@ public class DestinatarioController {
     )
     @Parameter(description = "Id del destinatario a modificar", name = "id", required = true)
     @PutMapping("/{id}")
-    public ResponseEntity<Destinatario> editDestinatario(@PathVariable Long id, @RequestBody CreateDestinatarioDTO editDest){
+    @JsonView(View.DestinatarioView.JustDestinatarioView.class)
+    public ResponseEntity<DestinatarioResponseDTO> editDestinatario(@PathVariable Long id, @RequestBody CreateDestinatarioDTO editDest){
+        Optional<Destinatario> destinatarioEditado = destinatarioService.editDestinatario(id, editDest);
 
-        return destinatarioService.editDestinatario(id, editDest).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+        return destinatarioEditado.isPresent()? ResponseEntity.ok(destinatarioEditado.map(DestinatarioResponseDTO::of).get()) : ResponseEntity.badRequest().build();
     }
-
 
 }
