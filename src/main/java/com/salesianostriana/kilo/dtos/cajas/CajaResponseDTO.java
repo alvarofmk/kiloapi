@@ -30,6 +30,7 @@ public class CajaResponseDTO {
     @JsonView({View.CajaView.GenericResponseView.class, View.DestinatarioView.DetailedDestinatarioView.class})
     private double kilosTotales;
 
+    @JsonView({View.CajaView.GenericResponseView.class})
     private String nombreDestinatario;
 
     @JsonView({View.CajaView.DetailResponseView.class, View.DestinatarioView.DetailedDestinatarioView.class})

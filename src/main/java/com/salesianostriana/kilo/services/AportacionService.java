@@ -5,7 +5,6 @@ import com.salesianostriana.kilo.dtos.detalles_aportacion.DetallesAportacionResp
 import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.entities.DetalleAportacion;
 import com.salesianostriana.kilo.repositories.AportacionRepository;
-import com.salesianostriana.kilo.repositories.TipoAlimentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +16,7 @@ import java.util.Optional;
 public class AportacionService {
 
     private final AportacionRepository aportacionRepository;
-
-    private final TipoAlimentoRepository tipoAlimentoRepository;
+    private final TipoAlimentoSaveService tipoAlimentoSaveService;
 
 
     public Optional<Aportacion> findById(Long id){ return aportacionRepository.findById(id); }
@@ -76,7 +74,20 @@ public class AportacionService {
                             (double) Math.round((detalle.getTipoAlimento().getKilosDisponibles().getCantidadDisponible() - detalle.getCantidadKg())* 100d) /100d
                     );
             a.removeDetalleAportacion(detalle);
-            tipoAlimentoRepository.save(detalle.getTipoAlimento());
+            tipoAlimentoSaveService.save(detalle.getTipoAlimento());
+        }
+    }
+
+    public void deleteAportacionById(Long id){
+
+        Optional<Aportacion> a = aportacionRepository.findById(id);
+
+        if(a.isPresent()){
+            Aportacion aportacion = a.get();
+            borrarDetallesAportacion(aportacion);
+
+            if(aportacion.getDetalleAportaciones().isEmpty())
+                aportacionRepository.deleteById(id);
         }
     }
 
@@ -94,23 +105,55 @@ public class AportacionService {
                                 (double) Math.round((detalle.getTipoAlimento().getKilosDisponibles().getCantidadDisponible() - detalle.getCantidadKg())* 100d) /100d
                         );
 
-                tipoAlimentoRepository.save(detalle.getTipoAlimento());
+                tipoAlimentoSaveService.save(detalle.getTipoAlimento());
                 it.remove();
             }
         }
         aportacionRepository.save(a);
     }
 
-    public void deleteAportacionById(Long id){
+    public Optional<Aportacion> editAportacion(Long idAportacion, Long numLinea, double kg){
 
-        Optional<Aportacion> a = aportacionRepository.findById(id);
+        Optional<Aportacion> a = aportacionRepository.findById(idAportacion);
 
-        if(a.isPresent()){
-            Aportacion aportacion = a.get();
-            borrarDetallesAportacion(aportacion);
+        if(a.isPresent() && kg>0){
+            Optional<DetalleAportacion> detalle =
+                    a.get().getDetalleAportaciones().size() >= numLinea ?
+                            Optional.of(a.get().getDetalleAportaciones().get(numLinea.intValue() -1))
+                            :
+                            Optional.empty();
 
-            if(aportacion.getDetalleAportaciones().isEmpty())
-                aportacionRepository.deleteById(id);
+            if(detalle.isPresent())
+                return cambiarKilosDetalle(detalle.get(), kg);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Aportacion> cambiarKilosDetalle(DetalleAportacion detalle, double kgNuevos){
+
+        double result = kgNuevos - detalle.getCantidadKg();
+        double kilosActuales = detalle.getTipoAlimento().getKilosDisponibles().getCantidadDisponible();
+        double kilosNuevos = (double) Math.round((kilosActuales + result) *100d) /100d;
+
+        if(result < 0){
+            if(kilosActuales < result*-1)
+                return Optional.empty();
+            else{
+                detalle.getTipoAlimento().getKilosDisponibles().setCantidadDisponible(
+                        kilosNuevos
+                );
+                detalle.setCantidadKg(kgNuevos);
+                tipoAlimentoSaveService.save(detalle.getTipoAlimento());
+                return Optional.of(aportacionRepository.save(detalle.getAportacion()));
+            }
+        }
+        else{
+            detalle.getTipoAlimento().getKilosDisponibles().setCantidadDisponible(
+                    kilosNuevos
+            );
+            detalle.setCantidadKg(kgNuevos);
+            tipoAlimentoSaveService.save(detalle.getTipoAlimento());
+            return Optional.of(aportacionRepository.save(detalle.getAportacion()));
         }
     }
 
