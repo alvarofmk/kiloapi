@@ -2,6 +2,7 @@ package com.salesianostriana.kilo.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.salesianostriana.kilo.dtos.aportaciones.AportacionesReponseDTO;
+import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.services.AportacionService;
 import com.salesianostriana.kilo.views.View;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/aportacion")
@@ -206,5 +208,39 @@ public class AportacionController {
 
         aportacionService.deleteAportacionById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Edita los kilos aportados de un alimento en una aportación")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Detalle aportación editado con éxito",
+                    content = { @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = AportacionesReponseDTO.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "id": 10,
+                                        "nombre": "Nietas de la Caridad",
+                                        "direccion": "Calle Con Nombre Nº7",
+                                        "personaContacto": "Sor María II",
+                                        "telefono": "689547563",
+                                    }
+                                    """)
+                    )
+                    }
+            ),
+            @ApiResponse(responseCode = "400", description = "Los datos proporcionados no son correctos",
+                    content = @Content)
+    })
+    @Parameters(value = {
+            @Parameter(description = "Id de la aportación", name = "id", required = true),
+            @Parameter(description = "Id de la línea de detalle de la aportación", name = "num", required = true),
+            @Parameter(description = "Número de kilos nuevos de dicha línea", name = "numKg", required = true)
+    })
+    @JsonView(View.AportacionView.AportacionDetallesView.class)
+    @PutMapping("/{id}/linea/{num}/kg/{numKg}")
+    public ResponseEntity<AportacionesReponseDTO> editAportacion(@PathVariable("id") Long idAportacion, @PathVariable("num") Long numLinea, @PathVariable("numKg") double numKg){
+        Optional<Aportacion> aportacion = aportacionService.editAportacion(idAportacion, numLinea, numKg);
+
+        return aportacion.isPresent()? ResponseEntity.ok(aportacion.map(AportacionesReponseDTO::of).get()) : ResponseEntity.badRequest().build();
     }
 }

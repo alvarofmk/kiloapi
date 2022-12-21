@@ -80,6 +80,19 @@ public class AportacionService {
         }
     }
 
+    public void deleteAportacionById(Long id){
+
+        Optional<Aportacion> a = aportacionRepository.findById(id);
+
+        if(a.isPresent()){
+            Aportacion aportacion = a.get();
+            borrarDetallesAportacion(aportacion);
+
+            if(aportacion.getDetalleAportaciones().isEmpty())
+                aportacionRepository.deleteById(id);
+        }
+    }
+
     public void borrarDetallesAportacion(Aportacion a){
         Iterator<DetalleAportacion> it = a.getDetalleAportaciones().iterator();
 
@@ -101,16 +114,48 @@ public class AportacionService {
         aportacionRepository.save(a);
     }
 
-    public void deleteAportacionById(Long id){
+    public Optional<Aportacion> editAportacion(Long idAportacion, Long numLinea, double kg){
 
-        Optional<Aportacion> a = aportacionRepository.findById(id);
+        Optional<Aportacion> a = aportacionRepository.findById(idAportacion);
 
-        if(a.isPresent()){
-            Aportacion aportacion = a.get();
-            borrarDetallesAportacion(aportacion);
+        if(a.isPresent() && kg>0){
+            Optional<DetalleAportacion> detalle =
+                    a.get().getDetalleAportaciones().size() >= numLinea ?
+                            Optional.of(a.get().getDetalleAportaciones().get(numLinea.intValue() -1))
+                            :
+                            Optional.empty();
 
-            if(aportacion.getDetalleAportaciones().isEmpty())
-                aportacionRepository.deleteById(id);
+            if(detalle.isPresent())
+                return cambiarKilosDetalle(detalle.get(), kg);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Aportacion> cambiarKilosDetalle(DetalleAportacion detalle, double kgNuevos){
+
+        double result = kgNuevos - detalle.getCantidadKg();
+        double kilosActuales = detalle.getTipoAlimento().getKilosDisponibles().getCantidadDisponible();
+        double kilosNuevos = (double) Math.round((kilosActuales + result) *100d) /100d;
+
+        if(result < 0){
+            if(kilosActuales < result*-1)
+                return Optional.empty();
+            else{
+                detalle.getTipoAlimento().getKilosDisponibles().setCantidadDisponible(
+                        kilosNuevos
+                );
+                detalle.setCantidadKg(kgNuevos);
+                tipoAlimentoRepository.save(detalle.getTipoAlimento());
+                return Optional.of(aportacionRepository.save(detalle.getAportacion()));
+            }
+        }
+        else{
+            detalle.getTipoAlimento().getKilosDisponibles().setCantidadDisponible(
+                    kilosNuevos
+            );
+            detalle.setCantidadKg(kgNuevos);
+            tipoAlimentoRepository.save(detalle.getTipoAlimento());
+            return Optional.of(aportacionRepository.save(detalle.getAportacion()));
         }
     }
 
