@@ -1,6 +1,5 @@
 package com.salesianostriana.kilo.entities;
 
-import com.salesianostriana.kilo.entities.keys.TienePK;
 import lombok.*;
 
 
@@ -10,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 @Entity
 @AllArgsConstructor

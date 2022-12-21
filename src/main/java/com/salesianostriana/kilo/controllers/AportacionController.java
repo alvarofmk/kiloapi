@@ -301,12 +301,27 @@ public class AportacionController {
                             schema = @Schema(implementation = AportacionesReponseDTO.class),
                             examples = @ExampleObject(value = """
                                     {
-                                        "id": 10,
-                                        "nombre": "Nietas de la Caridad",
-                                        "direccion": "Calle Con Nombre Nº7",
-                                        "personaContacto": "Sor María II",
-                                        "telefono": "689547563",
-                                    }
+                                         "id": 18,
+                                         "fecha": "2022-12-13",
+                                         "clase": "2 DAM",
+                                         "detallesAportacion": [
+                                             {
+                                                 "numLinea": 1,
+                                                 "cantidadKg": 17.7,
+                                                 "nombre": "Pasta"
+                                             },
+                                             {
+                                                 "numLinea": 2,
+                                                 "cantidadKg": 5.7,
+                                                 "nombre": "Huevos"
+                                             },
+                                             {
+                                                 "numLinea": 3,
+                                                 "cantidadKg": 4.0,
+                                                 "nombre": "Arroz"
+                                             }
+                                         ]
+                                     }
                                     """)
                     )
                     }

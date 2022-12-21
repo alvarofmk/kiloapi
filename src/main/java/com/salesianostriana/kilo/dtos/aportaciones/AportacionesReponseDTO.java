@@ -8,15 +8,12 @@ import com.salesianostriana.kilo.dtos.detalles_aportacion.DetallesAportacionResp
 import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.views.View;
 import lombok.*;
-import org.springframework.data.util.Pair;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @AllArgsConstructor
 @NoArgsConstructor
