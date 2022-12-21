@@ -3,7 +3,7 @@ package com.salesianostriana.kilo.dtos.cajas;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.salesianostriana.kilo.dtos.TieneResponseDTO;
+import com.salesianostriana.kilo.dtos.tiene.TieneResponseDTO;
 import com.salesianostriana.kilo.entities.Caja;
 import com.salesianostriana.kilo.views.View;
 import lombok.*;

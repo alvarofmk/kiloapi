@@ -1,6 +1,5 @@
-package com.salesianostriana.kilo.dtos;
+package com.salesianostriana.kilo.dtos.tiene;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.salesianostriana.kilo.entities.Tiene;
 import com.salesianostriana.kilo.views.View;
