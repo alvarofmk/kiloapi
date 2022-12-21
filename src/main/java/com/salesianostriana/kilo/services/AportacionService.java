@@ -200,12 +200,12 @@ public class AportacionService {
                                 .build();
                         contador.set(contador.get() + 1L);
                         creada.addDetalleAportacion(linea);
-                        KilosDisponibles kilos = kilosDisponiblesRepository.findById(l.getIdTipo()).get();
+                        KilosDisponibles kilos = tipo.get().getKilosDisponibles();
 
                         kilos.setCantidadDisponible((double)Math.round((kilos.getCantidadDisponible() + l.getKg())*100)/100);
 
                         kilos.addTipoAlimento(tipo.get());
-                        kilosDisponiblesRepository.save(kilos);
+                        tipoAlimentoSaveService.save(tipo.get());
                     }
 
                 });
