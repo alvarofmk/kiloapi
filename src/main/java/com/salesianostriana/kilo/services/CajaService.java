@@ -52,7 +52,7 @@ public class CajaService {
 
     public Optional<Caja> editCaja(EditCajaDTO editCajaDTO, Long id){
         Optional<Destinatario> newDest = editCajaDTO.getDestinatarioId() == null ? Optional.empty() : destinatarioRepository.findById(editCajaDTO.getDestinatarioId());
-        if(editCajaDTO.getNumero() <= 0 || newDest.isEmpty())
+        if(editCajaDTO.getNumero() <= 0 || (editCajaDTO.getDestinatarioId() != null && newDest.isEmpty()))
             return Optional.empty();
         return repository.findById(id).map( cajaToEdit -> {
             Destinatario actual = cajaToEdit.getDestinatario();
@@ -60,7 +60,8 @@ public class CajaService {
             cajaToEdit.setNumCaja(editCajaDTO.getNumero());
             if(actual != null)
                 cajaToEdit.removeDestinatario(actual);
-            cajaToEdit.addDestinatario(newDest.get());
+            if(editCajaDTO.getDestinatarioId() != null)
+                cajaToEdit.addDestinatario(newDest.get());
             return repository.save(cajaToEdit);
         });
     }
