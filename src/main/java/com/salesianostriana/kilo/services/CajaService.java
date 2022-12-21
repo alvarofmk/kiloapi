@@ -26,12 +26,12 @@ public class CajaService {
 
     private final KilosDisponiblesService kilosDisponiblesService;
 
-    private final DestinatarioService destinatarioService;
-
     private final TipoAlimentoService tipoAlimentoService;
+
     private final TipoAlimentoRepository tipoAlimentoRepository;
+
     private final DestinatarioRepository destinatarioRepository;
-    private final KilosDisponiblesRepository kilosDisponiblesRepository;
+
 
     public List<Caja> findAll(){
         return repository.findAll();

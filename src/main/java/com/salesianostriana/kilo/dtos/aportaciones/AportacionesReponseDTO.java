@@ -28,20 +28,23 @@ import java.util.stream.IntStream;
 public class AportacionesReponseDTO {
 
     @JsonView({View.AportacionView.AportacionDetallesView.class,
-    View.AportacionView.AllAportacionView.class})
+    View.AportacionView.AllAportacionView.class,
+    View.AportacionView.AportacionRequestView.class})
     private Long id;
 
     @JsonView({View.AportacionView.AportacionDetallesView.class,
             View.AportacionView.AllAportacionView.class,
-            View.AportacionView.AportacionByClase.class})
+            View.AportacionView.AportacionByClaseView.class,
+            View.AportacionView.AportacionRequestView.class})
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fecha;
 
+    @JsonView({View.AportacionView.AllAportacionView.class,
+            View.AportacionView.AportacionDetallesView.class})
+    private String clase;
 
     @JsonView({View.AportacionView.AportacionDetallesView.class})
     private List<DetallesAportacionResponseDTO> detallesAportacion = new ArrayList<>();
-    @JsonView({View.AportacionView.AllAportacionView.class})
-    private String nombreClase;
     @JsonView({View.AportacionView.AllAportacionView.class})
     private double cantidadTotalKg;
 
@@ -52,15 +55,23 @@ public class AportacionesReponseDTO {
     /*@JsonView({View.AportacionView.AportacionByClase.class})
     @Builder.Default
     private List<Pair<String, Double>> pares = new ArrayList<>();*/
-    @JsonView({View.AportacionView.AportacionByClase.class})
+    @JsonView({View.AportacionView.AportacionByClaseView.class,
+            View.AportacionView.AportacionRequestView.class})
     @Builder.Default
     private Map<String, Double> alimentos = new HashMap<>();
+
+    @JsonView(View.AportacionView.AportacionRequestView.class)
+    private Long idClase;
+
+    @JsonView(View.AportacionView.AportacionRequestView.class)
+    private List<LineaDTO> lineas = new ArrayList<>();
 
 
     public static AportacionesReponseDTO of (Aportacion a){
         return AportacionesReponseDTO.builder()
                 .id(a.getId())
                 .fecha(a.getFecha())
+                .clase(a.getClase().getNombre())
                 .detallesAportacion(a.getDetalleAportaciones()
                         .stream()
                         .map(DetallesAportacionResponseDTO::of)
@@ -72,7 +83,7 @@ public class AportacionesReponseDTO {
     public AportacionesReponseDTO(Long id, LocalDate fecha, String clase, double totalKg) {
         this.id = id;
         this.fecha = fecha;
-        nombreClase = clase;
+        this.clase = clase;
         cantidadTotalKg = totalKg;
     }
 
@@ -82,6 +93,13 @@ public class AportacionesReponseDTO {
         alimentos = null;
 
     }
+
+    public AportacionesReponseDTO (Long idAportacion, Long idClase, List<LineaDTO> pares) {
+        id = idAportacion;
+        this.idClase = idClase;
+        lineas = pares;
+    }
+
     @JsonAnySetter
     public AportacionesReponseDTO setPares(List<DetallesAportacionResponseDTO> detalles, Long id) {
 
@@ -109,7 +127,6 @@ public class AportacionesReponseDTO {
 
         Map<String, Double> mapa = new HashMap<>();
         detalles.forEach(d -> {
-            List<Double> aux;
             if(d.getAportacionId() == id && !mapa.containsKey(d.getNombre())) {
                 mapa.put(d.getNombre(), d.getCantidadKg());
             }else if(d.getAportacionId() == id && mapa.containsKey(d.getNombre())) {

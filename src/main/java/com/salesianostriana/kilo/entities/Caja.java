@@ -78,7 +78,7 @@ public class Caja {
 
     public void removeTiene(Tiene tiene){
         this.alimentos.remove(tiene);
-        this.kilosTotales -= t.getCantidadKgs();
+        this.kilosTotales -= tiene.getCantidadKgs();
         tiene.setCaja(null);
     }
   

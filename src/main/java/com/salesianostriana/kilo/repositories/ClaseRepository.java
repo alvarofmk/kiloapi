@@ -17,4 +17,6 @@ public interface ClaseRepository extends JpaRepository<Clase, Long> {
             "FROM Aportacion a JOIN DetalleAportacion d ON a.id = d.aportacion GROUP BY a.id")
     public List<RankQueryResponseDTO> findClasesOrderedByRank();
 
+
+
 }
