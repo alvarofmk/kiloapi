@@ -5,7 +5,6 @@ import com.salesianostriana.kilo.dtos.detalles_aportacion.DetallesAportacionResp
 import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.entities.DetalleAportacion;
 import com.salesianostriana.kilo.repositories.AportacionRepository;
-import com.salesianostriana.kilo.repositories.TipoAlimentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +16,7 @@ import java.util.Optional;
 public class AportacionService {
 
     private final AportacionRepository aportacionRepository;
-
-    private final TipoAlimentoRepository tipoAlimentoRepository;
+    private final TipoAlimentoSaveService tipoAlimentoSaveService;
 
 
     public Optional<Aportacion> findById(Long id){ return aportacionRepository.findById(id); }
@@ -76,7 +74,7 @@ public class AportacionService {
                             (double) Math.round((detalle.getTipoAlimento().getKilosDisponibles().getCantidadDisponible() - detalle.getCantidadKg())* 100d) /100d
                     );
             a.removeDetalleAportacion(detalle);
-            tipoAlimentoRepository.save(detalle.getTipoAlimento());
+            tipoAlimentoSaveService.save(detalle.getTipoAlimento());
         }
     }
 
@@ -107,7 +105,7 @@ public class AportacionService {
                                 (double) Math.round((detalle.getTipoAlimento().getKilosDisponibles().getCantidadDisponible() - detalle.getCantidadKg())* 100d) /100d
                         );
 
-                tipoAlimentoRepository.save(detalle.getTipoAlimento());
+                tipoAlimentoSaveService.save(detalle.getTipoAlimento());
                 it.remove();
             }
         }
@@ -145,7 +143,7 @@ public class AportacionService {
                         kilosNuevos
                 );
                 detalle.setCantidadKg(kgNuevos);
-                tipoAlimentoRepository.save(detalle.getTipoAlimento());
+                tipoAlimentoSaveService.save(detalle.getTipoAlimento());
                 return Optional.of(aportacionRepository.save(detalle.getAportacion()));
             }
         }
@@ -154,7 +152,7 @@ public class AportacionService {
                     kilosNuevos
             );
             detalle.setCantidadKg(kgNuevos);
-            tipoAlimentoRepository.save(detalle.getTipoAlimento());
+            tipoAlimentoSaveService.save(detalle.getTipoAlimento());
             return Optional.of(aportacionRepository.save(detalle.getAportacion()));
         }
     }
