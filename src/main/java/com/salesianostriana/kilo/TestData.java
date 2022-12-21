@@ -23,7 +23,7 @@ public class TestData {
 
     private final TieneRepository tieneRepository;
 
-
+    /*
     @PostConstruct
     public void initData(){
 
@@ -191,4 +191,5 @@ public class TestData {
         tieneRepository.saveAll(List.of(ti,ti1));
         
     }
+    */
 }
