@@ -1,6 +1,7 @@
 package com.salesianostriana.kilo.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.salesianostriana.kilo.dtos.aportaciones.AportacionRequestDTO;
 import com.salesianostriana.kilo.dtos.aportaciones.AportacionesReponseDTO;
 import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.services.AportacionService;
@@ -148,7 +149,7 @@ public class AportacionController {
             description = "No se han encontrado aportaciones",
             content = @Content)
     })
-    @JsonView(View.AportacionView.AportacionByClase.class)
+    @JsonView(View.AportacionView.AportacionByClaseView.class)
     @GetMapping("/clase/{id}")
     public ResponseEntity<List<AportacionesReponseDTO>> getAllAportacionesByClase(
             @Parameter(
@@ -210,6 +211,87 @@ public class AportacionController {
         aportacionService.deleteAportacionById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Crea una nueva aportación")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+    description = "Cuerpo de la petición",
+    content = {
+            @Content(mediaType = "application/json",
+            schema = @Schema(implementation = AportacionRequestDTO.class),
+            examples = {
+                    @ExampleObject(
+                            value = """
+                                    {
+                                        "idClase": 7,
+                                        "lineas": [
+                                            {
+                                                "idTipo": 5,
+                                                "kg": 12.4
+                                            },
+                                            {
+                                                "idTipo": 4,
+                                                "kg": 15
+                                            },
+                                            {
+                                                "idTipo": 6,
+                                                "kg": 10.9
+                                            }
+                                        ]
+                                    }
+                                    """
+                    )
+            })
+    })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+            description = "Se ha creado una aportación",
+            content = {
+                    @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = AportacionesReponseDTO.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "id": 13,
+                                                "fecha": "2022-12-21",
+                                                "clase": "1DAM",
+                                                "detallesAportacion": [
+                                                    {
+                                                        "numLinea": 1,
+                                                        "cantidadKg": 12.4,
+                                                        "nombre": "Chocolate"
+                                                    },
+                                                    {
+                                                        "numLinea": 2,
+                                                        "cantidadKg": 15.0,
+                                                        "nombre": "Pasta"
+                                                    },
+                                                    {
+                                                        "numLinea": 3,
+                                                        "cantidadKg": 10.9,
+                                                        "nombre": "Polvorones"
+                                                    }
+                                                ]
+                                            }
+                                            """
+                            )
+                    })
+            }),
+            @ApiResponse(responseCode = "400",
+            description = "Los datos de la aportación son incorrectos",
+            content = @Content)
+    })
+    @JsonView(View.AportacionView.AportacionDetallesView.class)
+    @PostMapping("/")
+    public ResponseEntity<AportacionesReponseDTO> createAportacion(@JsonView(View.AportacionView.AportacionRequestView.class) @RequestBody AportacionRequestDTO dto) {
+        Optional<AportacionesReponseDTO> resultado = aportacionService.createAportacion(dto);
+        if (resultado.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(resultado.get());
+        }
+    }
+
 
     @Operation(summary = "Edita los kilos aportados de un alimento en una aportación")
     @ApiResponses(value = {

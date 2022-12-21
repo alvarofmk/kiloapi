@@ -15,7 +15,9 @@ public class View {
 
         public static interface AllAportacionView{}
 
-        public static interface AportacionByClase{}
+        public static interface AportacionByClaseView{}
+
+        public static interface AportacionRequestView{}
 
 
     }
