@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @AllArgsConstructor
