@@ -7,14 +7,10 @@ import com.salesianostriana.kilo.dtos.detalles_aportacion.DetallesAportacionResp
 import com.salesianostriana.kilo.entities.*;
 import com.salesianostriana.kilo.entities.keys.DetalleAportacionPK;
 import com.salesianostriana.kilo.repositories.AportacionRepository;
-import com.salesianostriana.kilo.repositories.KilosDisponiblesRepository;
-import com.salesianostriana.kilo.repositories.TipoAlimentoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;

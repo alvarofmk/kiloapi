@@ -5,9 +5,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.salesianostriana.kilo.entities.DetalleAportacion;
 import com.salesianostriana.kilo.views.View;
 import lombok.*;
-import org.springframework.data.util.Pair;
 
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor

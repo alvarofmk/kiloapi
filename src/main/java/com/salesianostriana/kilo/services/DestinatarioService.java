@@ -1,6 +1,6 @@
 package com.salesianostriana.kilo.services;
 
-import com.salesianostriana.kilo.dtos.DestinatarioResponseDTO;
+import com.salesianostriana.kilo.dtos.destinatarios.DestinatarioResponseDTO;
 import com.salesianostriana.kilo.dtos.destinatarios.CreateDestinatarioDTO;
 import com.salesianostriana.kilo.entities.Destinatario;
 import com.salesianostriana.kilo.repositories.DestinatarioRepository;

@@ -1,7 +1,7 @@
 package com.salesianostriana.kilo.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.salesianostriana.kilo.dtos.DestinatarioResponseDTO;
+import com.salesianostriana.kilo.dtos.destinatarios.DestinatarioResponseDTO;
 import com.salesianostriana.kilo.dtos.destinatarios.CreateDestinatarioDTO;
 import com.salesianostriana.kilo.entities.Destinatario;
 import com.salesianostriana.kilo.services.DestinatarioService;
@@ -148,15 +148,13 @@ public class DestinatarioController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Destinatario creado con éxito",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Destinatario.class),
+                            schema = @Schema(implementation = CreateDestinatarioDTO.class),
                             examples = @ExampleObject(value = """
                                     {
-                                        "id": 10,
                                         "nombre": "Hijas de la caridad",
                                         "direccion": "Calle Sin nombre Nº7",
                                         "personaContacto": "Sor María",
                                         "telefono": "689624528",
-                                        "cajas": [],
                                     }
                                     """)) }),
             @ApiResponse(responseCode = "400", description = "Los datos proporcionados no son correctos",
@@ -189,7 +187,7 @@ public class DestinatarioController {
             @ApiResponse(responseCode = "200", description = "Destinatario editado con éxito",
                     content = { @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = Destinatario.class),
+                            schema = @Schema(implementation = DestinatarioResponseDTO.class),
                             examples = @ExampleObject(value = """
                                     {
                                         "id": 10,
@@ -208,7 +206,7 @@ public class DestinatarioController {
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "Datos del destinatario actualizados",
             content = { @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = DestinatarioResponseDTO.class),
+                    schema = @Schema(implementation = CreateDestinatarioDTO.class),
                     examples = @ExampleObject( value = """
                                 {
                                     "nombre": "Nietas de la Caridad",

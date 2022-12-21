@@ -2,7 +2,6 @@ package com.salesianostriana.kilo.services;
 
 
 import com.salesianostriana.kilo.dtos.tipo_alimento.TipoAlimentoDTO;
-import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.entities.KilosDisponibles;
 import com.salesianostriana.kilo.entities.TipoAlimento;
 import com.salesianostriana.kilo.repositories.TipoAlimentoRepository;
