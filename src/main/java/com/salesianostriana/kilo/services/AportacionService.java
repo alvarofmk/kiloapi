@@ -118,7 +118,7 @@ public class AportacionService {
 
         Optional<Aportacion> a = aportacionRepository.findById(idAportacion);
 
-        if(a.isPresent()){
+        if(a.isPresent() && kg>0){
             Optional<DetalleAportacion> detalle =
                     a.get().getDetalleAportaciones().size() >= numLinea ?
                             Optional.of(a.get().getDetalleAportaciones().get(numLinea.intValue() -1))
