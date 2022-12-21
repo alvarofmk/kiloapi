@@ -5,15 +5,16 @@ import com.salesianostriana.kilo.dtos.cajas.CreateCajaDTO;
 import com.salesianostriana.kilo.dtos.cajas.EditCajaDTO;
 import com.salesianostriana.kilo.entities.*;
 import com.salesianostriana.kilo.entities.keys.TienePK;
-import com.salesianostriana.kilo.repositories.CajaRepository;
-import com.salesianostriana.kilo.repositories.DestinatarioRepository;
-import com.salesianostriana.kilo.repositories.TieneRepository;
-import com.salesianostriana.kilo.repositories.TipoAlimentoRepository;
+import com.salesianostriana.kilo.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+
+import static java.lang.Long.valueOf;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +31,7 @@ public class CajaService {
     private final TipoAlimentoService tipoAlimentoService;
     private final TipoAlimentoRepository tipoAlimentoRepository;
     private final DestinatarioRepository destinatarioRepository;
+    private final KilosDisponiblesRepository kilosDisponiblesRepository;
 
     public List<Caja> findAll(){
         return repository.findAll();
@@ -114,6 +116,48 @@ public class CajaService {
         }
     }
 
+    public Optional<CajaResponseDTO> deleteAlimFromCaja (Long idCaja, Long idAlim) {
+        Optional<Caja> c = repository.findById(idCaja);
+        Optional<TipoAlimento> alim = tipoAlimentoRepository.findById(idAlim);
+        Optional<KilosDisponibles> kilosDisponibles = kilosDisponiblesService.findById(idAlim);
+
+        if (c.isPresent() && alim.isPresent()) {
+            Caja caja = c.get();
+            /*
+
+            Tiene t = Tiene.builder()
+                    .caja(caja)
+                    .tipoAlimento(alim.get())
+                    .tienePK(new TienePK(caja.getId(), alim.get().getId()))
+                    .build();
+
+             */
+
+            Tiene t = tieneRepository.findOneTiene(caja.getId(), idAlim);
+
+
+            if (caja.getAlimentos().contains(t)) {
+
+                caja.getAlimentos().stream().forEach( al -> {
+                    if (al.getTienePK().getTipoAlimentoId() == idAlim) {
+                        Double kilosEnCaja = alim.get().getKilosDisponibles().getCantidadDisponible();
+                        Double cant = al.getCantidadKgs() + kilosEnCaja;
+                        kilosDisponiblesService.add(new KilosDisponibles(idAlim, cant));
+                    }
+                });
+
+                caja.removeTiene(t);
+
+                repository.save(caja);
+
+                return Optional.of(CajaResponseDTO.of(caja));
+
+            }
+        }
+        return Optional.empty();
+
+    }
+
     public Optional<CajaResponseDTO> editKgOfALim(Long idCaja, Long idALim, Double cant) {
 
         Optional<Caja> c = this.findById(idCaja);
@@ -123,11 +167,7 @@ public class CajaService {
         if (c.isPresent() && alim.isPresent() && cant >= 0) {
             Caja caja = c.get();
 
-            Tiene t = Tiene.builder()
-                    .caja(caja)
-                    .tipoAlimento(alim.get())
-                    .tienePK(new TienePK(caja.getId(), alim.get().getId()))
-                    .build();
+            Tiene t = tieneRepository.findOneTiene(caja.getId(), idALim);
 
 
             if (caja.getAlimentos().contains(t)) {
@@ -165,4 +205,5 @@ public class CajaService {
         return Optional.empty();
 
     }
+
 }

@@ -219,7 +219,6 @@ public class CajaController {
     }
 
 
-
     @Operation(summary = "Edita la cantidad de kilos de un tipoAlimento indicando el tipo mediante Id y los kilos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Caja editada con éxito",
@@ -261,4 +260,34 @@ public class CajaController {
     }
 
 
+    @Operation(summary = "ELimina un alimento de una caja")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Alimento borrado",
+                    content = { @Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = """
+                                                    {
+                                                        "id": 3,
+                                                        "qr": "http://localhost:8080/caja/3",
+                                                        "numCaja": 7,
+                                                        "kilosTotales": 0.0,
+                                                        "contenido": []
+                                                    }
+                                    """))
+                    }),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "No se encontró ninguna caja con el id Id indicado ",
+                    content = @Content
+            )
+    })
+    @JsonView(View.CajaView.DetailResponseView.class)
+    @DeleteMapping("/{id}/tipo/{idTipoAlim}")
+    public ResponseEntity<CajaResponseDTO> deleteAlimFromCaja (@PathVariable Long id, @PathVariable Long idTipoAlim) {
+
+        return ResponseEntity
+                .of(cajaService.deleteAlimFromCaja(id, idTipoAlim));
+
+    }
 }
