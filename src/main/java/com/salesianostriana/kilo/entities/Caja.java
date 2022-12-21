@@ -77,8 +77,9 @@ public class Caja {
     }
 
     public void removeTiene(Tiene tiene){
+        double cantidad = this.alimentos.stream().filter(t -> t.equals(tiene)).findFirst().get().getCantidadKgs();
+        this.kilosTotales -= cantidad;
         this.alimentos.remove(tiene);
-        this.kilosTotales -= t.getCantidadKgs();
         tiene.setCaja(null);
     }
   

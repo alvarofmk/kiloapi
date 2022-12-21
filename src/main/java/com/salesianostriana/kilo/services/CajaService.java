@@ -94,25 +94,17 @@ public class CajaService {
 
     public void deleteById(Long id) {
         Optional<Caja> c = repository.findById(id);
-
         if (c.isPresent()) {
             Caja toDelete = c.get();
             toDelete.getAlimentos().forEach(alim -> {
-                toDelete.setKilosTotales(toDelete.getKilosTotales() - alim.getCantidadKgs());
-
                 Double kilosDispo = alim.getTipoAlimento().getKilosDisponibles().getCantidadDisponible();
-
                 kilosDispo += alim.getCantidadKgs();
-
-                alim.setCantidadKgs(kilosDispo);
+                kilosDisponiblesService.add(new KilosDisponibles(alim.getTipoAlimento().getId(), kilosDispo));
             });
-
-            Destinatario dest = destinatarioRepository.findById(toDelete.getDestinatario().getId()).get();
-
-            dest.getCajas().remove(toDelete);
-
+            if(toDelete.getDestinatario() != null){
+                toDelete.removeDestinatario(toDelete.getDestinatario());
+            }
             repository.delete(toDelete);
-
         }
     }
 
