@@ -219,6 +219,7 @@ public class CajaController {
     }
 
 
+
     @Operation(summary = "ELimina un alimento de una caja")
     @ApiResponses(value = {
             @ApiResponse(
