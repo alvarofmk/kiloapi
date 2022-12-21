@@ -29,7 +29,6 @@ public class AportacionService {
 
     private final ClaseService claseService;
 
-    private final KilosDisponiblesRepository kilosDisponiblesRepository;
 
 
     public Optional<Aportacion> findById(Long id){ return aportacionRepository.findById(id); }

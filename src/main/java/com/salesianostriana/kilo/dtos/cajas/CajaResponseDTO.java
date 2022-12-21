@@ -1,5 +1,6 @@
 package com.salesianostriana.kilo.dtos.cajas;
 
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.salesianostriana.kilo.dtos.TieneResponseDTO;
@@ -10,6 +11,7 @@ import lombok.*;
 import java.util.List;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -44,5 +46,6 @@ public class CajaResponseDTO {
                 .contenido(caja.getAlimentos().stream().map(TieneResponseDTO::of).toList())
                 .build();
     }
+
 
 }

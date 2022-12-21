@@ -1,10 +1,15 @@
 package com.salesianostriana.kilo.services;
 
+
+import com.salesianostriana.kilo.dtos.clase.ClaseResponseDTO;
+
 import com.salesianostriana.kilo.dtos.RankQueryResponseDTO;
 import com.salesianostriana.kilo.dtos.RankingResponseDTO;
+
 import com.salesianostriana.kilo.dtos.clase.CreateClaseDTO;
 import com.salesianostriana.kilo.entities.Clase;
 import com.salesianostriana.kilo.repositories.ClaseRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +19,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static java.util.stream.Collectors.*;
 
 @Service
+@RequiredArgsConstructor
 public class ClaseService {
 
-    @Autowired
-    private ClaseRepository repository;
+    private final ClaseRepository repository;
 
     public Clase add(Clase c) {
         return repository.save(c);
@@ -26,6 +31,12 @@ public class ClaseService {
     public Optional<Clase> findById(Long id) {
         return repository.findById(id);
     }
+
+
+    public Double findKilos(Long id) { return repository.findKilos(id); }
+
+
+
 
     public List<Clase> findAll(){
         return repository.findAll();

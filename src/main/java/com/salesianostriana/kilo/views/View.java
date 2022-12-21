@@ -50,4 +50,12 @@ public class View {
         public static interface KilosDisponiblesDetailsView{}
     }
 
+    public interface ClaseView {
+        public static interface GenericClaseView{}
+
+        public static interface DetailClaseView extends CajaView.GenericResponseView {}
+
+
+    }
+
 }
