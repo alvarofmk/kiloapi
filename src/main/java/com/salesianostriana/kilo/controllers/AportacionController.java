@@ -31,6 +31,7 @@ public class AportacionController {
 
     private final AportacionService aportacionService;
 
+
     @Operation(summary = "Obtiene los detalles de una aportación")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Aportación encontrada",
