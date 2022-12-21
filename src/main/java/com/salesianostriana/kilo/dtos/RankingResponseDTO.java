@@ -1,7 +1,6 @@
 package com.salesianostriana.kilo.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.salesianostriana.kilo.entities.Aportacion;
 import lombok.*;
 
 @Getter @Setter

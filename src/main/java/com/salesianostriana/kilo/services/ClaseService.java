@@ -1,7 +1,6 @@
 package com.salesianostriana.kilo.services;
 
 
-import com.salesianostriana.kilo.dtos.clase.ClaseResponseDTO;
 
 import com.salesianostriana.kilo.dtos.RankQueryResponseDTO;
 import com.salesianostriana.kilo.dtos.RankingResponseDTO;
@@ -10,7 +9,6 @@ import com.salesianostriana.kilo.dtos.clase.CreateClaseDTO;
 import com.salesianostriana.kilo.entities.Clase;
 import com.salesianostriana.kilo.repositories.ClaseRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

@@ -1,6 +1,6 @@
 package com.salesianostriana.kilo.entities.keys;
 
-import com.salesianostriana.kilo.entities.Aportacion;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
