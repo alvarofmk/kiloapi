@@ -16,24 +16,6 @@ import java.util.Optional;
 @Repository
 public interface ClaseRepository extends JpaRepository<Clase, Long> {
 
-
-    /*
-    @Query("""
-            SELECT new com.salesianostriana.kilo.dtos.clase.ClaseResponseDTO(c.id, c.nombre, c.tutor, 
-            (SELECT COUNT from a WHERE a.clase = c), 
-            (SELECT SUM (det.cantidadKgs) WHERE det.aportacion.id = a.id)) 
-            
-            FROM Clase c 
-            JOIN Aportacion a ON c.id = a.clase 
-            JOIN DetalleAportacion det ON a.id = det.aportacion
-            
-            WHERE c.id = :id
-            """)
-    Optional<ClaseResponseDTO> findKilos(@Param("id") Long id);
-
-     */
-
-
     @Query("""
                SELECT SUM (det.cantidadKg) 
                FROM Clase c
@@ -49,6 +31,7 @@ public interface ClaseRepository extends JpaRepository<Clase, Long> {
     @Query("SELECT new com.salesianostriana.kilo.dtos.RankQueryResponseDTO(a.clase.id, a.clase.nombre, SUM(d.cantidadKg) AS cantidadPorAp) " +
             "FROM Aportacion a JOIN DetalleAportacion d ON a.id = d.aportacion GROUP BY a.id")
     public List<RankQueryResponseDTO> findClasesOrderedByRank();
+
 
 
 }

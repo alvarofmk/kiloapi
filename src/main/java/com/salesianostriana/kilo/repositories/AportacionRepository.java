@@ -23,7 +23,7 @@ public interface AportacionRepository extends JpaRepository<Aportacion, Long> {
 
     @Query("""
             SELECT new com.salesianostriana.kilo.dtos.aportaciones.AportacionesReponseDTO(a.id, a.fecha, c.nombre, SUM(da.cantidadKg))
-            FROM Aportacion a JOIN Clase c ON (a.clase.id = c.id)
+            FROM Aportacion a LEFT JOIN Clase c ON (a.clase.id = c.id)
                               JOIN DetalleAportacion da ON (da.aportacion.id = a.id)
             GROUP BY a.id
             """)
