@@ -1,4 +1,4 @@
-package com.salesianostriana.kilo.dtos;
+package com.salesianostriana.kilo.dtos.destinatarios;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;

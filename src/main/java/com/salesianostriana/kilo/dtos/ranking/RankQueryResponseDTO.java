@@ -1,4 +1,4 @@
-package com.salesianostriana.kilo.dtos;
+package com.salesianostriana.kilo.dtos.ranking;
 
 import com.salesianostriana.kilo.entities.Aportacion;
 import com.salesianostriana.kilo.entities.Clase;
