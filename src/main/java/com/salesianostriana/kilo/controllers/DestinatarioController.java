@@ -1,7 +1,7 @@
 package com.salesianostriana.kilo.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.salesianostriana.kilo.dtos.DestinatarioResponseDTO;
+import com.salesianostriana.kilo.dtos.destinatarios.DestinatarioResponseDTO;
 import com.salesianostriana.kilo.dtos.destinatarios.CreateDestinatarioDTO;
 import com.salesianostriana.kilo.entities.Destinatario;
 import com.salesianostriana.kilo.services.DestinatarioService;

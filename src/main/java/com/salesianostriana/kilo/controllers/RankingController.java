@@ -1,6 +1,6 @@
 package com.salesianostriana.kilo.controllers;
 
-import com.salesianostriana.kilo.dtos.RankingResponseDTO;
+import com.salesianostriana.kilo.dtos.ranking.RankingResponseDTO;
 import com.salesianostriana.kilo.services.ClaseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

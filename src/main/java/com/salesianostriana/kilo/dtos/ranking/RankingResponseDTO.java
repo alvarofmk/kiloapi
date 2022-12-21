@@ -1,4 +1,4 @@
-package com.salesianostriana.kilo.dtos;
+package com.salesianostriana.kilo.dtos.ranking;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;

@@ -1,9 +1,8 @@
 package com.salesianostriana.kilo.services;
 
 
-
-import com.salesianostriana.kilo.dtos.RankQueryResponseDTO;
-import com.salesianostriana.kilo.dtos.RankingResponseDTO;
+import com.salesianostriana.kilo.dtos.ranking.RankQueryResponseDTO;
+import com.salesianostriana.kilo.dtos.ranking.RankingResponseDTO;
 
 import com.salesianostriana.kilo.dtos.clase.CreateClaseDTO;
 import com.salesianostriana.kilo.entities.Clase;
