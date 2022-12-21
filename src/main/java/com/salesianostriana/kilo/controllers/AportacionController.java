@@ -212,8 +212,6 @@ public class AportacionController {
         return ResponseEntity.noContent().build();
     }
 
-<<<<<<< HEAD
-
     @Operation(summary = "Crea una nueva aportación")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
     description = "Cuerpo de la petición",
@@ -287,13 +285,14 @@ public class AportacionController {
     @PostMapping("/")
     public ResponseEntity<AportacionesReponseDTO> createAportacion(@JsonView(View.AportacionView.AportacionRequestView.class) @RequestBody AportacionRequestDTO dto) {
         Optional<AportacionesReponseDTO> resultado = aportacionService.createAportacion(dto);
-        if(resultado.isEmpty()) {
+        if (resultado.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }else {
+        } else {
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado.get());
         }
+    }
 
-=======
+
     @Operation(summary = "Edita los kilos aportados de un alimento en una aportación")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Detalle aportación editado con éxito",
@@ -326,6 +325,5 @@ public class AportacionController {
         Optional<Aportacion> aportacion = aportacionService.editAportacion(idAportacion, numLinea, numKg);
 
         return aportacion.isPresent()? ResponseEntity.ok(aportacion.map(AportacionesReponseDTO::of).get()) : ResponseEntity.badRequest().build();
->>>>>>> master
     }
 }

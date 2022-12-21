@@ -52,9 +52,6 @@ public class AportacionesReponseDTO {
 
     private double kgDetalleAportacion;
 
-    /*@JsonView({View.AportacionView.AportacionByClase.class})
-    @Builder.Default
-    private List<Pair<String, Double>> pares = new ArrayList<>();*/
     @JsonView({View.AportacionView.AportacionByClaseView.class,
             View.AportacionView.AportacionRequestView.class})
     @Builder.Default
@@ -102,28 +99,6 @@ public class AportacionesReponseDTO {
 
     @JsonAnySetter
     public AportacionesReponseDTO setPares(List<DetallesAportacionResponseDTO> detalles, Long id) {
-
-        /*List<Pair<String, Double>> aux = new ArrayList<>();
-
-        detalles.forEach(d -> {
-            if(d.getAportacionId() == id)
-                aux.add(Pair.of(d.getNombre(), d.getCantidadKg()));
-        });*/
-
-
-        /*Map<String, Double> mapa = aux.stream().collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
-        pares = mapa;*/
-
-        /*pares = aux;
-
-        return AportacionesReponseDTO
-                .builder()
-                .id(this.id)
-                .fecha(this.fecha)
-                .pares(aux)
-                .build();*/
-
-        /*Map<String, Double> mapa = aux.stream().collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));*/
 
         Map<String, Double> mapa = new HashMap<>();
         detalles.forEach(d -> {

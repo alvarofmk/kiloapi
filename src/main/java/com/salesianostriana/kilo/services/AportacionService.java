@@ -187,10 +187,10 @@ public class AportacionService {
             if(lineas.stream().allMatch(l -> l.getIdTipo() != null &&
                                                 l.getKg() != null &&
                                                 l.getKg() > 0 &&
-                                                tipoAlimentoRepository.existsById(l.getIdTipo()))) {
+                                                tipoAlimentoSaveService.existsById(l.getIdTipo()))) {
                 AtomicReference<Long> contador = new AtomicReference<>(1L);
                 lineas.forEach(l -> {
-                    Optional<TipoAlimento> tipo = tipoAlimentoRepository.findById(l.getIdTipo());
+                    Optional<TipoAlimento> tipo = tipoAlimentoSaveService.findById(l.getIdTipo());
                     if (tipo.isPresent()) {
                         DetalleAportacionPK pk = new DetalleAportacionPK(contador.get(), creada.getId());
                         DetalleAportacion linea = DetalleAportacion
@@ -202,7 +202,9 @@ public class AportacionService {
                         contador.set(contador.get() + 1L);
                         creada.addDetalleAportacion(linea);
                         KilosDisponibles kilos = kilosDisponiblesRepository.findById(l.getIdTipo()).get();
-                        kilos.setCantidadDisponible(kilos.getCantidadDisponible() + l.getKg());
+
+                        kilos.setCantidadDisponible((double)Math.round((kilos.getCantidadDisponible() + l.getKg())*100)/100);
+
                         kilos.addTipoAlimento(tipo.get());
                         kilosDisponiblesRepository.save(kilos);
                     }
