@@ -123,12 +123,17 @@ public class CajaService {
 
         if (c.isPresent() && alim.isPresent()) {
             Caja caja = c.get();
+            /*
 
             Tiene t = Tiene.builder()
                     .caja(caja)
                     .tipoAlimento(alim.get())
                     .tienePK(new TienePK(caja.getId(), alim.get().getId()))
                     .build();
+
+             */
+
+            Tiene t = tieneRepository.findOneTiene(caja.getId(), idAlim);
 
 
             if (caja.getAlimentos().contains(t)) {
@@ -152,4 +157,53 @@ public class CajaService {
         return Optional.empty();
 
     }
+
+    public Optional<CajaResponseDTO> editKgOfALim(Long idCaja, Long idALim, Double cant) {
+
+        Optional<Caja> c = this.findById(idCaja);
+        Optional<TipoAlimento> alim = tipoAlimentoService.findById(idALim);
+        Optional<KilosDisponibles> kilos = kilosDisponiblesService.findById(idALim);
+
+        if (c.isPresent() && alim.isPresent() && cant >= 0) {
+            Caja caja = c.get();
+
+            Tiene t = tieneRepository.findOneTiene(caja.getId(), idALim);
+
+
+            if (caja.getAlimentos().contains(t)) {
+
+                caja.getAlimentos().stream().forEach( al -> {
+                    if (al.getTienePK().getTipoAlimentoId() == idALim) {
+                        if (al.getCantidadKgs() > cant ) {
+
+                            Double restar = cant - al.getCantidadKgs();
+                            Double kilosEnCaja = alim.get().getKilosDisponibles().getCantidadDisponible();
+                            Double cantidad = kilosEnCaja - restar;
+                            t.setCantidadKgs(cant);
+                            tieneRepository.save(t);
+                            kilosDisponiblesService.add(new KilosDisponibles(idALim, cantidad));
+
+                        } else {
+                            Double sumar = cant - al.getCantidadKgs();
+                            Double kilosEnCaja = alim.get().getKilosDisponibles().getCantidadDisponible();
+                            Double cantidad = sumar + kilosEnCaja;
+                            t.setCantidadKgs(cant);
+                            tieneRepository.save(t);
+                            kilosDisponiblesService.add(new KilosDisponibles(idALim, cantidad));
+                        }
+
+                    }
+                });
+
+
+                repository.save(caja);
+
+                return Optional.of(CajaResponseDTO.of(caja));
+
+            }
+        }
+        return Optional.empty();
+
+    }
+
 }
