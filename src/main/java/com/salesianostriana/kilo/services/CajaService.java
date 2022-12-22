@@ -24,9 +24,7 @@ public class CajaService {
 
     private final TipoAlimentoService tipoAlimentoService;
 
-    private final TipoAlimentoRepository tipoAlimentoRepository;
-
-    private final DestinatarioRepository destinatarioRepository;
+    private final DestinatarioService destinatarioService;
 
 
     public List<Caja> findAll(){
@@ -47,7 +45,7 @@ public class CajaService {
     }
 
     public Optional<Caja> editCaja(EditCajaDTO editCajaDTO, Long id){
-        Optional<Destinatario> newDest = editCajaDTO.getDestinatarioId() == null ? Optional.empty() : destinatarioRepository.findById(editCajaDTO.getDestinatarioId());
+        Optional<Destinatario> newDest = editCajaDTO.getDestinatarioId() == null ? Optional.empty() : destinatarioService.findById(editCajaDTO.getDestinatarioId());
         if(editCajaDTO.getNumero() <= 0 || (editCajaDTO.getDestinatarioId() != null && newDest.isEmpty()))
             return Optional.empty();
         return repository.findById(id).map( cajaToEdit -> {
@@ -107,7 +105,7 @@ public class CajaService {
 
     public Optional<CajaResponseDTO> deleteAlimFromCaja (Long idCaja, Long idAlim) {
         Optional<Caja> c = repository.findById(idCaja);
-        Optional<TipoAlimento> alim = tipoAlimentoRepository.findById(idAlim);
+        Optional<TipoAlimento> alim = tipoAlimentoService.findById(idAlim);
         Optional<KilosDisponibles> kilosDisponibles = kilosDisponiblesService.findById(idAlim);
 
         if (c.isPresent() && alim.isPresent()) {
