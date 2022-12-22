@@ -73,7 +73,7 @@ public class CajaController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Caja creada con éxito",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Caja.class),
+                            schema = @Schema(implementation = CajaResponseDTO.class),
                             examples = @ExampleObject(value = """
                                     {
                                         "id": 2,
@@ -87,12 +87,13 @@ public class CajaController {
             @ApiResponse(responseCode = "400", description = "Hay algún error en los datos",
                     content = @Content) })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "Los datos para crear la caja")
+    @JsonView(View.CajaView.GenericResponseView.class)
     @PostMapping("/")
-    public ResponseEntity<Caja> createCaja(@RequestBody CreateCajaDTO createCajaDTO){
+    public ResponseEntity<CajaResponseDTO> createCaja(@RequestBody CreateCajaDTO createCajaDTO){
         if (createCajaDTO.getNumCaja() <= 0)
             return ResponseEntity.badRequest().build();
         else
-            return ResponseEntity.status(HttpStatus.CREATED).body(cajaService.createCaja(createCajaDTO));
+            return ResponseEntity.status(HttpStatus.CREATED).body(CajaResponseDTO.of(cajaService.createCaja(createCajaDTO)));
     }
 
     @Operation(summary = "Añade kilos de un tipo de alimento a una caja")

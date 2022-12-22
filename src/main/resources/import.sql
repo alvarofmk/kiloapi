@@ -82,3 +82,4 @@ INSERT INTO tiene(cantidad_kgs, caja_id, tipo_alimento_id) VALUES (7, 34, 16);
 INSERT INTO tiene(cantidad_kgs, caja_id, tipo_alimento_id) VALUES (5, 38, 12);
 UPDATE caja c SET kilos_totales = (SELECT SUM(cantidad_kgs) FROM tiene t WHERE t.caja_id = c.id);
 UPDATE kilos_disponibles k SET cantidad_disponible = cantidad_disponible - (SELECT SUM(cantidad_kgs) FROM tiene t WHERE t.tipo_alimento_id = k.tipo_alimento);
+UPDATE caja c SET qr = CONCAT('http://localhost:8080/caja/', c.id);
