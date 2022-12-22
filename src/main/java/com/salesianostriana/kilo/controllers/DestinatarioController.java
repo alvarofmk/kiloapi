@@ -161,23 +161,23 @@ public class DestinatarioController {
                     content = @Content) })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "Datos del nuevo destinatario",
             content = {@Content(mediaType = "application/json",
-                    schema = @Schema(implementation = Destinatario.class),
+                    schema = @Schema(implementation = DestinatarioResponseDTO.class),
                     examples = @ExampleObject(value = """
                             {
-                                "id": 1,
                                 "nombre": "Hijas de la caridad",
                                 "direccion": "Calle Sin nombre Nº7",
                                 "personaContacto": "Sor María",
                                 "telefono": "689624528",
-                                "cajas": []
                             }
                             """)
             )}
     )
     @PostMapping("/")
-    public ResponseEntity<Destinatario> createDestinatario(@RequestBody CreateDestinatarioDTO newDest){
+    @JsonView(View.DestinatarioView.JustDestinatarioView.class)
+    public ResponseEntity<DestinatarioResponseDTO> createDestinatario(@RequestBody CreateDestinatarioDTO newDest){
+
         if(newDest.getNombre()!= null && newDest.getDireccion()!= null)
-            return ResponseEntity.status(HttpStatus.CREATED).body(destinatarioService.createDestinatario(newDest));
+            return ResponseEntity.status(HttpStatus.CREATED).body(DestinatarioResponseDTO.of(destinatarioService.createDestinatario(newDest)));
         else
             return ResponseEntity.badRequest().build();
     }
